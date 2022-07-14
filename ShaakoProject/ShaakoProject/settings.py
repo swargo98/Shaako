@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Organization',
     'Supervisor',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
