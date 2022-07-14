@@ -32,7 +32,7 @@ class Location(models.Model):
 
 # create notification class with timestamp, description, notification_type, type_id, is_read
 class Notification(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
     description = models.CharField(max_length=100)
     notification_type = models.CharField(max_length=100)
     type_id = models.CharField(max_length=100)
@@ -53,8 +53,8 @@ class Supervisor(models.Model):
 # create Campaign with Title, state_date, end_date, campaign_details and goal
 class Campaign(models.Model):
     title = models.CharField(max_length=100)
-    state_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now_add=True)
+    state_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     campaign_details = models.CharField(max_length=300)
     goal = models.CharField(max_length=100)
 
@@ -97,13 +97,13 @@ class PatientCampaign(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     chw = models.ForeignKey(CHW, on_delete=models.CASCADE)
-    enrollment_date = models.DateTimeField(auto_now_add=True)
+    enrollment_date = models.DateTimeField()
 
 
 class VisitForm(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     chw = models.ForeignKey(CHW, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     temperature = models.FloatField()
     blood_pressure = models.FloatField()
     headache_level = models.IntegerField()
@@ -123,13 +123,13 @@ class Lesson(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=2000)
-    upload_date = models.DateTimeField(auto_now_add=True)
+    upload_date = models.DateTimeField()
 
 
 # create Quiz with title, upload date, lesson
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
-    upload_date = models.DateTimeField(auto_now_add=True)
+    upload_date = models.DateTimeField()
     relatedLesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
 
