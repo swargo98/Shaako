@@ -8,6 +8,10 @@ import SupervisorManagement from "./pages/supervisorManagement";
 import SupervisorList from "./pages/supervisorList";
 import NewSupervisor from "./pages/newSupervisor";
 import UpdateSupervisor from "./pages/updateSupervisor";
+import CHWManagement from "./pages/CHWManagement";
+import CHWList from "./pages/chwList";
+import NewCHW from "./pages/newCHW";
+import UpdateCHW from "./pages/updateCHW";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -26,6 +30,10 @@ function App() {
                     <Route path='/supervisor_list' element={<SupervisorList/>} />
                     <Route path='/new_supervisor' element={<NewSupervisor/>} />
                     <Route path='/update_supervisor' element={<UpdateSupervisor/>} />
+                    <Route path='/chw_management' element={<CHWManagement/>} />
+                    <Route path='/chw_list' element={<CHWList/>} />
+                    <Route path='/new_chw' element={<NewCHW/>} />
+                    <Route path='/update_chw' element={<UpdateCHW/>} />
                 </Routes>
             </div>
             <Footer />
