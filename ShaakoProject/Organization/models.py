@@ -15,7 +15,7 @@ class Organization(models.Model):
 class OrganizationAdmin(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=512)
     email = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
     presentAddress = models.CharField(max_length=100)
@@ -43,7 +43,7 @@ class Notification(models.Model):
 class Supervisor(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=512)
     email = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
     presentAddress = models.CharField(max_length=100)
@@ -75,7 +75,7 @@ class Supervisor_Campaign(models.Model):
 class CHW(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=512)
     email = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
     presentAddress = models.CharField(max_length=100)
