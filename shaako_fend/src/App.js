@@ -13,7 +13,7 @@ function App() {
             <br/>
             <br/>
             <br/>
-            <div className="app-container">
+            <div className="app-container" style={{backgroundColor: "#a6f9d6"}}>
                 <Routes>
                     <Route path='/home' element={<Home/>} />
                     <Route path='/about' element={<About/>} />
