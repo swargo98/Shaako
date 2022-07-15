@@ -12,17 +12,17 @@ const SupervisorManagement = () => {
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-star icon"></i>
-                            <h4>সুপারভাইজার তালিকা</h4>
+                            <a href="/supervisor_list"><h4>সুপারভাইজার তালিকা</h4></a>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
                                 auctor in, mattis vitae leo.</p>
                         </div>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
-                            <h4>সুপারভাইজার নিয়োগ</h4>
+                            <a href='/new_supervisor'><h4>সুপারভাইজার নিয়োগ</h4></a>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
                                 auctor in, mattis vitae leo.</p>
                         </div>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-refresh icon"></i>
-                            <h4>সুপারভাইজার আপডেট</h4>
+                            <a href='/update_supervisor'><h4>সুপারভাইজার আপডেট</h4></a>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
                                 auctor in, mattis vitae leo.</p>
                         </div>
