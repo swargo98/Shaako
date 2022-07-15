@@ -36,7 +36,13 @@ def login(request):
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
-        data = [10, 20, 30]
+        
+
+        # find number entry in patient table
+        patient = Patient.objects.count()
+        chw = CHW.objects.count()
+        supervisor = Supervisor.objects.count()
+        data = [patient, chw, supervisor]
         return Response(data)
 
 
