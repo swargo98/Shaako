@@ -1,5 +1,6 @@
 import './App.css';
 import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 import About from "./pages/about";
 import Home from "./pages/home";
 import Authentication from "./pages/auth";
@@ -9,6 +10,9 @@ function App() {
     return (
         <Router>
             <Navbar />
+            <br/>
+            <br/>
+            <br/>
             <div className="app-container">
                 <Routes>
                     <Route path='/home' element={<Home/>} />
@@ -16,6 +20,7 @@ function App() {
                     <Route path='/login' element={<Authentication/>} />
                 </Routes>
             </div>
+            <Footer />
         </Router>
     );
 }
