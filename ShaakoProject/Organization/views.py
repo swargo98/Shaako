@@ -20,7 +20,13 @@ def login(request):
         print(username)
         print(password)
         print(len(password))
-        return Response('False')
+
+        # find OrganizationAdmin with username and password
+        user = OrganizationAdmin.objects.filter(username=username, password=password)
+        if user:
+            return Response('True')
+        else:
+            return Response('False')
 
 
 # Organization
