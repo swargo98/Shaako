@@ -1,6 +1,5 @@
 import logo from './assets/img/Capture.png'
 import './assets/fonts/simple-line-icons.min.css'
-import './assets/css/vanilla-zoom.min.css'
 
 const Navbar = () => {
     return (

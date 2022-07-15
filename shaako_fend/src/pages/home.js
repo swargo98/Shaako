@@ -1,10 +1,5 @@
 import Background from './assets/img/mali-800.jpg'
 import './assets/fonts/simple-line-icons.min.css'
-import './assets/css/vanilla-zoom.min.css'
-import './assets/bootstrap/js/bootstrap.min.js'
-import './assets/js/vanilla-zoom.js'
-import './assets/js/theme.js'
-import 'https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js'
 
 const Home = () => {
     return (
