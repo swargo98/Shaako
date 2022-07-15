@@ -3,9 +3,25 @@ from rest_framework import viewsets
 from .serializers import *
 from .models import *
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import JsonResponse
+from argon2 import PasswordHasher as ph
 
 
 # Create your views here.
+@api_view(['POST'])
+def login(request):
+    if request.method == 'POST':
+        data = request.data
+        username = data['username']['username']
+        password = data['password']['password']
+        password = ph().hash(password)
+        print(username)
+        print(password)
+        print(len(password))
+        return Response('False')
+
 
 # Organization
 class OrganizationList(ListAPIView):
