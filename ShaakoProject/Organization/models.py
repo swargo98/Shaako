@@ -27,7 +27,7 @@ class Location(models.Model):
     division = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
     upazilla_thana = models.CharField(max_length=100)
-    ward_union = models.CharField(max_length=100, null=True)
+    ward_union = models.CharField(max_length=100)
 
 
 # create notification class with timestamp, description, notification_type, type_id, is_read
@@ -48,8 +48,6 @@ class Supervisor(models.Model):
     contactNo = models.CharField(max_length=100)
     presentAddress = models.CharField(max_length=100)
     imagePath = models.CharField(max_length=100)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
-    recruitment_date = models.DateTimeField(null=True)
 
 
 # create Campaign with Title, state_date, end_date, campaign_details and goal
