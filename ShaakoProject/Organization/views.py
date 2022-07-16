@@ -24,7 +24,7 @@ def login(request):
 
         # find OrganizationAdmin with username and password
         user = OrganizationAdmin.objects.values('password').filter(email=email)
-        
+
         if user:
             try:
                 ph().verify(user[0]['password'], password)
@@ -38,8 +38,6 @@ def login(request):
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
-        
-
         # find number entry in patient table
         patient = Patient.objects.count()
         chw = CHW.objects.count()
@@ -47,44 +45,38 @@ def home(request):
         data = [patient, chw, supervisor]
         return Response(data)
 
+
 @api_view(['GET'])
 def getSupervisor(request):
     if request.method == 'GET':
-        
-        ret=[]
-
+        ret = []
         for supervisor in Supervisor.objects.all():
-            location=supervisor.locationdict={}
-            dict['name']=supervisor.name
-            dict['division']=location.division
-            dict['district']=location.district
-            dict['upazilla_thana']=location.upazilla_thana
-            dict['recruitment_date']=supervisor.recruitment_date
-            ret.append(dict)    
+            location = supervisor.location
+            dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
+                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date()}
+            ret.append(dict)
+        # print(ret)
         return Response(ret)
+
 
 @api_view(['POST'])
 def searchSupervisor(request):
     if request.method == 'POST':
         data = request.data
-        searchtext = data['searchtext']['searchtext']
-        
-        ret=[]
+        searchtext = data
+
+        ret = []
 
         for supervisor in Supervisor.objects.all():
-            location=supervisor.location
-            if searchtext in supervisor.name or (location is not None and (searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
-                dict={}
-                dict['name']=supervisor.name
-                dict['division']=location.division
-                dict['district']=location.district
-                dict['upazilla_thana']=location.upazilla_thana
-                dict['recruitment_date']=supervisor.recruitment_date
-                ret.append(dict)    
+            location = supervisor.location
+            if searchtext in supervisor.name or (location is not None and (
+                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
+                dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
+                        'upazilla_thana': location.upazilla_thana,
+                        'recruitment_date': supervisor.recruitment_date.date()}
+                ret.append(dict)
+        # print(ret)
         return Response(ret)
-
-
-
 
 
 # Organization
