@@ -83,7 +83,7 @@ class CHW(models.Model):
     presentAddress = models.CharField(max_length=100)
     imagePath = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-
+    recruitment_date = models.DateTimeField(null=True)
 
 # create Patient with name, address, contact no, date_of_birth, gender
 class Patient(models.Model):
