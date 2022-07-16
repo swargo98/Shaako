@@ -14,13 +14,36 @@ from argon2 import PasswordHasher as ph
 def login(request):
     if request.method == 'POST':
         data = request.data
-        username = data['username']['username']
+        email = data['username']['username']
         password = data['password']['password']
-        password = ph().hash(password)
-        print(username)
-        print(password)
-        print(len(password))
-        return Response('False')
+        # password = ph().hash(password)
+        # print(email)
+        # print(password)
+        # print(len(password))
+
+        # find OrganizationAdmin with username and password
+        user = OrganizationAdmin.objects.values('password').filter(email=email)
+        if user:
+            try:
+                ph().verify(user[0]['password'], password)
+                return Response('True')
+            except:
+                return Response('False')
+        else:
+            return Response('False')
+
+
+@api_view(['GET'])
+def home(request):
+    if request.method == 'GET':
+        
+
+        # find number entry in patient table
+        patient = Patient.objects.count()
+        chw = CHW.objects.count()
+        supervisor = Supervisor.objects.count()
+        data = [patient, chw, supervisor]
+        return Response(data)
 
 
 # Organization
