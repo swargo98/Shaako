@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Navigate } from 'react-router-dom';
 
 export const Form = ({ onSubmit, sup_id }) => {
   let [division, setdivision] = useState([])
@@ -10,80 +11,53 @@ export const Form = ({ onSubmit, sup_id }) => {
   let [inputupazilla, setinputupazilla] = useState('')
 
   useEffect(() => {
-    getDivisions()
+    getDivisions();
   }, [])
 
+  useEffect(() => {
+    getDistrict();
+  }, [inputdivision])
+
+  useEffect(() => {
+    getUpazilla();
+  }, [inputdistrict])
+
   let getDivisions = async () => {
-    if (inputdivision.length === 0) {
-      setdivision([]);
-      setdistrict([]);
-      setupazilla([]);
-      setinputdivision('');
-      setinputdistrict('');
-      setinputupazilla('');
+    setdivision([]);
+    setdistrict([]);
+    setupazilla([]);
+    setinputdivision('');
+    setinputdistrict('');
+    setinputupazilla('');
 
-      let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
-      })
-      let d = await response.json()
-      for (let i = 0; i < d.length; i++) {
-        let now = d[i]
-        setdivision(prevArray => [...prevArray, now]);
-      }
-      setinputdivision(division[0]);
-
+    let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
+    })
+    let d = await response.json()
+    for (let i = 0; i < d.division.length; i++) {
+      let now = d.division[i]
+      setdivision(prevArray => [...prevArray, now]);
     }
-    if (inputdistrict.length === 0) {
-      setdistrict([]);
-      setupazilla([]);
-      setinputdistrict('');
-      setinputupazilla('');
-
-      let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
-      })
-      let d = await response.json()
-      for (let i = 0; i < d.length; i++) {
-        let now = d[i]
-        setdistrict(prevArray => [...prevArray, now]);
-      }
-      setinputdistrict(district[0]);
+    setinputdivision(d.division[0]);
+    for (let i = 0; i < d.district.length; i++) {
+      let now = d.district[i]
+      setdistrict(prevArray => [...prevArray, now]);
     }
-    if (inputupazilla.length === 0) {
-      setupazilla([]);
-      setinputupazilla('');
-
-      let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
-      })
-      let d = await response.json()
-      for (let i = 0; i < d.length; i++) {
-        let now = d[i]
-        setupazilla(prevArray => [...prevArray, now]);
-      }
-      setinputupazilla(upazilla[0]);
+    setinputdistrict(d.district[0]);
+    for (let i = 0; i < d.upazilla.length; i++) {
+      let now = d.upazilla[i]
+      setupazilla(prevArray => [...prevArray, now]);
     }
-
+    setinputupazilla(d.upazilla[0]);
   }
 
   let getDistrict = async () => {
     if (inputdivision.length !== 0) {
-      setdistrict([])
-      setupazilla([])
-      setinputdistrict('')
-      setinputupazilla('')
+
 
       let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
         method: "POST",
@@ -93,12 +67,16 @@ export const Form = ({ onSubmit, sup_id }) => {
         body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
       })
       let d = await response.json()
-      for (let i = 0; i < d.length; i++) {
-        let now = d[i]
+      for (let i = 0; i < d.district.length; i++) {
+        let now = d.district[i]
         setdistrict(prevArray => [...prevArray, now]);
       }
-      setinputdistrict(district[0])
-      getUpazilla()
+      setinputdistrict(d.district[0]);
+      for (let i = 0; i < d.upazilla.length; i++) {
+        let now = d.upazilla[i]
+        setupazilla(prevArray => [...prevArray, now]);
+      }
+      setinputupazilla(d.upazilla[0]);
     }
   }
 
@@ -115,25 +93,41 @@ export const Form = ({ onSubmit, sup_id }) => {
         body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
       })
       let d = await response.json()
-      for (let i = 0; i < d.length; i++) {
-        let now = d[i]
+      for (let i = 0; i < d.upazilla.length; i++) {
+        let now = d.upazilla[i]
         setupazilla(prevArray => [...prevArray, now]);
       }
-      setinputupazilla(upazilla[0])
+      setinputupazilla(d.upazilla[0]);
     }
   }
   let handleChangeDivision = (value) => {
-    setinputdivision(value)
-    getDistrict()
+    setdistrict([])
+    setupazilla([])
+    setinputdistrict('')
+    setinputupazilla('')
+    setinputdivision(value);
   }
 
   let handleChangeDistrict = (value) => {
-    setinputdistrict(value)
-    getUpazilla()
+    setupazilla([])
+    setinputupazilla('')
+    setinputdistrict(value);
   }
 
   let handleChangeUpazilla = (value) => {
     setinputupazilla(value)
+  }
+  let handleSubmit = async () => {
+    if (inputdivision.length !== 0 && inputdistrict.length !== 0 && inputupazilla.length != 0) {
+      let response = await fetch('http://127.0.0.1:8000/organization/updateSupervisor', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ sup_id, inputdivision, inputdistrict, inputupazilla })
+      })
+      let data = await response.json()
+    }
   }
   return (
     <form onSubmit={onSubmit}>
@@ -177,7 +171,7 @@ export const Form = ({ onSubmit, sup_id }) => {
       </div>
       <br />
       <div className="form-group">
-        <button className="form-control btn btn-primary" type="submit">
+        <button className="form-control btn btn-primary" type="submit" onClick={handleSubmit}>
           Submit
         </button>
       </div>

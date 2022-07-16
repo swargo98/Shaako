@@ -46,13 +46,14 @@ def home(request):
         data = [patient, chw, supervisor]
         return Response(data)
 
+
 @api_view(['POST'])
 def updateSupervisor(request):
-    data=request.data
-    supervisor=Supervisor.objects.get(id=data['id'])
-    division=data['division']
-    district=data['district']
-    upazilla_thana=data['upazilla']
+    data = request.data
+    supervisor = Supervisor.objects.get(id=data['sup_id'])
+    division = data['inputdivision']
+    district = data['inputdistrict']
+    upazilla_thana = data['inputupazilla']
 
     if supervisor is not None:
         location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
@@ -73,30 +74,30 @@ def fetchLocationSupervisor(request):
         upazilla_thana = data['inputupazilla']
         # ward_union = data['ward_union']['ward_union']
 
-        dict={}
+        dict = {}
         divisions = Location.objects.values('division').distinct()
         ret = []
         for d in divisions:
             ret.append(d['division'])
-        dict['division']=ret
+        dict['division'] = ret
 
-        if len(division)==0:
-            division=ret[0]
-        
+        if len(division) == 0:
+            division = ret[0]
+
         districts = Location.objects.values('district').filter(division=division).distinct()
         ret = []
         for d in districts:
             ret.append(d['district'])
-        dict['district']=ret
+        dict['district'] = ret
 
-        if len(district)==0:
-            district=ret[0]
-        
+        if len(district) == 0:
+            district = ret[0]
+
         upazilla_thanas = Location.objects.values('upazilla_thana').filter(district=district).distinct()
         ret = []
         for d in upazilla_thanas:
             ret.append(d['upazilla_thana'])
-        dict['upazilla']=ret
+        dict['upazilla'] = ret
 
         return Response(dict)
 
