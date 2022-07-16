@@ -25,9 +25,21 @@ const UpdateSupervisor = () => {
     }
 
     let handleChangeSearch = (value) => {
-        setsearch(value)  
+        setsearch(value)
     }
 
+    let onCancel = async (id) => {
+        console.log(id)
+        let response = await fetch('http://127.0.0.1:8000/organization/deleteSupervisor', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(id)
+        })
+        let d = await response.json()
+        getSupervisor()
+    }
     let handleSubmit = async () => {
         console.log(search)
         let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
@@ -96,8 +108,8 @@ const UpdateSupervisor = () => {
                                                 </td>
                                                 <td>{r.recruitment_date}</td>
                                                 <td>
-                                                    <button className="btn btn-primary" type="button"
-                                                        style={{ background: "rgb(247,22,22)" }} onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) this.onCancel() }}
+                                                    <button className="btn btn-primary" type="submit"
+                                                        style={{ background: "rgb(247,22,22)" }} onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) onCancel(r.id) }}
                                                     >অব্যহতি প্রদান
                                                     </button>
                                                 </td>

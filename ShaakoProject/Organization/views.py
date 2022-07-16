@@ -25,24 +25,24 @@ def login(request):
         # print(len(password))
 
         # find OrganizationAdmin with username and password
-        user = OrganizationAdmin.objects.values('password','organization','id').filter(email=email)
+        user = OrganizationAdmin.objects.values('password', 'organization', 'id').filter(email=email)
 
         if user:
             try:
                 ph().verify(user[0]['password'], password)
-                dict={}
-                dict['correct']='True'
-                dict['id']=user[0]['id']
-                dict['organization']=user[0]['organization']
+                dict = {}
+                dict['correct'] = 'True'
+                dict['id'] = user[0]['id']
+                dict['organization'] = user[0]['organization']
 
                 return Response(dict)
             except:
-                dict={}
-                dict['correct']='False'
+                dict = {}
+                dict['correct'] = 'False'
                 return Response(dict)
         else:
-            dict={}
-            dict['correct']='False'
+            dict = {}
+            dict['correct'] = 'False'
             return Response(dict)
 
 
@@ -56,34 +56,39 @@ def home(request):
         data = [patient, chw, supervisor]
         return Response(data)
 
+
 @api_view(['POST'])
 def createSupervisor(request):
     if request.method == 'POST':
         data = request.data
+        print(data)
         name = data['name']
         password = data['password']
         email = data['email']
-        contactNo = data['contactNo']
-        presentAddress = data['presentAddress']
+        contactNo = data['contact']
+        presentAddress = data['address']
         imagePath = 'image\default.png'
         organization = data['organization']
-        
-        division=data['division']
-        district=data['district']
-        upazilla_thana=data['upazilla']
-        recruitment_date = datetime.now()
+
+        division = data['inputdivision']
+        district = data['inputdistrict']
+        upazilla_thana = data['inputupazilla']
+        recruitment_date = datetime.datetime.now()
 
         location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
         organization = Organization.objects.get(id=organization)
         password = ph().hash(password)
 
         if organization is not None and location is not None:
-            location=location[0]
-            supervisor = Supervisor(name=name, password=password, email=email, contactNo=contactNo, presentAddress=presentAddress, imagePath=imagePath, location=location, organization=organization, recruitment_date=recruitment_date)
+            location = location[0]
+            supervisor = Supervisor(name=name, password=password, email=email, contactNo=contactNo,
+                                    presentAddress=presentAddress, imagePath=imagePath, location=location,
+                                    organization=organization, recruitment_date=recruitment_date)
             supervisor.save()
             return Response('True')
         else:
             return Response('False')
+
 
 @api_view(['GET'])
 def getSupervisorDetailed(request):
@@ -93,9 +98,13 @@ def getSupervisorDetailed(request):
             location = supervisor.location
             dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
                     'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
-                    'id': supervisor.id,'email':supervisor.email,'contactNo':supervisor.contactNo,'presentAddress':supervisor.presentAddress,'imagePath':supervisor.imagePath,'organization':supervisor.organization}
+                    'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
+                    'presentAddress': supervisor.presentAddress, 'imagePath': supervisor.imagePath,
+                    'organization': supervisor.organization.id}
             ret.append(dict)
+        print(ret)
         return Response(ret)
+
 
 @api_view(['POST'])
 def updateSupervisor(request):
@@ -164,17 +173,16 @@ def getSupervisor(request):
             ret.append(dict)
         return Response(ret)
 
+
 @api_view(['POST'])
 def deleteSupervisor(request):
     if request.method == 'POST':
         data = request.data
-        id = data['id']
+        id = data
         supervisor = Supervisor.objects.get(id=id)
         supervisor.delete()
         return Response('True')
     return Response('False')
-
-
 
 
 @api_view(['POST'])
@@ -182,17 +190,18 @@ def searchSupervisor(request):
     if request.method == 'POST':
         data = request.data
         searchtext = data
-
         ret = []
-
         for supervisor in Supervisor.objects.all():
             location = supervisor.location
             if searchtext in supervisor.name or (location is not None and (
-                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
+                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana
+            ) or searchtext in supervisor.email or searchtext in supervisor.presentAddress):
                 dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
                         'upazilla_thana': location.upazilla_thana,
                         'recruitment_date': supervisor.recruitment_date.date(),
-                        'id': supervisor.id}
+                        'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
+                        'presentAddress': supervisor.presentAddress, 'imagePath': supervisor.imagePath,
+                        'organization': supervisor.organization.id}
                 ret.append(dict)
         # print(ret)
         return Response(ret)

@@ -17,18 +17,17 @@ const SupervisorManagement = () => {
                     <div className="row justify-content-center">
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-star icon"></i>
                             <a href="/supervisor_list"><h4>সুপারভাইজার তালিকা</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <h6>সকল সুপারভাইজারের ডিটেইলড তালিকা দেখতে এখনে ক্লিক করুন</h6>
                         </div>
+                        <br/>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
                             <a href='/new_supervisor'><h4>সুপারভাইজার নিয়োগ</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <h6>নতুন সুপারভাইজার নিয়োগ করতে এখনে ক্লিক করুন</h6>
                         </div>
+                        <br/>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-refresh icon"></i>
                             <a href='/update_supervisor'><h4>সুপারভাইজার আপডেট</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <h6>সুপারভাইজারের কর্মরত এলাকা পরিবর্তন অথবা ডিলিট করতে এখনে ক্লিক করুন</h6>
                         </div>
                     </div>
                 </div>
