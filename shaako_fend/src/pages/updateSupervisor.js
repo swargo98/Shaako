@@ -24,7 +24,7 @@ const UpdateSupervisor = () => {
     }
 
     let handleChangeSearch = (value) => {
-        setsearch(value)
+        setsearch(value)  
     }
 
     let handleSubmit = async () => {

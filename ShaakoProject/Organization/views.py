@@ -47,13 +47,14 @@ def home(request):
         return Response(data)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def fetchLocationSupervisor(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = request.data
-        division = data['division']['division']
-        district = data['district']['district']
-        upazilla_thana = data['upazilla_thana']['upazilla_thana']
+        print(data)
+        division = data['inputdivision']
+        district = data['inputdistrict']
+        upazilla_thana = data['inputupazilla']
         # ward_union = data['ward_union']['ward_union']
 
         if len(division) == 0:
@@ -97,7 +98,7 @@ def getSupervisor(request):
         for supervisor in Supervisor.objects.all():
             location = supervisor.location
             dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
-                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date,
+                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
                     'id': supervisor.id}
             ret.append(dict)
         return Response(ret)
