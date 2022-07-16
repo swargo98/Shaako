@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 const UpdateSupervisor = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
+
     useEffect(() => {
         getSupervisor()
     }, [])
@@ -15,6 +16,7 @@ const UpdateSupervisor = () => {
     let getSupervisor = async () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getSupervisor')
         let d = await response.json()
+        setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
             setresult(prevArray => [...prevArray, now]);
@@ -24,6 +26,7 @@ const UpdateSupervisor = () => {
     let handleChangeSearch = (value) => {
         setsearch(value)
     }
+
     let handleSubmit = async () => {
         console.log(search)
         let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
@@ -87,7 +90,7 @@ const UpdateSupervisor = () => {
                                                 <td>{r.upazilla_thana}
                                                 </td>
                                                 <td>
-                                                    <Container triggerText={"এলাকা পরিবর্তন"} />
+                                                    <Container triggerText={"এলাকা পরিবর্তন"} sup_id={r.id} />
                                                 </td>
                                                 <td>{r.recruitment_date}</td>
                                                 <td>
