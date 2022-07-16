@@ -40,14 +40,13 @@ def login(request):
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
-        
-
         # find number entry in patient table
         patient = Patient.objects.count()
         chw = CHW.objects.count()
         supervisor = Supervisor.objects.count()
         data = [patient, chw, supervisor]
         return Response(data)
+
 
 @api_view(['GET'])
 def fetchLocationSupervisor(request):
@@ -92,9 +91,7 @@ def fetchLocationSupervisor(request):
 @api_view(['GET'])
 def getSupervisor(request):
     if request.method == 'GET':
-        
-        ret=[]
-
+        ret = []
         for supervisor in Supervisor.objects.all():
             location=supervisor.location
             dict={}
@@ -106,28 +103,25 @@ def getSupervisor(request):
             ret.append(dict)    
         return Response(ret)
 
+
 @api_view(['POST'])
 def searchSupervisor(request):
     if request.method == 'POST':
         data = request.data
-        searchtext = data['searchtext']['searchtext']
-        
-        ret=[]
+        searchtext = data
+
+        ret = []
 
         for supervisor in Supervisor.objects.all():
-            location=supervisor.location
-            if searchtext in supervisor.name or (location is not None and (searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
-                dict={}
-                dict['name']=supervisor.name
-                dict['division']=location.division
-                dict['district']=location.district
-                dict['upazilla_thana']=location.upazilla_thana
-                dict['recruitment_date']=supervisor.recruitment_date
-                ret.append(dict)    
+            location = supervisor.location
+            if searchtext in supervisor.name or (location is not None and (
+                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
+                dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
+                        'upazilla_thana': location.upazilla_thana,
+                        'recruitment_date': supervisor.recruitment_date.date()}
+                ret.append(dict)
+        # print(ret)
         return Response(ret)
-
-
-
 
 
 # Organization
