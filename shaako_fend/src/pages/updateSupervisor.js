@@ -2,9 +2,6 @@ import man1 from './assets/img/avatars/avatar1.jpg'
 import man2 from './assets/img/avatars/avatar2.jpg'
 import man3 from './assets/img/avatars/avatar3.jpg'
 
-import Container from "../popup/Container";
-import React from "react";
-
 const UpdateSupervisor = () => {
     return (
         <div className="container-fluid">
@@ -51,14 +48,29 @@ const UpdateSupervisor = () => {
                                 <td><img className="rounded-circle me-2" width="30" height="30"
                                          src={man2} alt="man"/>Airi Satou</td>
                                 <td>Union Lorem Ipsum
+                                    <div className="dropdown">
+                                        <button className="btn btn-primary dropdown-toggle" aria-expanded="false"
+                                                data-bs-toggle="dropdown" type="button">এলাকা নির্বাচন
+                                        </button>
+                                        <div className="dropdown-menu"><a className="dropdown-item" href="/">First
+                                            Item</a><a className="dropdown-item" href="/">Second Item</a><a
+                                            className="dropdown-item" href="/">Third Item</a></div>
+                                    </div>
                                 </td>
                                 <td>Tokyo
+                                    <div className="dropdown">
+                                        <button className="btn btn-primary dropdown-toggle" aria-expanded="false"
+                                                data-bs-toggle="dropdown" type="button">জেলা নির্বাচন
+                                        </button>
+                                        <div className="dropdown-menu"><a className="dropdown-item" href="/">First Item</a><a
+                                            className="dropdown-item" href="/">Second Item</a><a
+                                            className="dropdown-item" href="/">Third Item</a></div>
+                                    </div>
                                 </td>
                                 <td>
-                                    <Container triggerText={"এলাকা পরিবর্তন"} />
-                                    {/*<button className="btn btn-primary" type="button"*/}
-                                    {/*        style={{background: "rgb(233,254,0)"}}>এলাকা পরিবর্তন*/}
-                                    {/*</button>*/}
+                                    <button className="btn btn-primary" type="button"
+                                            style={{background: "rgb(233,254,0)"}}>এলাকা পরিবর্তন
+                                    </button>
                                 </td>
                                 <td>2008/11/28</td>
                                 <td>
