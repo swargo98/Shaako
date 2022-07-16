@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from pyparsing import Or
 from rest_framework import viewsets
 from .serializers import *
 from .models import *
@@ -23,6 +24,7 @@ def login(request):
 
         # find OrganizationAdmin with username and password
         user = OrganizationAdmin.objects.values('password').filter(email=email)
+        
         if user:
             try:
                 ph().verify(user[0]['password'], password)
@@ -44,6 +46,45 @@ def home(request):
         supervisor = Supervisor.objects.count()
         data = [patient, chw, supervisor]
         return Response(data)
+
+@api_view(['GET'])
+def getSupervisor(request):
+    if request.method == 'GET':
+        
+        ret=[]
+
+        for supervisor in Supervisor.objects.all():
+            location=supervisor.locationdict={}
+            dict['name']=supervisor.name
+            dict['division']=location.division
+            dict['district']=location.district
+            dict['upazilla_thana']=location.upazilla_thana
+            dict['recruitment_date']=supervisor.recruitment_date
+            ret.append(dict)    
+        return Response(ret)
+
+@api_view(['POST'])
+def searchSupervisor(request):
+    if request.method == 'POST':
+        data = request.data
+        searchtext = data['searchtext']['searchtext']
+        
+        ret=[]
+
+        for supervisor in Supervisor.objects.all():
+            location=supervisor.location
+            if searchtext in supervisor.name or (location is not None and (searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana)):
+                dict={}
+                dict['name']=supervisor.name
+                dict['division']=location.division
+                dict['district']=location.district
+                dict['upazilla_thana']=location.upazilla_thana
+                dict['recruitment_date']=supervisor.recruitment_date
+                ret.append(dict)    
+        return Response(ret)
+
+
+
 
 
 # Organization
