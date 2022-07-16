@@ -114,6 +114,18 @@ def getSupervisor(request):
             ret.append(dict)
         return Response(ret)
 
+@api_view(['POST'])
+def deleteSupervisor(request):
+    if request.method == 'POST':
+        data = request.data
+        id = data['id']
+        supervisor = Supervisor.objects.get(id=id)
+        supervisor.delete()
+        return Response('True')
+    return Response('False')
+
+
+
 
 @api_view(['POST'])
 def searchSupervisor(request):
