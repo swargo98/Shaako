@@ -46,6 +46,22 @@ def home(request):
         data = [patient, chw, supervisor]
         return Response(data)
 
+@api_view(['POST'])
+def updateSupervisor(request):
+    data=request.data
+    supervisor=Supervisor.objects.get(id=data['id'])
+    division=data['division']
+    district=data['district']
+    upazilla_thana=data['upazilla']
+
+    if supervisor is not None:
+        location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
+        if location is not None:
+            supervisor.location = location[0]
+            supervisor.save()
+            return Response('True')
+    return Response('False')
+
 
 @api_view(['POST'])
 def fetchLocationSupervisor(request):
