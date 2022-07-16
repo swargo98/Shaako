@@ -119,6 +119,28 @@ def getSupervisorDetailed(request):
 
 
 @api_view(['POST'])
+def getUnionsOfSupervisor(request):
+    if request.method == 'POST':
+        data = request.data
+        supervisor_id = data['supervisor_id']
+        supervisor = Supervisor.objects.get(id=supervisor_id)
+        if supervisor is not None:
+            location = supervisor.location
+            division=location.division
+            district=location.district
+            upazilla_thana=location.upazilla_thana
+
+            # find all location which is in the same division, district and upazilla_thana
+            location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
+            ret = []
+            for loc in location:
+                ret.append(loc.ward_union)
+            return Response(ret)
+    return Response('WRONG')
+
+
+
+@api_view(['POST'])
 def updateSupervisor(request):
     data = request.data
     supervisor = Supervisor.objects.get(id=data['sup_id'])

@@ -11,6 +11,7 @@ urlpatterns = [
     path('organization/deleteSupervisor', views.deleteSupervisor),
     path('organization/createSupervisor', views.createSupervisor),
     path('organization/getSupervisorDetailed', views.getSupervisorDetailed),
+    path('organization/getUnionsOfSupervisor', views.getUnionsOfSupervisor),
 
     path('organization/getCHW', views.getCHW),
     path('organization/createCHW', views.createCHW),
