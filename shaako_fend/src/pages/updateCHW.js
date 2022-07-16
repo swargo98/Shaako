@@ -2,6 +2,35 @@ import man1 from './assets/img/avatars/avatar1.jpg'
 import man2 from './assets/img/avatars/avatar2.jpg'
 import man3 from './assets/img/avatars/avatar3.jpg'
 
+import ContainerCHW from "../popupCHW/Container";
+import React from "react";
+
+
+import Swal from 'sweetalert2'
+
+// // CommonJS
+// const Swal = require('sweetalert2')
+
+const submit = () => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+        }
+    })
+};
+
 const UpdateCHW = () => {
     return (
         <div className="container-fluid">
@@ -47,168 +76,17 @@ const UpdateCHW = () => {
                                 <td><img className="rounded-circle me-2" width="30" height="30"
                                          src={man2} alt="man"/>Airi Satou</td>
                                 <td>John Doe
-                                    <div className="dropdown">
-                                        <button className="btn btn-primary dropdown-toggle" aria-expanded="false"
-                                                data-bs-toggle="dropdown" type="button">সুপারভাইজার নির্বাচন
-                                        </button>
-                                        <div className="dropdown-menu"><a className="dropdown-item" href="/">First
-                                            Item</a><a className="dropdown-item" href="/">Second Item</a><a
-                                            className="dropdown-item" href="/">Third Item</a></div>
-                                    </div>
                                 </td>
                                 <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(233,254,0)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
+                                    {/*<button className="btn btn-primary" type="button"*/}
+                                    {/*        style={{background: "rgb(233,254,0)"}}>সুপারভাইজার পরিবর্তন*/}
+                                    {/*</button>*/}
+                                    <ContainerCHW triggerText={"সুপারভাইজার পরিবর্তন"} />
                                 </td>
                                 <td>2008/11/28</td>
                                 <td>
                                     <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man1} alt="man"/>Angelica Ramos</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2009/10/09<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man3} alt="man"/>Ashton Cox</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2009/01/12<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man1} alt="man"/>Bradley Greer</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2012/10/13<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man2} alt="man"/>Brenden Wagner</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2011/06/07<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man2} alt="man"/>Brielle Williamson</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2012/12/02<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man1} alt="man"/>Bruno Nash<br /></td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2011/05/03<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man3} alt="man"/>Caesar Vance</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2011/12/12<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man1} alt="man"/>Cara Stevens</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2011/12/06<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                         src={man2} alt="man"/>Cedric Kelly</td>
-                                <td>John Doe<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(54,247,22)"}}>সুপারভাইজার পরিবর্তন
-                                    </button>
-                                </td>
-                                <td>2012/03/29<br /></td>
-                                <td>
-                                    <button className="btn btn-primary" type="button"
-                                            style={{background: "rgb(247,22,22)"}}>অব্যহতি প্রদান
+                                            style={{background: "rgb(247,22,22)"}} onClick={submit}>অব্যহতি প্রদান
                                     </button>
                                 </td>
                             </tr>
