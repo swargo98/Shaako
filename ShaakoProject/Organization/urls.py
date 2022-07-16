@@ -9,6 +9,8 @@ urlpatterns = [
     path('organization/fetchLocationSupervisor', views.fetchLocationSupervisor),
     path('organization/updateSupervisor', views.updateSupervisor),
     path('organization/deleteSupervisor', views.deleteSupervisor),
+    path('organization/createSupervisor', views.createSupervisor),
+    path('organization/getSupervisorDetailed', views.getSupervisorDetailed),
 
 
     path('organization/list', views.OrganizationList.as_view()),

@@ -1,6 +1,7 @@
 import Background from './assets/img/mali-800.jpg'
 import './assets/fonts/simple-line-icons.min.css'
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 const Home = () => {
     let [data1, setdata1] = useState(12)
@@ -22,6 +23,8 @@ const Home = () => {
 
     return (
         <main className="page landing-page">
+            
+            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <section className="clean-block clean-hero"
                 style={{ backgroundImage: "url(" + Background + ")", color: 'rgba(9, 255, 162, 0.85)' }}>
                 <div className="text">

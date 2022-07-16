@@ -1,6 +1,9 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 const NewCHW = () => {
     return (
         <main className="page landing-page" style={{padding: "76px 0px 0px"}}>
+            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <section className="clean-block features" style={{background: "#a6f9d6"}}>
                 <div className="container">
                     <div className="block-heading" style={{padding: "24px 0px 0px"}}>

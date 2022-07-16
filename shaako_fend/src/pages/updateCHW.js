@@ -4,6 +4,7 @@ import man3 from './assets/img/avatars/avatar3.jpg'
 
 import ContainerCHW from "../popupCHW/Container";
 import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
 import Swal from 'sweetalert2'
@@ -34,6 +35,7 @@ const submit = () => {
 const UpdateCHW = () => {
     return (
         <div className="container-fluid">
+            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <br/>
             <br/>
             <div className="card shadow">

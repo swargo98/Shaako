@@ -1,4 +1,5 @@
 from __future__ import division
+import datetime
 from django.shortcuts import render
 from pyparsing import Or
 from rest_framework import viewsets
@@ -24,16 +25,25 @@ def login(request):
         # print(len(password))
 
         # find OrganizationAdmin with username and password
-        user = OrganizationAdmin.objects.values('password').filter(email=email)
+        user = OrganizationAdmin.objects.values('password','organization','id').filter(email=email)
 
         if user:
             try:
                 ph().verify(user[0]['password'], password)
-                return Response('True')
+                dict={}
+                dict['correct']='True'
+                dict['id']=user[0]['id']
+                dict['organization']=user[0]['organization']
+
+                return Response(dict)
             except:
-                return Response('False')
+                dict={}
+                dict['correct']='False'
+                return Response(dict)
         else:
-            return Response('False')
+            dict={}
+            dict['correct']='False'
+            return Response(dict)
 
 
 @api_view(['GET'])
@@ -46,6 +56,46 @@ def home(request):
         data = [patient, chw, supervisor]
         return Response(data)
 
+@api_view(['POST'])
+def createSupervisor(request):
+    if request.method == 'POST':
+        data = request.data
+        name = data['name']
+        password = data['password']
+        email = data['email']
+        contactNo = data['contactNo']
+        presentAddress = data['presentAddress']
+        imagePath = 'image\default.png'
+        organization = data['organization']
+        
+        division=data['division']
+        district=data['district']
+        upazilla_thana=data['upazilla']
+        recruitment_date = datetime.now()
+
+        location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
+        organization = Organization.objects.get(id=organization)
+        password = ph().hash(password)
+
+        if organization is not None and location is not None:
+            location=location[0]
+            supervisor = Supervisor(name=name, password=password, email=email, contactNo=contactNo, presentAddress=presentAddress, imagePath=imagePath, location=location, organization=organization, recruitment_date=recruitment_date)
+            supervisor.save()
+            return Response('True')
+        else:
+            return Response('False')
+
+@api_view(['GET'])
+def getSupervisorDetailed(request):
+    if request.method == 'GET':
+        ret = []
+        for supervisor in Supervisor.objects.all():
+            location = supervisor.location
+            dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
+                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
+                    'id': supervisor.id,'email':supervisor.email,'contactNo':supervisor.contactNo,'presentAddress':supervisor.presentAddress,'imagePath':supervisor.imagePath,'organization':supervisor.organization}
+            ret.append(dict)
+        return Response(ret)
 
 @api_view(['POST'])
 def updateSupervisor(request):

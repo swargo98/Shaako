@@ -4,6 +4,7 @@ import man3 from './assets/img/avatars/avatar3.jpg'
 
 import Container from "../popup/Container";
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 const UpdateSupervisor = () => {
     let [result, setresult] = useState([])
@@ -46,6 +47,7 @@ const UpdateSupervisor = () => {
 
     return (
         <div className="container-fluid">
+            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
             <div className="card shadow">

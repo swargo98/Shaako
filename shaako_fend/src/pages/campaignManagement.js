@@ -1,10 +1,13 @@
 import man1 from './assets/img/avatars/avatar1.jpg'
 import man2 from './assets/img/avatars/avatar2.jpg'
 import man3 from './assets/img/avatars/avatar3.jpg'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 const CampaignManagement = () => {
     return (
+        
         <main className="page landing-page">
+            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <section className="clean-block features" style={{background: "#a6f9d6", margin: "-67px"}}>
                 <div className="container">
                     <div className="block-heading" style={{padding: "24px 0px 0px"}}>

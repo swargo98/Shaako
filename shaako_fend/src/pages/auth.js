@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-
 const Authentication = () => {
     let [username, setusername] = useState(null)
     let [password, setpassword] = useState(null)
     let [isLoggedIn, setisLoggedIn] = useState(false)
     let [failedLogin, setfailedLogin] = useState(false)
+
+    useEffect(() => {
+        checkAlreadyLogged()
+    }, [])
+    
+    let checkAlreadyLogged = () => {
+        let res=localStorage.getItem('logged')
+        if(res==='true'){
+            setisLoggedIn(true)
+        }
+    }
 
     let handleChangeUsername = (value) => {
         setusername(username => ({ ...username, 'username': value }))
@@ -28,8 +38,11 @@ const Authentication = () => {
                 body: JSON.stringify({ username, password })
             })
             let data = await response.json()
-            if (data === 'True') {
+            if (data.correct === 'True') {
                 setisLoggedIn(true)
+                localStorage.setItem('logged', true)
+                localStorage.setItem('organization', data.organization)
+                localStorage.setItem('admin_id', data.id)
             }
             else {
                 setfailedLogin(true)
