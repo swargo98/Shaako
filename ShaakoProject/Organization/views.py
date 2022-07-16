@@ -57,38 +57,32 @@ def fetchLocationSupervisor(request):
         upazilla_thana = data['inputupazilla']
         # ward_union = data['ward_union']['ward_union']
 
-        if len(division) == 0:
-            # get all divisions
-            divisions = Location.objects.values('division').distinct()
-            ret = []
-            for d in divisions:
-                ret.append(d['division'])
-            return Response(ret)
-        elif len(district) == 0:
-            # get all districts where division is equal to division
-            district = Location.objects.values('district').filter(division=division).distinct()
-            ret = []
-            for d in district:
-                ret.append(d['district'])
-            return Response(ret)
-        elif len(upazilla_thana) == 0:
-            # get all upazilla_thana where district is equal to district and division is equal to division
-            upazilla_thana = Location.objects.values('upazilla_thana').filter(district=district,
-                                                                              division=division).distinct()
-            ret = []
-            for d in upazilla_thana:
-                ret.append(d['upazilla_thana'])
-            return Response(ret)
-        # elif len(ward_union) == 0:
-        #     # get all ward_union where upazilla_thana is equal to upazilla_thana and district is equal to district and division is equal to division
-        #     ward_union = Location.objects.values('ward_union').filter(upazilla_thana=upazilla_thana, district=district,
-        #                                                               division=division).distinct()
-        #     ret = []
-        #     for d in ward_union:
-        #         ret.append(d['ward_union'])
-        #     return Response(ret)
-        else:
-            return Response('')
+        dict={}
+        divisions = Location.objects.values('division').distinct()
+        ret = []
+        for d in divisions:
+            ret.append(d['division'])
+        dict['division']=ret
+
+        if len(division)==0:
+            division=ret[0]
+        
+        districts = Location.objects.values('district').filter(division=division).distinct()
+        ret = []
+        for d in districts:
+            ret.append(d['district'])
+        dict['district']=ret
+
+        if len(district)==0:
+            district=ret[0]
+        
+        upazilla_thanas = Location.objects.values('upazilla_thana').filter(district=district).distinct()
+        ret = []
+        for d in upazilla_thanas:
+            ret.append(d['upazilla_thana'])
+        dict['upazilla']=ret
+
+        return Response(dict)
 
 
 @api_view(['GET'])
