@@ -5,16 +5,32 @@ export const Form = ({ onSubmit }) => {
     <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="name">বিভাগ</label>
-        <input className="form-control" id="name" />
+          <br/>
+          <select className="form-control" name="cars" id="cars">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="mercedes">Mercedes</option>
+              <option value="audi">Audi</option>
+          </select>
       </div>
         <div className="form-group">
             <label htmlFor="name">জেলা</label>
-            <input className="form-control" id="name" />
+            <select className="form-control" name="cars" id="cars">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
         </div>
 
         <div className="form-group">
             <label htmlFor="name">উপজেলা</label>
-            <input className="form-control" id="name" />
+            <select className="form-control" name="cars" id="cars">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
         </div>
         <br/>
       <div className="form-group">
