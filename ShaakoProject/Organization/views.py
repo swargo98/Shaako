@@ -90,9 +90,21 @@ def createSupervisor(request):
             return Response('False')
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getSupervisorDetailed(request):
     if request.method == 'GET':
+        ret = []
+        for supervisor in Supervisor.objects.all():
+            location = supervisor.location
+            dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
+                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
+                    'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
+                    'presentAddress': supervisor.presentAddress, 'imagePath': supervisor.imagePath,
+                    'organization': supervisor.organization.id}
+            ret.append(dict)
+        print(ret)
+        return Response(ret)
+    if request.method == 'POST':
         ret = []
         for supervisor in Supervisor.objects.all():
             location = supervisor.location
@@ -173,27 +185,31 @@ def getSupervisor(request):
             ret.append(dict)
         return Response(ret)
 
+
 @api_view(['GET'])
 def getCHW(request):
     if request.method == 'GET':
-        data=request.data
+        data = request.data
         ret = []
         for chw in CHW.objects.filter(supervisor__organization=data):
             location = chw.location
             supervisor = chw.supervisor
             dict = {'name': chw.name, 'division': location.division, 'district': location.district,
-                    'upazilla_thana': location.upazilla_thana, 'ward_union':location.ward_union, 'recruitment_date': chw.recruitment_date.date(),
-                    'id': chw.id, 'email':chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress, 'imagePath': chw.imagePath,
-                    'supervisor_name':supervisor.name, 'supervisor_id':supervisor.id}
+                    'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                    'recruitment_date': chw.recruitment_date.date(),
+                    'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress,
+                    'imagePath': chw.imagePath,
+                    'supervisor_name': supervisor.name, 'supervisor_id': supervisor.id}
             ret.append(dict)
         return Response(ret)
+
 
 @api_view(['POST'])
 def createCHW(request):
     if request.method == 'POST':
-        data=request.data
-        supervisor_id=data['supervisor_id']
-        supervisor=Supervisor.objects.get(id=supervisor_id)
+        data = request.data
+        supervisor_id = data['supervisor_id']
+        supervisor = Supervisor.objects.get(id=supervisor_id)
         name = data['name']
         password = data['password']
         password = ph().hash(password)
@@ -205,18 +221,20 @@ def createCHW(request):
         district = data['district']
         upazilla_thana = data['upazilla_thana']
         ward_union = data['ward_union']
-        location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana, ward_union=ward_union)
+        location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana,
+                                           ward_union=ward_union)
         recruitment_date = datetime.datetime.now()
 
         if location is not None and supervisor is not None:
             location = location[0]
             chw = CHW(name=name, password=password, email=email, contactNo=contactNo,
-                                    presentAddress=presentAddress, imagePath=imagePath, location=location,
-                                    supervisor=supervisor, recruitment_date=recruitment_date)
+                      presentAddress=presentAddress, imagePath=imagePath, location=location,
+                      supervisor=supervisor, recruitment_date=recruitment_date)
             chw.save()
             return Response('True')
 
     return Response('False')
+
 
 @api_view(['POST'])
 def deleteSupervisor(request):
@@ -228,6 +246,7 @@ def deleteSupervisor(request):
         return Response('True')
     return Response('False')
 
+
 @api_view(['POST'])
 def deleteCHW(request):
     if request.method == 'POST':
@@ -237,6 +256,7 @@ def deleteCHW(request):
         chw.delete()
         return Response('True')
     return Response('False')
+
 
 @api_view(['POST'])
 def searchCHW(request):
@@ -253,12 +273,15 @@ def searchCHW(request):
                     searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana
             )) or searchtext in chw.email or searchtext in chw.presentAddress or searchtext in chw.contactNo or searchtext in chw.supervisor.name:
                 dict = {'name': chw.name, 'division': location.division, 'district': location.district,
-                    'upazilla_thana': location.upazilla_thana, 'ward_union':location.ward_union, 'recruitment_date': chw.recruitment_date.date(),
-                    'id': chw.id, 'email':chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress, 'imagePath': chw.imagePath,
-                    'supervisor_name':chw.supervisor.name, 'supervisor_id':chw.supervisor.id}
+                        'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                        'recruitment_date': chw.recruitment_date.date(),
+                        'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo,
+                        'presentAddress': chw.presentAddress, 'imagePath': chw.imagePath,
+                        'supervisor_name': chw.supervisor.name, 'supervisor_id': chw.supervisor.id}
             ret.append(dict)
         # print(ret)
         return Response(ret)
+
 
 @api_view(['POST'])
 def searchSupervisor(request):

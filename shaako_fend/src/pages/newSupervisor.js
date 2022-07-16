@@ -140,7 +140,7 @@ const NewSupervisor = () => {
     let handleSubmit = async () => {
         console.log(name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla)
         if (name.length !== 0 && email.length !== 0 && password.length !== 0 && contact.length !== 0
-            && address.length !== 0 && inputdivision.length !== 0 && inputdistrict.length !== 0 && inputupazilla.length != 0) {
+            && address.length !== 0 && inputdivision.length !== 0 && inputdistrict.length !== 0 && inputupazilla.length !== 0) {
             let response = await fetch('http://127.0.0.1:8000/organization/createSupervisor', {
                 method: "POST",
                 headers: {

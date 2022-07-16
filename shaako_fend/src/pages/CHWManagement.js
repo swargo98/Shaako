@@ -16,18 +16,15 @@ const CHWManagement = () => {
                     <div className="row justify-content-center">
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-star icon"></i>
                             <a href="/chw_list"><h4>স্বাস্থ্যকর্মী তালিকা</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <p>সকল স্বাস্থ্যকর্মীর ডিটেইলড তালিকা দেখতে এখনে ক্লিক করুন</p>
                         </div>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
                             <a href='/new_chw'><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <p>নতুন স্বাস্থ্যকর্মী নিয়োগ করতে এখনে ক্লিক করুন</p>
                         </div>
                         <div className="col-md-5 col-lg-8 feature-box"><i className="icon-refresh icon"></i>
                             <a href='/update_chw'><h4>স্বাস্থ্যকর্মী আপডেট</h4></a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec
-                                auctor in, mattis vitae leo.</p>
+                            <p>সুপারভাইজার পরিবর্তন অথবা ডিলিট করতে এখনে ক্লিক করুন</p>
                         </div>
                     </div>
                 </div>
