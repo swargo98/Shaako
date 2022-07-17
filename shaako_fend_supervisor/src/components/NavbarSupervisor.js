@@ -1,8 +1,19 @@
 import logo from './assets/img/Capture.png'
 import './assets/fonts/simple-line-icons.min.css'
 import './assets/fonts/fontawesome-all.min.css'
+import Notifications from "react-notifications-menu";
+import {useState} from "react";
+
+const DEFAULT_NOTIFICATION = {
+    image:
+        "https://cutshort-data.s3.amazonaws.com/cloudfront/public/companies/5809d1d8af3059ed5b346ed1/logo-1615367026425-logo-v6.png",
+    message: "Notification one.",
+    detailPage: "/events",
+    receivedTime: "12h ago"
+};
 
 const NavbarSupervisor = () => {
+    const [data, setData] = useState([DEFAULT_NOTIFICATION]);
     return (
         <nav className="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
             <div className="container"><img src={logo} alt="logo" style={{width: '40px'}}/><a
@@ -19,8 +30,16 @@ const NavbarSupervisor = () => {
                         <li className="nav-item"><a className="nav-link" href="/">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">ক্যাম্পেইন</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
-                        <li className="nav-item"><a className="nav-link active" href="/"><i className="far fa-bell"
-                                                                                            style={{fontSize: "17px"}}></i></a>
+                        <li className="nav-item"><Notifications
+                            data={data}
+                            header={{
+                                title: "Notifications",
+                                option: { text: "View All", onClick: () => console.log("Clicked") }
+                            }}
+                            markAsRead={(data) => {
+                                console.log(data);
+                            }}
+                        />
                         </li>
                         <li className="nav-item">
                             <div className="nav-item dropdown" style={{margin: "5px"}}><a className="dropdown-toggle"
