@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 const NewCHW = () => {
     let [ward, setward] = useState([])
     let [inputward, setinputward] = useState('')
-    let [inputdivision, setinputdivision] = useState('')
-    let [inputdistrict, setinputdistrict] = useState('')
-    let [inputupazilla, setinputupazilla] = useState('')
+    let [inputdivision, setinputdivision] = useState([])
+    let [inputdistrict, setinputdistrict] = useState([])
+    let [inputupazilla, setinputupazilla] = useState([])
 
     let [sup, setsup] = useState([])
     let [inputsup, setinputsup] = useState('')
@@ -52,55 +52,78 @@ const NewCHW = () => {
         })
 
         let d = await response.json()
-        for (let i = 0; i < d.supervisor.length; i++) {
-            let now = d.supervisor[i]
+        console.log(d)
+        setsup([])
+        setinputdivision([])
+        setinputdistrict([])
+        setinputupazilla([])
+
+        for (let i = 0; i < d.length; i++) {
+            let now = d[i]
             setsup(prevArray => [...prevArray, now]);
         }
-        setinputsup(d.supervisor[0].name);
-        setsupid(d.supervisor[0].id);
-        setinputdivision(d.supervisor[0].division);
-        setinputdistrict(d.supervisor[0].district);
-        setinputupazilla(d.supervisor[0].upazilla_thana);
+        setinputsup(d[0].name);
+        setsupid(d[0].id);
+        setinputdivision(prevArray => [...prevArray, d[0].division]);
+        setinputdistrict(prevArray => [...prevArray, d[0].district]);
+        setinputupazilla(prevArray => [...prevArray, d[0].upazilla_thana]);
     }
 
     let getWards = async () => {
         if (inputsup.length !== 0) {
-            let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
+            console.log(supid)
+            let response = await fetch('http://127.0.0.1:8000/organization/getUnionsOfSupervisor', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
+                body: JSON.stringify(supid)
             })
+            setward([])
             let d = await response.json()
-            for (let i = 0; i < d.ward.length; i++) {
-                let now = d.ward[i]
+            for (let i = 0; i < d.length; i++) {
+                let now = d[i]
                 setward(prevArray => [...prevArray, now]);
             }
-            setinputward(d.ward[0]);
+            setinputward(d[0]);
         }
     }
 
 
     let handleChangeSup = (value) => {
-
+        setinputdivision([])
+        setinputdistrict([])
+        setinputupazilla([])
+        for (let i = 0; i < sup.length; i++) {
+            if (sup[i].id == value) {
+                setinputsup(sup[i].name);
+                setsupid(sup[i].id);
+                setinputdivision(prevArray => [...prevArray, sup[i].division]);
+                setinputdistrict(prevArray => [...prevArray, sup[i].district]);
+                setinputupazilla(prevArray => [...prevArray, sup[i].upazilla_thana]);
+            }
+        }
     }
 
 
-    let  = (value) => {
-        setward(value)
-    }handleChangeWard
+    let handleChangeWard = (value) => {
+        setinputward(value)
+    }
 
     let handleSubmit = async () => {
         console.log(name, email, password, contact, address, organization, inputward, supid)
         if (name.length !== 0 && email.length !== 0 && password.length !== 0 && contact.length !== 0
             && address.length !== 0 && inputward.length !== 0 && inputsup.length !== 0) {
-            let response = await fetch('http://127.0.0.1:8000/organization/createSupervisor', {
+            let division = inputdivision[0]
+            let district = inputdistrict[0]
+            let upazilla_thana = inputupazilla[0]
+            let response = await fetch('http://127.0.0.1:8000/organization/createCHW', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, email, password, contact, address, organization, inputward, supid })
+
+                body: JSON.stringify({ name, email, password, contact, address, organization, inputward, supid, division, district, upazilla_thana })
             })
             let data = await response.json()
         }
@@ -139,20 +162,21 @@ const NewCHW = () => {
 
                                 <label htmlFor="name">সুপারভাইজার সিলেক্ট</label>
                                 <br />
-                                <select className="form-control" onChange={(e) => { handleChangeSup(e.target.value) }} value={inputsup?.body}>
+                                <select className="form-control" onChange={(e) => { handleChangeSup(e.target.value) }} value={supid?.body}>
                                     {
-                                        division.map((r) => {
+                                        sup.map((r) => {
                                             return (
-                                                <option value={r}>{r}</option>
+                                                <option value={r.id}>(ID: {r.id})&nbsp;{r.name}</option>
                                             )
                                         })
                                     }
                                 </select>
+                                <br />
                                 <label htmlFor="name">কর্মরত বিভাগ</label>
                                 <br />
                                 <select className="form-control" value={inputdivision?.body}>
                                     {
-                                        division.map((r) => {
+                                        inputdivision.map((r) => {
                                             return (
                                                 <option value={r}>{r}</option>
                                             )
@@ -163,9 +187,9 @@ const NewCHW = () => {
                             <br />
                             <div className="form-group">
                                 <label htmlFor="name">কর্মরত জেলা</label>
-                                <select className="form-control" onChange={(e) => { handleChangeDistrict(e.target.value) }} value={inputdistrict?.body}>
+                                <select className="form-control" value={inputdistrict?.body}>
                                     {
-                                        district.map((r) => {
+                                        inputdistrict.map((r) => {
                                             return (
                                                 <option value={r}>{r}</option>
                                             )
@@ -176,9 +200,9 @@ const NewCHW = () => {
                             <br />
                             <div className="form-group">
                                 <label htmlFor="name">কর্মরত উপজেলা</label>
-                                <select className="form-control" onChange={(e) => { handleChangeUpazilla(e.target.value) }} value={inputupazilla?.body}>
+                                <select className="form-control" value={inputupazilla?.body}>
                                     {
-                                        upazilla.map((r) => {
+                                        inputupazilla.map((r) => {
                                             return (
                                                 <option value={r}>{r}</option>
                                             )
@@ -186,11 +210,12 @@ const NewCHW = () => {
                                     }
                                 </select>
                             </div>
+                            <br />
                             <div className="form-group">
                                 <label htmlFor="name">কর্মরত ওয়ার্ড</label>
-                                <select className="form-control" onChange={(e) => { handleChangeUpazilla(e.target.value) }} value={inputupazilla?.body}>
+                                <select className="form-control" onChange={(e) => { handleChangeWard(e.target.value) }} value={inputward?.body}>
                                     {
-                                        upazilla.map((r) => {
+                                        ward.map((r) => {
                                             return (
                                                 <option value={r}>{r}</option>
                                             )

@@ -43,6 +43,7 @@ export class ContainerCHW extends Component {
             closeModal={this.closeModal}
             onKeyDown={this.onKeyDown}
             onClickOutside={this.onClickOutside}
+            chwid={this.props.chwid}
           />
         ) : null}
       </React.Fragment>

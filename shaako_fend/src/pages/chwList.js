@@ -5,13 +5,19 @@ import React, { useState, useEffect } from "react";
 const CHWList = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
-
+    let organization = localStorage.getItem('organization')
     useEffect(() => {
         getCHW()
     }, [])
 
     let getCHW = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorDetailed')
+        let response = await fetch('http://127.0.0.1:8000/organization/getCHW', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(organization)
+        })
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
@@ -26,15 +32,15 @@ const CHWList = () => {
 
     let handleSubmit = async () => {
         console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
+        let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(search)
+            body: JSON.stringify({ search, organization })
         })
         let d = await response.json()
-        setresult([])
+        setresult([]) 
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
             setresult(prevArray => [...prevArray, now]);
@@ -86,9 +92,9 @@ const CHWList = () => {
                                                 </td>
                                                 <td>{r.presentAddress}
                                                 </td>
-                                                <td>{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
+                                                <td>{r.ward_union},&nbsp;{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
                                                 </td>
-                                                <td>{r.supervisor}</td>
+                                                <td>{r.supervisor_name}</td>
                                                 <td>{r.recruitment_date}</td>
                                             </tr>
                                         );

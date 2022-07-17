@@ -122,13 +122,13 @@ def getSupervisorDetailed(request):
 def getUnionsOfSupervisor(request):
     if request.method == 'POST':
         data = request.data
-        supervisor_id = data['supervisor_id']
+        supervisor_id = data
         supervisor = Supervisor.objects.get(id=supervisor_id)
         if supervisor is not None:
             location = supervisor.location
-            division=location.division
-            district=location.district
-            upazilla_thana=location.upazilla_thana
+            division = location.division
+            district = location.district
+            upazilla_thana = location.upazilla_thana
 
             # find all location which is in the same division, district and upazilla_thana
             location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
@@ -137,7 +137,6 @@ def getUnionsOfSupervisor(request):
                 ret.append(loc.ward_union)
             return Response(ret)
     return Response('WRONG')
-
 
 
 @api_view(['POST'])
@@ -208,10 +207,11 @@ def getSupervisor(request):
         return Response(ret)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def getCHW(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = request.data
+        print(data)
         ret = []
         for chw in CHW.objects.filter(supervisor__organization=data):
             location = chw.location
@@ -230,19 +230,19 @@ def getCHW(request):
 def createCHW(request):
     if request.method == 'POST':
         data = request.data
-        supervisor_id = data['supervisor_id']
+        supervisor_id = data['supid']
         supervisor = Supervisor.objects.get(id=supervisor_id)
         name = data['name']
         password = data['password']
         password = ph().hash(password)
         email = data['email']
-        contactNo = data['contactNo']
-        presentAddress = data['presentAddress']
+        contactNo = data['contact']
+        presentAddress = data['address']
         imagePath = 'image\default.png'
         division = data['division']
         district = data['district']
         upazilla_thana = data['upazilla_thana']
-        ward_union = data['ward_union']
+        ward_union = data['inputward']
         location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana,
                                            ward_union=ward_union)
         recruitment_date = datetime.datetime.now()
@@ -273,6 +273,7 @@ def deleteSupervisor(request):
 def deleteCHW(request):
     if request.method == 'POST':
         data = request.data
+        print(data)
         id = data
         chw = CHW.objects.get(id=id)
         chw.delete()
@@ -284,15 +285,16 @@ def deleteCHW(request):
 def searchCHW(request):
     if request.method == 'POST':
         data = request.data
-        searchtext = data['searchtext']
-        organization_id = data['organization_id']
+        searchtext = data['search']
+        organization_id = data['organization']
         organization = Organization.objects.get(id=organization_id)
-        chws = CHW.objects.filter(supervisor__organization=organization)
+        chws = CHW.objects.filter(supervisor__organization=organization).distinct()
         ret = []
         for chw in chws:
+            # print(chw.name)
             location = chw.location
             if searchtext in chw.name or (location is not None and (
-                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana
+                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana or searchtext in location.ward_union
             )) or searchtext in chw.email or searchtext in chw.presentAddress or searchtext in chw.contactNo or searchtext in chw.supervisor.name:
                 dict = {'name': chw.name, 'division': location.division, 'district': location.district,
                         'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
@@ -300,7 +302,7 @@ def searchCHW(request):
                         'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo,
                         'presentAddress': chw.presentAddress, 'imagePath': chw.imagePath,
                         'supervisor_name': chw.supervisor.name, 'supervisor_id': chw.supervisor.id}
-            ret.append(dict)
+                ret.append(dict)
         # print(ret)
         return Response(ret)
 
