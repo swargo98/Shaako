@@ -5,6 +5,7 @@ import man3 from './assets/img/avatars/avatar3.jpg'
 import Container from "../popup/Container";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 const UpdateSupervisor = () => {
     let [result, setresult] = useState([])
@@ -56,6 +57,27 @@ const UpdateSupervisor = () => {
             setresult(prevArray => [...prevArray, now]);
         }
     }
+
+    let submit = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onCancel(id)
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    };
 
     return (
         <div className="container-fluid">
@@ -109,7 +131,7 @@ const UpdateSupervisor = () => {
                                                 <td>{r.recruitment_date}</td>
                                                 <td>
                                                     <button className="btn btn-primary" type="submit"
-                                                        style={{ background: "rgb(247,22,22)" }} onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) onCancel(r.id) }}
+                                                        style={{ background: "rgb(247,22,22)" }} onClick={() => submit(r.id)}
                                                     >অব্যহতি প্রদান
                                                     </button>
                                                 </td>
