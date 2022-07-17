@@ -46,6 +46,41 @@ def login(request):
             return Response(dict)
 
 
+@api_view(['POST'])
+def getAssignableSupervisor(request):
+    if request.method == 'POST':
+        chw_id = request.data
+        chw=CHW.objects.get(id=chw_id)
+        division=chw.location.division
+        district=chw.location.district
+        upazilla_thana=chw.location.upazilla_thana
+        organization_id=chw.organization.id
+        ret=[]
+        for supervisor in Supervisor.objects.all():
+            if supervisor.organization.id==organization_id:
+                if supervisor.location.division==division and supervisor.location.district==district and supervisor.location.upazilla_thana==upazilla_thana:
+                    dict = {'name': supervisor.name, 'division': supervisor.location.division, 'district': supervisor.location.district,
+                    'upazilla_thana': supervisor.location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
+                    'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
+                    'presentAddress': supervisor.presentAddress, 'imagePath': supervisor.imagePath,
+                    'organization': supervisor.organization.id}
+                    ret.append(dict)
+        return Response(ret)        
+@api_view(['POST'])
+def changeSupervisorOfCHW(request):
+    if request.method == 'POST':
+        data = request.data
+        chw_id = data['chw_id']
+        supervisor_id = data['supervisor_id']
+        chw=CHW.objects.get(id=chw_id)
+        supervisor=Supervisor.objects.get(id=supervisor_id)
+        if supervisor is not None and chw is not None:
+            chw.supervisor=supervisor
+            chw.save()
+            return Response('True')
+    return Response('False')
+
+
 @api_view(['GET'])
 def home(request):
     if request.method == 'GET':
