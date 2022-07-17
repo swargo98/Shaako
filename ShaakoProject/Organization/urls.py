@@ -13,7 +13,7 @@ urlpatterns = [
     path('organization/getSupervisorDetailed', views.getSupervisorDetailed),
     path('organization/getUnionsOfSupervisor', views.getUnionsOfSupervisor),
     path('organization/getAssignableSupervisor', views.getAssignableSupervisor),
-    path('organization/changeSupervisorOfCHW', views.getAssignableSupervisor),
+    path('organization/changeSupervisorOfCHW', views.changeSupervisorOfCHW),
     
 
     path('organization/getCHW', views.getCHW),
