@@ -71,12 +71,10 @@ const CHWList = () => {
                             <thead>
                                 <tr>
                                     <th>নাম</th>
-                                    <th>ইমেইল</th>
                                     <th>মোবাইল নম্বর</th>
-                                    <th>বর্তমান ঠিকানা</th>
                                     <th>কর্মরত এলাকা</th>
-                                    <th>সুপারভাইজার</th>
                                     <th>নিয়োগ তারিখ</th>
+                                    <th>রোগীর সংখ্যা</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,17 +83,14 @@ const CHWList = () => {
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
-                                                    src={man2} alt="man" />{r.name}</td>
-                                                <td>{r.email}
-                                                </td>
+                                                         src={man2} alt="man" /><a style={{textDecoration: "none"}} href="/">{r.name}</a></td>
                                                 <td>{r.contactNo}
                                                 </td>
-                                                <td>{r.presentAddress}
-                                                </td>
+
                                                 <td>{r.ward_union},&nbsp;{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
                                                 </td>
-                                                <td>{r.supervisor_name}</td>
                                                 <td>{r.recruitment_date}</td>
+                                                <td>১০০</td>
                                             </tr>
                                         );
                                     })

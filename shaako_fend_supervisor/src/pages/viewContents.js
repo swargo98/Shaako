@@ -2,6 +2,7 @@ import man1 from './assets/img/avatars/avatar1.jpg'
 import man2 from './assets/img/avatars/avatar2.jpg'
 import man3 from './assets/img/avatars/avatar3.jpg'
 import { Navigate } from 'react-router-dom';
+import React from "react";
 
 const ViewContents = () => {
     return (
@@ -24,7 +25,7 @@ const ViewContents = () => {
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
                         <div className="col">
                             <div className="p-4">
-                                <h4>পোলিও টিকা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>পোলিও টিকা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
@@ -40,7 +41,7 @@ const ViewContents = () => {
                         </div>
                         <div className="col">
                             <div className="p-4">
-                                <h4>কোভিড-১৯ সচেতনতা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>কোভিড-১৯ সচেতনতা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
@@ -56,7 +57,7 @@ const ViewContents = () => {
                         </div>
                         <div className="col">
                             <div className="p-4">
-                                <h4>প্রাথমিক চিকিৎসা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>প্রাথমিক চিকিৎসা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
@@ -88,7 +89,7 @@ const ViewContents = () => {
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
                         <div className="col">
                             <div className="p-4">
-                                <h4>পোলিও টিকা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>পোলিও টিকা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
@@ -104,7 +105,7 @@ const ViewContents = () => {
                         </div>
                         <div className="col">
                             <div className="p-4">
-                                <h4>কোভিড-১৯ সচেতনতা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>কোভিড-১৯ সচেতনতা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
@@ -120,7 +121,7 @@ const ViewContents = () => {
                         </div>
                         <div className="col">
                             <div className="p-4">
-                                <h4>প্রাথমিক চিকিৎসা</h4>
+                                <a style={{textDecoration: "none"}} href="/blog_post"><h4>প্রাথমিক চিকিৎসা</h4></a>
                                 <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
                                     facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
                                     metus.</p>
