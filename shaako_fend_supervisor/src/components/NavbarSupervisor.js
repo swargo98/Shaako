@@ -14,20 +14,9 @@ const NavbarSupervisor = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navcol-1">
                     <ul className="navbar-nav ms-auto">
-                        <li className="nav-item"><a className="nav-link active" href="/">হোম</a></li>
-                        <li className="nav-item" style={{margin: "0px", padding: "0px 1px 0px 0px"}}>
-                            <div className="nav-item dropdown" style={{margin: "5px"}}><a className="dropdown-toggle"
-                                                                                       aria-expanded="false"
-                                                                                       data-bs-toggle="dropdown"
-                                                                                       href="/"
-                                                                                       style={{color: "rgb(0,0,0)", margin: "-27px", padding: "24px"}}><span
-                                style={{color: 'rgb(0, 0, 0)'}}>পাঠসমূহ</span></a>
-                                <div className="dropdown-menu"><a className="dropdown-item" href="/new_lesson">কন্টেন্ট</a><a
-                                    className="dropdown-item" href="/">কুইজ</a></div>
-                            </div>
-                        </li>
-                        <li className="nav-item"><a className="nav-link" href="/"
-                                                    style={{margin: "0px"}}>স্বাস্থ্যকর্মী</a></li>
+                        <li className="nav-item"><a className="nav-link active" href="/home">হোম</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/view_contents">পাঠসমূহ</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">ক্যাম্পেইন</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
                         <li className="nav-item"><a className="nav-link active" href="/"><i className="far fa-bell"
