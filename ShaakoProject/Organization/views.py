@@ -169,7 +169,6 @@ def getUnionsOfSupervisor(request):
             district = location.district
             upazilla_thana = location.upazilla_thana
 
-            # find all location which is in the same division, district and upazilla_thana
             location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
             ret = []
             for loc in location:
