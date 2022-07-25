@@ -3,12 +3,15 @@ from statistics import mode
 from django.db import models
 
 
+# Create your models here.
+
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     officeAddress = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
 
 
+# create OrganizationAdmin class with Organization, name, password, email, contact no, present address and image path
 class OrganizationAdmin(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -19,6 +22,7 @@ class OrganizationAdmin(models.Model):
     imagePath = models.CharField(max_length=100)
 
 
+# create Location class with division, district, upazilla_thana, ward_union
 class Location(models.Model):
     division = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
@@ -26,6 +30,7 @@ class Location(models.Model):
     ward_union = models.CharField(max_length=100, null=True)
 
 
+# create notification class with timestamp, description, notification_type, type_id, is_read
 class Notification(models.Model):
     timestamp = models.DateTimeField()
     description = models.CharField(max_length=100)
@@ -34,6 +39,7 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
 
 
+# create Supervisor with Organization, name, password, email, contact no, present_address, image_path
 class Supervisor(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -46,6 +52,7 @@ class Supervisor(models.Model):
     recruitment_date = models.DateTimeField(null=True)
 
 
+# create Campaign with Title, state_date, end_date, campaign_details and goal
 class Campaign(models.Model):
     title = models.CharField(max_length=100)
     state_date = models.DateTimeField()
@@ -54,16 +61,19 @@ class Campaign(models.Model):
     goal = models.CharField(max_length=100)
 
 
+# create Location_Campaign with Location and Campaign
 class Location_Campaign(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
 
 
+# create Supervisor Campaign with Supervisor and Campaign
 class Supervisor_Campaign(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
 
 
+# create CHW with Supervisor, name, password, email, contact no, present_address, image_path
 class CHW(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -75,6 +85,7 @@ class CHW(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     recruitment_date = models.DateTimeField(null=True)
 
+# create Patient with name, address, contact no, date_of_birth, gender
 class Patient(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
@@ -83,6 +94,7 @@ class Patient(models.Model):
     gender = models.CharField(max_length=10)
 
 
+# create PatientCampaign with patient, campaign, chw and enrollment_date
 class PatientCampaign(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
@@ -108,6 +120,7 @@ class VisitForm(models.Model):
     next_visit_date = models.DateTimeField()
 
 
+# create Lesson with supervisor, title, content, upload_date
 class Lesson(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -115,12 +128,14 @@ class Lesson(models.Model):
     upload_date = models.DateTimeField()
 
 
+# create Quiz with title, upload date, lesson
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
     upload_date = models.DateTimeField()
     relatedLesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
 
+# create QuizItem with Quiz, Question, option_1, option_2, option_3, option_4, point, correct_option
 class QuizItem(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.CharField(max_length=100)
@@ -132,6 +147,7 @@ class QuizItem(models.Model):
     correct_option = models.IntegerField()
 
 
+# create Lesson_CHW  with Lesson, CHW, is_read, dateOfRead
 class Lesson_CHW(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     chw = models.ForeignKey(CHW, on_delete=models.CASCADE)
@@ -139,12 +155,14 @@ class Lesson_CHW(models.Model):
     dateOfRead = models.DateTimeField()
 
 
+# create QuizSubmission with Quiz, CHW, date
 class QuizSubmission(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     chw = models.ForeignKey(CHW, on_delete=models.CASCADE)
     date = models.DateTimeField()
 
 
+# create SubmissionItem with QuizSubmission, QuizItem, chosenOption
 class SubmissionItem(models.Model):
     quizSubmission = models.ForeignKey(QuizSubmission, on_delete=models.CASCADE)
     quizItem = models.ForeignKey(QuizItem, on_delete=models.CASCADE)
