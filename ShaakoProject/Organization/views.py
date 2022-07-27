@@ -1,14 +1,21 @@
 from __future__ import division
 import datetime
+from io import BytesIO
+
+from PIL import Image
+from os.path import exists
+
 from django.shortcuts import render
 from pyparsing import Or
 from rest_framework import viewsets
+
+from ShaakoProject.settings import BASE_DIR
 from .serializers import *
 from .models import *
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from argon2 import PasswordHasher as ph
 
 
@@ -112,6 +119,7 @@ def createSupervisor(request):
         division = data['inputdivision']
         district = data['inputdistrict']
         upazilla_thana = data['inputupazilla']
+
         recruitment_date = datetime.datetime.now()
 
         location = Location.objects.filter(division=division, district=district, upazilla_thana=upazilla_thana)
@@ -123,27 +131,38 @@ def createSupervisor(request):
             supervisor = Supervisor(name=name, password=password, email=email, contactNo=contactNo,
                                     presentAddress=presentAddress, imagePath=imagePath, location=location,
                                     organization=organization, recruitment_date=recruitment_date)
+
             supervisor.save()
+            try:
+                image = data['inputimage']
+                img = Image.open(image)
+                img.save(str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png",qualtity=95,optimize=True)
+            except:
+                pass
+
             return Response('True')
         else:
             return Response('False')
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
+def getSupervisorImage(request):
+    data = request.data
+    id = data
+    path = str(BASE_DIR) + "//image//supervisor//" + str(id) + ".png"
+    print("wtf "+path)
+    if not exists(path):
+        path = str(BASE_DIR) + "//image//supervisor//default.png"
+    im = Image.open(path)
+    # send image as response
+    buffered = BytesIO()
+    im.save(buffered, format="PNG")
+    return HttpResponse(buffered.getvalue(), content_type="image/png")
+
+
+@api_view(['GET'])
 def getSupervisorDetailed(request):
     if request.method == 'GET':
-        ret = []
-        for supervisor in Supervisor.objects.all():
-            location = supervisor.location
-            dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
-                    'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
-                    'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
-                    'presentAddress': supervisor.presentAddress, 'imagePath': supervisor.imagePath,
-                    'organization': supervisor.organization.id}
-            ret.append(dict)
-        print(ret)
-        return Response(ret)
-    if request.method == 'POST':
         ret = []
         for supervisor in Supervisor.objects.all():
             location = supervisor.location
