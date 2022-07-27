@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 const SupervisorList = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
-    let [images, setimages] = useState([])
 
     useEffect(() => {
         getSupervisor()
@@ -19,24 +18,6 @@ const SupervisorList = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            console.log(now.id)
-            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(now.id)
-            })
-            //take image respone from bufferIO
-            let image = await response2.blob()
-            //convert to base64
-            let image64 = await image.arrayBuffer()
-            //convert to base64
-            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            //convert to url
-            let imageurl = `data:image/png;base64,${image64base64}`
-            //push to array
-            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -58,27 +39,6 @@ const SupervisorList = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(now.id)
-            })
-            // let result = stackSizeSync();
-            // console.log(result)
-
-            //take image respone from bufferIO
-            let image = await response2.blob()
-            //convert to base64
-            let image64 = await image.arrayBuffer()
-            //convert to base64
-            let image64base64 = await image64.toString()
-
-            //convert to url
-            let imageurl = `data:image/png;base64,${image64base64}`
-            //push to array
-            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -121,7 +81,7 @@ const SupervisorList = () => {
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
-                                                    src={r.image} alt="man" />{r.name}</td>
+                                                    src={man2} alt="man" />{r.name}</td>
                                                 <td>{r.email}
                                                 </td>
                                                 <td>{r.contactNo}

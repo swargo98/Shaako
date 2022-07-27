@@ -14,7 +14,6 @@ const NewSupervisor = () => {
     let [password, setpassword] = useState('')
     let [contact, setcontact] = useState('')
     let [address, setaddress] = useState('')
-    let [inputimage, setinputimage] = useState(null)
     let organization = localStorage.getItem('organization')
     let handleChangename = (value) => {
         setname(value)
@@ -138,36 +137,16 @@ const NewSupervisor = () => {
     let handleChangeUpazilla = (value) => {
         setinputupazilla(value)
     }
-
-    let handleChangeImage = (value) => {
-        // set the inputimage to value.target.files[0]
-        console.log(value);
-        console.log(value.target.files[0]);
-        setinputimage(value.target.files[0])
-    }
-
     let handleSubmit = async () => {
-        console.log(name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla, inputimage)
+        console.log(name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla)
         if (name.length !== 0 && email.length !== 0 && password.length !== 0 && contact.length !== 0
             && address.length !== 0 && inputdivision.length !== 0 && inputdistrict.length !== 0 && inputupazilla.length !== 0) {
-                const uploadData = new FormData();
-                uploadData.append('name', name);
-                uploadData.append('email', email);
-                uploadData.append('password', password);
-                uploadData.append('contact', contact);
-                uploadData.append('address', address);
-                uploadData.append('organization', organization);
-                uploadData.append('inputdivision', inputdivision);
-                uploadData.append('inputdistrict', inputdistrict);
-                uploadData.append('inputupazilla', inputupazilla);
-                uploadData.append('inputimage', inputimage);
-                let response = await fetch('http://127.0.0.1:8000/organization/createSupervisor', {
+            let response = await fetch('http://127.0.0.1:8000/organization/createSupervisor', {
                 method: "POST",
-                // headers: {
-                //     'Content-Type': 'application/json'
-                // },
-                body : uploadData
-                //body: JSON.stringify({ name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla, inputimage })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla })
             })
             let data = await response.json()
         }
@@ -243,7 +222,7 @@ const NewSupervisor = () => {
                             </div>
                             <br />
                             <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label><input
-                                className="form-control" type="file" onChange={(e) => { handleChangeImage(e) }}  /></div>
+                                className="form-control" type="file" /></div>
                             <div className="mb-3">
                                 <button className="btn btn-primary" type="button" onClick={handleSubmit}>সংরক্ষণ করুন</button>
                             </div>
