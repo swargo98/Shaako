@@ -1,5 +1,6 @@
 from __future__ import division
 import datetime
+from email import message
 from io import BytesIO
 
 from PIL import Image
@@ -119,6 +120,37 @@ def createSupervisor(request):
         division = data['inputdivision']
         district = data['inputdistrict']
         upazilla_thana = data['inputupazilla']
+        # find supervisor with email equals to email
+        supervisor = Supervisor.objects.filter(email=email)
+
+        ok=1
+        message=""
+
+        if len(name)==0:
+            ok=0
+            message+="নাম লিখুন"+"\n"
+            return Response(message)
+        if len(password)==0:
+            ok=0
+            message+="পাসওয়ার্ড লিখুন"+"\n"
+            return Response(message)
+        if len(email)==0:
+            ok=0
+            message+="ইমেইল লিখুন"+"\n"
+            return Response(message)
+        if len(contactNo)==0:
+            ok=0
+            message+="মোবাইল নম্বর লিখুন"+"\n"
+            return Response(message)
+        if len(presentAddress)==0:
+            ok=0
+            message+="ঠিকানা লিখুন"+"\n"
+            return Response(message)
+
+        if supervisor:
+            ok=0
+            message+="ইমেইল প্রযুক্ত সুপারভাইজর পাওয়া গেছে"+"\n"
+            return Response(message)
 
         recruitment_date = datetime.datetime.now()
 
@@ -136,13 +168,21 @@ def createSupervisor(request):
             try:
                 image = data['inputimage']
                 img = Image.open(image)
+                # find size of img in kB
+                #resize image as 100kB
+
+                width, height = img.size
+                TARGET_WIDTH = 200
+                coefficient = width / TARGET_WIDTH
+                new_height = height / coefficient
+                img = img.resize((int(TARGET_WIDTH),int(new_height)),Image.ANTIALIAS)
                 img.save(str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png",qualtity=95,optimize=True)
             except:
                 pass
 
             return Response('True')
         else:
-            return Response('False')
+            return Response('আনএক্সপেক্টেড এরর!')
 
 
 @api_view(['POST'])

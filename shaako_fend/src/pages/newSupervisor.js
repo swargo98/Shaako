@@ -15,6 +15,10 @@ const NewSupervisor = () => {
     let [contact, setcontact] = useState('')
     let [address, setaddress] = useState('')
     let [inputimage, setinputimage] = useState(null)
+    let [failedCreate, setfailedCreate] = useState('')
+    let [failedCreateBool, setfailedCreateBool] = useState(false)
+    let [done , setdone] = useState(false)
+
     let organization = localStorage.getItem('organization')
     let handleChangename = (value) => {
         setname(value)
@@ -148,8 +152,7 @@ const NewSupervisor = () => {
 
     let handleSubmit = async () => {
         console.log(name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla, inputimage)
-        if (name.length !== 0 && email.length !== 0 && password.length !== 0 && contact.length !== 0
-            && address.length !== 0 && inputdivision.length !== 0 && inputdistrict.length !== 0 && inputupazilla.length !== 0) {
+        {
                 const uploadData = new FormData();
                 uploadData.append('name', name);
                 uploadData.append('email', email);
@@ -170,9 +173,18 @@ const NewSupervisor = () => {
                 //body: JSON.stringify({ name, email, password, contact, address, organization, inputdivision, inputdistrict, inputupazilla, inputimage })
             })
             let data = await response.json()
+            console.log(data)
+            if (data === 'True') {
+                setdone(true)
+            }
+            else {
+                setfailedCreate(data)
+                setfailedCreateBool(true)
+            }
         }
     }
     return (
+        <>
         <main className="page landing-page" style={{ padding: "20px 0px 0px" }}>
             {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
             <section className="clean-block features" style={{ background: "#a6f9d6" }}>
@@ -246,12 +258,15 @@ const NewSupervisor = () => {
                                 className="form-control" type="file" onChange={(e) => { handleChangeImage(e) }}  /></div>
                             <div className="mb-3">
                                 <button className="btn btn-primary" type="button" onClick={handleSubmit}>সংরক্ষণ করুন</button>
+                                {failedCreateBool && <p style={{color: "red"}}>{failedCreate}!</p>}
                             </div>
                         </form>
                     </div>
                 </section>
             </section>
         </main>
+        {done && <Navigate to="/supervisor_list" replace={true} />}
+        </>
     );
 }
 
