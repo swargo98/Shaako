@@ -10,13 +10,19 @@ import Swal from "sweetalert2";
 const UpdateSupervisor = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
-
+    let organization = localStorage.getItem('organization')
     useEffect(() => {
         getSupervisor()
     }, [])
 
     let getSupervisor = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisor')
+        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisor', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(organization)
+        })
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {

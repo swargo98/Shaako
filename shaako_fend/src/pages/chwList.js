@@ -22,6 +22,23 @@ const CHWList = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            // let response2 = await fetch('http://127.0.0.1:8000/organization/image/CHW', {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(now.id)
+            // })
+            // //take image respone from bufferIO
+            // let image = await response2.blob()
+            // //convert to base64
+            // let image64 = await image.arrayBuffer()
+            // //convert to base64
+            // let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            // //convert to url
+            // let imageurl = `data:image/png;base64,${image64base64}`
+            // //push to array
+            // now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -43,6 +60,23 @@ const CHWList = () => {
         setresult([]) 
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            // let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(now.id)
+            // })
+            // //take image respone from bufferIO
+            // let image = await response2.blob()
+            // //convert to base64
+            // let image64 = await image.arrayBuffer()
+            // //convert to base64
+            // let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            // //convert to url
+            // let imageurl = `data:image/png;base64,${image64base64}`
+            // //push to array
+            // now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }

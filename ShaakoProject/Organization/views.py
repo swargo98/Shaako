@@ -123,33 +123,33 @@ def createSupervisor(request):
         # find supervisor with email equals to email
         supervisor = Supervisor.objects.filter(email=email)
 
-        ok=1
-        message=""
+        ok = 1
+        message = ""
 
-        if len(name)==0:
-            ok=0
-            message+="নাম লিখুন"+"\n"
+        if len(name) == 0:
+            ok = 0
+            message += "নাম লিখুন" + "\n"
             return Response(message)
-        if len(password)==0:
-            ok=0
-            message+="পাসওয়ার্ড লিখুন"+"\n"
+        if len(password) == 0:
+            ok = 0
+            message += "পাসওয়ার্ড লিখুন" + "\n"
             return Response(message)
-        if len(email)==0:
-            ok=0
-            message+="ইমেইল লিখুন"+"\n"
+        if len(email) == 0:
+            ok = 0
+            message += "ইমেইল লিখুন" + "\n"
             return Response(message)
-        if len(contactNo)==0:
-            ok=0
-            message+="মোবাইল নম্বর লিখুন"+"\n"
+        if len(contactNo) == 0:
+            ok = 0
+            message += "মোবাইল নম্বর লিখুন" + "\n"
             return Response(message)
-        if len(presentAddress)==0:
-            ok=0
-            message+="ঠিকানা লিখুন"+"\n"
+        if len(presentAddress) == 0:
+            ok = 0
+            message += "ঠিকানা লিখুন" + "\n"
             return Response(message)
 
         if supervisor:
-            ok=0
-            message+="ইমেইল প্রযুক্ত সুপারভাইজর পাওয়া গেছে"+"\n"
+            ok = 0
+            message += "ইমেইল প্রযুক্ত সুপারভাইজর পাওয়া গেছে" + "\n"
             return Response(message)
 
         recruitment_date = datetime.datetime.now()
@@ -169,14 +169,15 @@ def createSupervisor(request):
                 image = data['inputimage']
                 img = Image.open(image)
                 # find size of img in kB
-                #resize image as 100kB
+                # resize image as 100kB
 
                 width, height = img.size
                 TARGET_WIDTH = 200
                 coefficient = width / TARGET_WIDTH
                 new_height = height / coefficient
-                img = img.resize((int(TARGET_WIDTH),int(new_height)),Image.ANTIALIAS)
-                img.save(str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png",qualtity=95,optimize=True)
+                img = img.resize((int(TARGET_WIDTH), int(new_height)), Image.ANTIALIAS)
+                img.save(str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png", qualtity=95,
+                         optimize=True)
             except:
                 pass
 
@@ -190,7 +191,7 @@ def getSupervisorImage(request):
     data = request.data
     id = data
     path = str(BASE_DIR) + "//image//supervisor//" + str(id) + ".png"
-    print("wtf "+path)
+    print("wtf " + path)
     if not exists(path):
         path = str(BASE_DIR) + "//image//supervisor//default.png"
     im = Image.open(path)
@@ -200,11 +201,16 @@ def getSupervisorImage(request):
     return HttpResponse(buffered.getvalue(), content_type="image/png")
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def getSupervisorDetailed(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         ret = []
-        for supervisor in Supervisor.objects.all():
+        data = request.data
+        organization = data
+        #print(organization)
+        # get all supervisor under this organization
+        supervisors = Supervisor.objects.filter(organization=organization)
+        for supervisor in supervisors:
             location = supervisor.location
             dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
                     'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
@@ -292,11 +298,15 @@ def fetchLocationSupervisor(request):
         return Response(dict)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def getSupervisor(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         ret = []
-        for supervisor in Supervisor.objects.all():
+        data = request.data
+        organization = data
+        # get all supervisor under this organization
+        supervisors = Supervisor.objects.filter(organization=organization)
+        for supervisor in supervisors:
             location = supervisor.location
             dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
                     'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
@@ -409,9 +419,12 @@ def searchCHW(request):
 def searchSupervisor(request):
     if request.method == 'POST':
         data = request.data
-        searchtext = data
+        searchtext = data['search']
+        organization = data['organization']
+        # get all supervisor under this organization
+        supervisors = Supervisor.objects.filter(organization=organization)
         ret = []
-        for supervisor in Supervisor.objects.all():
+        for supervisor in supervisors:
             location = supervisor.location
             if searchtext in supervisor.name or (location is not None and (
                     searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana

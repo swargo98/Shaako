@@ -1,3 +1,7 @@
+import man1 from './assets/img/avatars/avatar1.jpg'
+import man2 from './assets/img/avatars/avatar2.jpg'
+import man3 from './assets/img/avatars/avatar3.jpg'
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -60,6 +64,25 @@ const NewCHW = () => {
 
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(now.id)
+            })
+
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
+            console.log(now)
             setsup(prevArray => [...prevArray, now]);
         }
         setinputsup(d[0].name);
@@ -166,7 +189,7 @@ const NewCHW = () => {
                                     {
                                         sup.map((r) => {
                                             return (
-                                                <option value={r.id}>(ID: {r.id})&nbsp;{r.name}</option>
+                                                <option value={r.id} style={{background-image:url(./assets/img/avatars/avatar1.jpg);}}>{r.name}</option>
                                             )
                                         })
                                     }

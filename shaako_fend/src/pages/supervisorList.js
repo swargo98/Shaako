@@ -8,14 +8,19 @@ const SupervisorList = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
     let [images, setimages] = useState([])
-
+    let organization = localStorage.getItem('organization')
     useEffect(() => {
         getSupervisor()
     }, [])
 
     let getSupervisor = async () => {
-        console.log('dhukechi')
-        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorDetailed')
+        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorDetailed', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(organization)
+        })
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
@@ -53,7 +58,7 @@ const SupervisorList = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(search)
+            body: JSON.stringify({search,organization})
         })
         let d = await response.json()
         setresult([])
