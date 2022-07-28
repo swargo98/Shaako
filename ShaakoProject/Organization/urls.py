@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import views
+from . import views, views2
 
 urlpatterns = [
     path('organization/login', views.login),
@@ -25,6 +25,9 @@ urlpatterns = [
     path('organization/createCHW', views.createCHW),
     path('organization/searchCHW', views.searchCHW),
     path('organization/deleteCHW', views.deleteCHW),
+
+    path('organization/createCampaign', views2.createCampaign),
+    path('organization/getCampaign', views2.getCampaign),
 
 
 ]
