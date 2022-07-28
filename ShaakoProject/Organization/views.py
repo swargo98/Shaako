@@ -19,6 +19,44 @@ from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from argon2 import PasswordHasher as ph
 
+@api_view(['POST'])
+def getL(request):
+    print('baire')
+    if request.method == 'POST':
+        print("asche")
+        data=request.data
+        print(data)
+        sup_id=data
+        #find all contents of the supervisor with id=sup_id
+        lessons=Lesson.objects.filter(supervisor_id=sup_id)
+        ret=[]
+        for lesson in lessons:
+            ret.append({'id':lesson.id,'title':lesson.title,'content':lesson.content,'supervisor_name':lesson.supervisor.name,'upload_time':lesson.upload_date.date()})
+        return Response(ret)
+
+@api_view(['POST'])
+def addContent(request):
+    if request.method == 'POST':
+        print('came here')
+        data=request.data
+        title=data['title']
+        content=data['content']
+        print(title)
+        print(len(content))
+        # find supervisor with id 19
+        supervisor=Supervisor.objects.get(id=19)
+        # create new less with title and content and upload_date and save it
+        newLess = Lesson(supervisor=supervisor,title=title, content=content, upload_date=datetime.datetime.now())
+        newLess.save()
+
+        return Response('ok')
+@api_view(['POST'])
+def getMyContent(request):
+    if request.method == 'POST':
+        lesson_id=request.data
+        lesson=Lesson.objects.get(id=lesson_id)
+        print(lesson.title , lesson.content)
+        return Response({'title':lesson.title,'content':lesson.content,'author':lesson.supervisor.name,'upload_time':lesson.upload_date.date()})
 
 # Create your views here.
 @api_view(['POST'])

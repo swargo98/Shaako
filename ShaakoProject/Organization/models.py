@@ -124,7 +124,8 @@ class VisitForm(models.Model):
 class Lesson(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=2000)
+    # create a variable length content 
+    content = models.CharField(max_length=100000)
     upload_date = models.DateTimeField()
 
 

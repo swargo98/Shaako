@@ -14,4 +14,5 @@ admin.site.register(CHW)
 admin.site.register(Patient)
 admin.site.register(PatientCampaign)
 admin.site.register(VisitForm)
+admin.site.register(Lesson)
 

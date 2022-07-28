@@ -9,11 +9,11 @@ class RichTextEditor extends Component {
 
         this.modules = {
             toolbar: [
-                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                [{size: []}],
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ size: [] }],
                 ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{'list': 'ordered'}, {'list': 'bullet'},
-                    {'indent': '-1'}, {'indent': '+1'}],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' },
+                { 'indent': '-1' }, { 'indent': '+1' }],
                 ['link', 'image', 'video'],
                 ['clean']
             ]
@@ -48,17 +48,15 @@ class RichTextEditor extends Component {
     }
 
     rteChange = (content, delta, source, editor) => {
-        console.log(editor.getHTML()); // rich text
-        console.log(editor.getText()); // plain text
-        console.log(editor.getLength()); // number of characters
+        this.props.setmycontent(editor.getHTML());
     }
 
     render() {
         return (
             <div>
-                <ReactQuill theme="snow"  modules={this.modules}
-                            formats={this.formats} onChange={this.rteChange}
-                            value={this.state.comments || ''}/>
+                <ReactQuill theme="snow" modules={this.modules}
+                    formats={this.formats} onChange={this.rteChange}
+                    value={this.props.content2} />
             </div>
         );
     }
