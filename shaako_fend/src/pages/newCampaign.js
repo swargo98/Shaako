@@ -112,7 +112,7 @@ const NewCampaign = () => {
                 </div>
                 <section className="clean-block clean-form dark" style={{background: "#a6f9d6"}}>
                     <div className="container" style={{margin: "0px 10px", padding: "0px 200px"}}>
-                        <form style={{width: "1000px", transform: "translate(270px)"}}>
+                        <form style={{width: "1000px", transform: "translate(100px)"}}>
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="name">নাম</label>
                                 <input className="form-control" type="text" id="name" name="name" onChange={(e) => { handleChangename(e.target.value) }} value={name?.body}/>

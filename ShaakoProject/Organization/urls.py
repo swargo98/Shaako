@@ -27,7 +27,7 @@ urlpatterns = [
     path('organization/deleteCHW', views.deleteCHW),
 
     path('organization/createCampaign', views2.createCampaign),
-    path('organization/getCampaign', views2.getCampaign),
+    # path('organization/getCampaign', views2.getCampaign),
 
 
 ]

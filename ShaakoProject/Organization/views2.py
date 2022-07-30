@@ -14,12 +14,19 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.response import Response
 from ShaakoProject.settings import BASE_DIR
-
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes
+from rest_framework.decorators import permission_classes
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from .models import *
 from .serializers import *
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def createCampaign(request):
     if request.method == 'POST':
         print("line 25")
@@ -36,7 +43,7 @@ def createCampaign(request):
         endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
         print(name, " ", startDate, " ", endDate, " ", supervisor, " ", description, " ", goal)
 
-        if len(supervisor) is not 0:
+        if len(supervisor) != 0:
             campaign = Campaign(title=name, state_date=startDate, end_date=endDate, campaign_details=description,
                                 goal=goal)
             campaign.save()
@@ -50,21 +57,21 @@ def createCampaign(request):
     return Response('False')
 
 
-@api_view(['POST'])
-def getCampaign(request):
-    if request.method == 'POST':
-        organization = request.data
-        print(organization)
-        ret = []
-        # get all supervisors of the organization
-        supervisors = Supervisor.objects.filter(organization_id=organization)
-        for i in supervisors:
-            # get all campaigns of the supervisor
-            campaigns = Campaign.objects.filter(supervisor_campaign__supervisor_id=i.id)
-            for j in campaigns:
-                # add j in ret
-                ret.append(j)
-        # make ret unique
-        ret = list(set(ret))
-        print(ret)
-        return Response(ret)
+# @api_view(['POST'])
+# def getCampaign(request):
+#     if request.method == 'POST':
+#         organization = request.data
+#         print(organization)
+#         ret = []
+#         # get all supervisors of the organization
+#         supervisors = Supervisor.objects.filter(organization_id=organization)
+#         for i in supervisors:
+#             # get all campaigns of the supervisor
+#             campaigns = Campaign.objects.filter(supervisor_campaign__supervisor_id=i.id)
+#             for j in campaigns:
+#                 # add j in ret
+#                 ret.append(j)
+#         # make ret unique
+#         ret = list(set(ret))
+#         print(ret)
+#         return Response(ret)
