@@ -32,7 +32,7 @@ const NavbarSupervisor = () => {
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item"><a className="nav-link active" href="/home">হোম</a></li>
                         <li className="nav-item"><a className="nav-link" href="/view_contents">পাঠসমূহ</a></li>
-                        <li className="nav-item"><a className="nav-link" href="/">স্বাস্থ্যকর্মী</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/chw_list">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">ক্যাম্পেইন</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
                         <li className="nav-item"><Notifications

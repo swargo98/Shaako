@@ -11,12 +11,13 @@ const CHWList = () => {
     }, [])
 
     let getCHW = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/getCHW', {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/getCHW', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify(organization)
+            body: JSON.stringify({'sup_id':localStorage.getItem('sup_id'), 'organization':organization})
         })
         let d = await response.json()
         setresult([])
@@ -24,6 +25,7 @@ const CHWList = () => {
             let now = d[i]
             setresult(prevArray => [...prevArray, now]);
         }
+        console.log(d)
     }
 
     let handleChangeSearch = (value) => {
@@ -32,13 +34,13 @@ const CHWList = () => {
 
     let handleSubmit = async () => {
         console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/searchCHW', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({ search, organization })
+            body: JSON.stringify({'sup_id':localStorage.getItem('sup_id'), 'organization':organization, search})
         })
         let d = await response.json()
         setresult([]) 
@@ -75,24 +77,28 @@ const CHWList = () => {
                                     <th>মোবাইল নম্বর</th>
                                     <th>কর্মরত এলাকা</th>
                                     <th>নিয়োগ তারিখ</th>
-                                    <th>রোগীর সংখ্যা</th>
+                                    <th>ভিজিট সংখ্যা</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     result.map((r) => {
                                         return (
+                                            
                                             <tr>
-                                                <td><img className="rounded-circle me-2" width="30" height="30"
-                                                         src={man2} alt="man" /><a style={{textDecoration: "none"}} href="/">{r.name}</a></td>
+                                                
+                                                <td><a style={{textDecoration: "none"}} href="/"><img className="rounded-circle me-2" width="30" height="30"
+                                                         src={man2} alt="man" />{r.name}</a></td>
                                                 <td>{r.contactNo}
                                                 </td>
 
-                                                <td>{r.ward_union},&nbsp;{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
+                                                <td>{r.union}
                                                 </td>
                                                 <td>{r.recruitment_date}</td>
-                                                <td>১০০</td>
+                                                <td>{r.visit_forms}</td>
+                                                
                                             </tr>
+                                            
                                         );
                                     })
                                 }
@@ -107,20 +113,6 @@ const CHWList = () => {
                         <div className="col-md-6 align-self-center">
                             <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Total {result.length} results</p>
                         </div>
-                        {/* <div className="col-md-6">
-                            <nav className="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                <ul className="pagination">
-                                    <li className="page-item disabled"><a className="page-link" aria-label="Previous"
-                                        href="/"><span aria-hidden="true">«</span></a>
-                                    </li>
-                                    <li className="page-item active"><a className="page-link" href="/">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="/">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="/">3</a></li>
-                                    <li className="page-item"><a className="page-link" aria-label="Next" href="/"><span
-                                        aria-hidden="true">»</span></a></li>
-                                </ul>
-                            </nav>
-                        </div> */}
                     </div>
                 </div>
             </div>

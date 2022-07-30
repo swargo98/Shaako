@@ -64,3 +64,57 @@ def supervisorlogin(request):
             dict = {}
             dict['correct'] = 'False'
             return Response(dict)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def supGetCHWList(request):
+    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    if request.method == 'POST':
+        data = request.data
+        sup_id = data['sup_id']
+        # find all CHW objects with supervisor_id
+
+        chw_list = CHW.objects.filter(supervisor_id=sup_id)
+        print(chw_list)
+        ret=[]
+        for chw in chw_list:
+            dict={}
+            dict['name']=chw.name
+            dict['contactNo']=chw.contactNo
+            dict['union']=chw.location.ward_union
+            dict['recruitment_date']=chw.recruitment_date.date()
+            # find all visit forms of chw
+            visit_forms = VisitForm.objects.filter(chw_id=chw.id).count()
+            dict['visit_forms']=visit_forms
+            ret.append(dict)
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def searchCHW(request):
+    if request.method == 'POST':
+        data = request.data
+        searchtext = data['search']
+        sup_id=data['sup_id']
+        
+        chw_list = CHW.objects.filter(supervisor_id=sup_id)
+        print(chw_list)
+        ret=[]
+        for chw in chw_list:
+            location=chw.location
+            if searchtext in chw.name or (location is not None and (searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana or searchtext in location.ward_union)) or searchtext in chw.email or searchtext in chw.presentAddress or searchtext in chw.contactNo or searchtext in chw.supervisor.name:
+                dict={}
+                dict['name']=chw.name
+                dict['contactNo']=chw.contactNo
+                dict['union']=chw.location.ward_union
+                dict['recruitment_date']=chw.recruitment_date.date()
+                # find all visit forms of chw
+                visit_forms = VisitForm.objects.filter(chw_id=chw.id).count()
+                dict['visit_forms']=visit_forms
+                ret.append(dict)
+        return Response(ret)
+
+        
