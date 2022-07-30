@@ -33,16 +33,18 @@ const Authentication = () => {
             let response = await fetch('http://127.0.0.1:8000/organization/login', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
                 body: JSON.stringify({ username, password })
             })
             let data = await response.json()
             if (data.correct === 'True') {
                 setisLoggedIn(true)
-                localStorage.setItem('logged', true)
+                localStorage.setItem('token', data.token)
                 localStorage.setItem('organization', data.organization)
                 localStorage.setItem('admin_id', data.id)
+                console.log(data.token)
             }
             else {
                 setfailedLogin(true)

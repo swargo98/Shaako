@@ -50,7 +50,8 @@ const NewCHW = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorDetailed', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -67,7 +68,8 @@ const NewCHW = () => {
             let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
                 body: JSON.stringify(now.id)
             })
@@ -98,7 +100,8 @@ const NewCHW = () => {
             let response = await fetch('http://127.0.0.1:8000/organization/getUnionsOfSupervisor', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
                 body: JSON.stringify(supid)
             })
@@ -143,7 +146,8 @@ const NewCHW = () => {
             let response = await fetch('http://127.0.0.1:8000/organization/createCHW', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
 
                 body: JSON.stringify({ name, email, password, contact, address, organization, inputward, supid, division, district, upazilla_thana })
@@ -153,7 +157,7 @@ const NewCHW = () => {
     }
     return (
         <main className="page landing-page" style={{ padding: "76px 0px 0px" }}>
-            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
+            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <section className="clean-block features" style={{ background: "#a6f9d6" }}>
                 <div className="container">
                     <div className="block-heading" style={{ padding: "24px 0px 0px" }}>

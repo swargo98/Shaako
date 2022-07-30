@@ -24,7 +24,8 @@ const UpdateCHW = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getCHW', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -45,7 +46,8 @@ const UpdateCHW = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify({ search, organization })
         })
@@ -81,7 +83,8 @@ const UpdateCHW = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/deleteCHW', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(id)
         })
@@ -90,7 +93,7 @@ const UpdateCHW = () => {
     }
     return (
         <div className="container-fluid">
-            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
+            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <br />
             <br />
             <div className="card shadow">

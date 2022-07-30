@@ -52,7 +52,8 @@ const NewCampaign = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorDetailed', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -79,7 +80,8 @@ const NewCampaign = () => {
             let response = await fetch('http://127.0.0.1:8000/organization/createCampaign', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
 
                 body: JSON.stringify({ name,selected, startDate, endDate, description, goal})
@@ -99,7 +101,7 @@ const NewCampaign = () => {
     }
     return (
         <main className="page landing-page" style={{padding: "76px 0px 0px"}}>
-            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
+            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <section className="clean-block features" style={{background: "#a6f9d6"}}>
                 <div className="container">
                     <div className="block-heading" style={{padding: "24px 0px 0px"}}>

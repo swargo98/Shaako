@@ -19,7 +19,8 @@ const UpdateSupervisor = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getSupervisor', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -40,7 +41,8 @@ const UpdateSupervisor = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/deleteSupervisor', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(id)
         })
@@ -52,7 +54,8 @@ const UpdateSupervisor = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(search)
         })
@@ -87,7 +90,7 @@ const UpdateSupervisor = () => {
 
     return (
         <div className="container-fluid">
-            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
+            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <br />
             <br />
             <div className="card shadow">

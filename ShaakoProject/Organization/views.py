@@ -18,8 +18,18 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse, HttpResponse
 from argon2 import PasswordHasher as ph
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes
+from rest_framework.decorators import permission_classes
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getL(request):
     print('baire')
     if request.method == 'POST':
@@ -35,6 +45,8 @@ def getL(request):
         return Response(ret)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def addContent(request):
     if request.method == 'POST':
         print('came here')
@@ -51,6 +63,8 @@ def addContent(request):
 
         return Response('ok')
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getMyContent(request):
     if request.method == 'POST':
         lesson_id=request.data
@@ -76,10 +90,15 @@ def login(request):
         if user:
             try:
                 ph().verify(user[0]['password'], password)
+
+                token=Token.objects.get(user=User.objects.get(username=email))
+
                 dict = {}
                 dict['correct'] = 'True'
                 dict['id'] = user[0]['id']
                 dict['organization'] = user[0]['organization']
+                dict['token']=token.key
+                
 
                 return Response(dict)
             except:
@@ -93,6 +112,8 @@ def login(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getAssignableSupervisor(request):
     if request.method == 'POST':
         chw_id = request.data
@@ -117,6 +138,8 @@ def getAssignableSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def changeSupervisorOfCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -132,6 +155,8 @@ def changeSupervisorOfCHW(request):
 
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def home(request):
     if request.method == 'GET':
         # find number entry in patient table
@@ -139,10 +164,14 @@ def home(request):
         chw = CHW.objects.count()
         supervisor = Supervisor.objects.count()
         data = [patient, chw, supervisor]
+        print(request.user)
+        print(request.auth)
         return Response(data)
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def createSupervisor(request):
     if request.method == 'POST':
         data = request.data
@@ -225,6 +254,8 @@ def createSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getSupervisorImage(request):
     data = request.data
     id = data
@@ -240,6 +271,8 @@ def getSupervisorImage(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getSupervisorDetailed(request):
     if request.method == 'POST':
         ret = []
@@ -261,6 +294,8 @@ def getSupervisorDetailed(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getUnionsOfSupervisor(request):
     if request.method == 'POST':
         data = request.data
@@ -282,6 +317,8 @@ def getUnionsOfSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def updateSupervisor(request):
     data = request.data
     supervisor = Supervisor.objects.get(id=data['sup_id'])
@@ -299,6 +336,8 @@ def updateSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def fetchLocationSupervisor(request):
     if request.method == 'POST':
         data = request.data
@@ -337,6 +376,8 @@ def fetchLocationSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getSupervisor(request):
     if request.method == 'POST':
         ret = []
@@ -354,6 +395,8 @@ def getSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -373,6 +416,8 @@ def getCHW(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def createCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -405,6 +450,8 @@ def createCHW(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def deleteSupervisor(request):
     if request.method == 'POST':
         data = request.data
@@ -416,6 +463,8 @@ def deleteSupervisor(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def deleteCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -428,6 +477,8 @@ def deleteCHW(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def searchCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -454,6 +505,8 @@ def searchCHW(request):
 
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def searchSupervisor(request):
     if request.method == 'POST':
         data = request.data

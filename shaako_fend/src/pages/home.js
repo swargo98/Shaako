@@ -13,7 +13,14 @@ const Home = () => {
     }, [])
 
     let getData = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/home')
+        let response = await fetch('http://127.0.0.1:8000/organization/home',
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
+            },
+        })
         let d = await response.json()
         setdata1(data1 => ({ ...data1, 'data1': d[0] }))
         setdata2(data2 => ({ ...data2, 'data2': d[1] }))
@@ -24,7 +31,7 @@ const Home = () => {
     return (
         <main className="page landing-page">
             
-            {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />}
+            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <section className="clean-block clean-hero"
                 style={{ backgroundImage: "url(" + Background + ")", color: 'rgba(9, 255, 162, 0.85)' }}>
                 <div className="text">
