@@ -35,7 +35,8 @@ const CHWList = () => {
         let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify({ search, organization })
         })
@@ -48,7 +49,7 @@ const CHWList = () => {
     }
     return (
         <div className="container-fluid">
-            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
+           {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
             <div className="card shadow">

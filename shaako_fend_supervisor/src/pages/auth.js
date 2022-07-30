@@ -1,37 +1,93 @@
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 const Authentication = () => {
+    let [username, setusername] = useState(null)
+    let [password, setpassword] = useState(null)
+    let [isLoggedIn, setisLoggedIn] = useState(false)
+    let [failedLogin, setfailedLogin] = useState(false)
+
+    useEffect(() => {
+        checkAlreadyLogged()
+    }, [])
+    
+    let checkAlreadyLogged = () => {
+        let res=localStorage.getItem('logged')
+        if(res==='true'){
+            setisLoggedIn(true)
+        }
+    }
+
+    let handleChangeUsername = (value) => {
+        setusername(value)
+    }
+    
+    let handleChangePassword = (value) => {
+        setpassword(value)
+    }
+
+    let handleSubmit = async () => {
+        if (username && password) {
+            console.log("Username : ", username, " Password : ", password)
+            let response = await fetch('http://127.0.0.1:8000/supervisor/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization':'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({ username, password })
+            })
+            let data = await response.json()
+            if (data.correct === 'True') {
+                setisLoggedIn(true)
+                localStorage.setItem('token', data.token)
+                localStorage.setItem('organization', data.organization)
+                localStorage.setItem('sup_id', data.id)
+                console.log(data.token)
+            }
+            else {
+                setfailedLogin(true)
+            }
+        }
+    }
+
     return (
-        <div className="Auth-form-container">
-            <form className="Auth-form">
-                <div className="Auth-form-content">
-                    <h3 className="Auth-form-title">Sign In</h3>
-                    <div className="form-group mt-3">
-                        <label>Email address</label>
-                        <input
-                            type="email"
-                            className="form-control mt-1"
-                            placeholder="Enter email"
-                        />
+        <>
+            {localStorage.getItem('token') && <Navigate to="/home" replace={true} />}
+            <div className="Auth-form-container">
+                <form className="Auth-form">
+                    <div className="Auth-form-content">
+                        <h3 className="Auth-form-title">Sign In</h3>
+                        <div className="form-group mt-3">
+                            <label>Email address</label>
+                            <input
+                                type="email"
+                                className="form-control mt-1"
+                                placeholder="Enter email"
+                                onChange={(e) => { handleChangeUsername(e.target.value) }} value={username?.body}
+                            />
+                        </div>
+                        <div className="form-group mt-3">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                className="form-control mt-1"
+                                placeholder="Enter password"
+                                onChange={(e) => { handleChangePassword(e.target.value) }} value={password?.body}
+                            />
+                        </div>
+                        <div className="d-grid gap-2 mt-3">
+                            <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                                Submit
+                            </button>
+                            {failedLogin && <p style={{color: "red"}}>Login Failed!</p>}
+                        </div>
                     </div>
-                    <div className="form-group mt-3">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            className="form-control mt-1"
-                            placeholder="Enter password"
-                        />
-                    </div>
-                    <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
-                    <p className="forgot-password text-right mt-2">
-                        Forgot <a href="/">password?</a>
-                    </p>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+            {isLoggedIn && <Navigate to="/home" replace={true} />}
+        </>
     );
 }
 

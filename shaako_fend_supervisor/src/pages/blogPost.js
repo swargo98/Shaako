@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 const BlogPost = () => {
     let [result, setresult] = useState('');
@@ -12,7 +13,8 @@ const BlogPost = () => {
         let response = await fetch('http://127.0.0.1:8000/supervisor/getMyContent', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(7)
         })
@@ -23,6 +25,7 @@ const BlogPost = () => {
         setresult(now);
     }
     return (
+        <>{!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
         <div>
             <br />
             <header className="masthead" style={{ backgroundColor: "lightyellow" }}>
@@ -97,6 +100,7 @@ const BlogPost = () => {
                 </div>
             </article>
         </div>
+        </>
     );
 }
 

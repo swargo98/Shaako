@@ -33,8 +33,7 @@ const Authentication = () => {
             let response = await fetch('http://127.0.0.1:8000/organization/login', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization':'TOKEN ' + localStorage.getItem('token')
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ username, password })
             })
@@ -54,6 +53,7 @@ const Authentication = () => {
 
     return (
         <>
+            {localStorage.getItem('token') && <Navigate to="/home" replace={true} />}
             <div className="Auth-form-container">
                 <form className="Auth-form">
                     <div className="Auth-form-content">

@@ -90,7 +90,7 @@ const UpdateSupervisor = () => {
 
     return (
         <div className="container-fluid">
-            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
+            {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
             <div className="card shadow">

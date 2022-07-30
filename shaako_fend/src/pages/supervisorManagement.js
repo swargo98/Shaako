@@ -4,7 +4,7 @@ const SupervisorManagement = () => {
     return (
 
         <main className="page landing-page">
-            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
+            {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br/>
             <br/>
             <section className="clean-block features" style={{background: "#a6f9d6", height: "700px"}}>

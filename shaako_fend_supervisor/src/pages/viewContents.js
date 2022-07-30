@@ -1,7 +1,7 @@
 import man1 from './assets/img/avatars/avatar1.jpg'
 import man2 from './assets/img/avatars/avatar2.jpg'
 import man3 from './assets/img/avatars/avatar3.jpg'
-import { Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React from "react";
 import { useState, useEffect } from "react";
 
@@ -17,7 +17,8 @@ const ViewContents = () => {
         let response = await fetch('http://127.0.0.1:8000/supervisor/getL', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(sup_id)
         })
@@ -34,6 +35,7 @@ const ViewContents = () => {
     return (
 
         <main className="page landing-page">
+            {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <section className="clean-block features" style={{ background: "#a6f9d6", margin: "-67px" }}>
                 <div className="container">

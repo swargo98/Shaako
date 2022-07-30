@@ -29,7 +29,8 @@ const NewLesson = () => {
         let response = await fetch('http://127.0.0.1:8000/supervisor/addContent', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
                 body: JSON.stringify({ title, content })
             })
@@ -41,6 +42,7 @@ const NewLesson = () => {
     };
     return (
         <main className="page landing-page">
+            {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <section className="clean-block features" style={{ background: "#a6f9d6", margin: "-67px" }}>
                 <div className="container">
                     <div className="block-heading" style={{ padding: "24px 0px 0px" }}>

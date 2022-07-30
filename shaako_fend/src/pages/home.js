@@ -31,7 +31,7 @@ const Home = () => {
     return (
         <main className="page landing-page">
             
-            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
+            {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <section className="clean-block clean-hero"
                 style={{ backgroundImage: "url(" + Background + ")", color: 'rgba(9, 255, 162, 0.85)' }}>
                 <div className="text">

@@ -2,6 +2,7 @@ from __future__ import division
 import datetime
 from email import message
 from io import BytesIO
+import re
 
 from PIL import Image
 from os.path import exists
@@ -173,9 +174,14 @@ def home(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def createSupervisor(request):
+    print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    print(request.user)
+    print(request.auth  )
     if request.method == 'POST':
+        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         data = request.data
         print(data)
+        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         name = data['name']
         password = data['password']
         email = data['email']
@@ -189,7 +195,7 @@ def createSupervisor(request):
         upazilla_thana = data['inputupazilla']
         # find supervisor with email equals to email
         supervisor = Supervisor.objects.filter(email=email)
-
+        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         ok = 1
         message = ""
 
@@ -232,6 +238,11 @@ def createSupervisor(request):
                                     organization=organization, recruitment_date=recruitment_date)
 
             supervisor.save()
+            U=User(username=supervisor.email)
+            U.save()
+            token=Token.objects.create(user=U)
+            token.save()
+
             try:
                 image = data['inputimage']
                 img = Image.open(image)
@@ -260,7 +271,6 @@ def getSupervisorImage(request):
     data = request.data
     id = data
     path = str(BASE_DIR) + "//image//supervisor//" + str(id) + ".png"
-    print("wtf " + path)
     if not exists(path):
         path = str(BASE_DIR) + "//image//supervisor//default.png"
     im = Image.open(path)

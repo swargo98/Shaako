@@ -5,6 +5,7 @@ let handleSubmit = async () => {
     localStorage.removeItem('logged');
     localStorage.removeItem('organization');
     localStorage.removeItem('admin_id');
+    localStorage.removeItem('token');
 }
 
 const NavbarNGOAdmin = () => {

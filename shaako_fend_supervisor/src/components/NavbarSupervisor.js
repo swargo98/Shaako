@@ -11,7 +11,12 @@ const DEFAULT_NOTIFICATION = {
     detailPage: "/events",
     receivedTime: "12h ago"
 };
-
+let handleSubmit = async () => {
+    localStorage.removeItem('logged');
+    localStorage.removeItem('organization');
+    localStorage.removeItem('sup_id');
+    localStorage.removeItem('token');
+}
 const NavbarSupervisor = () => {
     const [data, setData] = useState([DEFAULT_NOTIFICATION]);
     return (
@@ -48,7 +53,7 @@ const NavbarSupervisor = () => {
                                                                                        href="/"
                                                                                        style={{color: 'rgb(0,0,0)'}}></a>
                                 <div className="dropdown-menu"><a className="dropdown-item" href="/">প্রোফাইল</a><a
-                                    className="dropdown-item" href="/">লগ আউট</a></div>
+                                    className="dropdown-item" href="/login" onClick={handleSubmit}>লগ আউট</a></div>
                             </div>
                         </li>
                     </ul>
