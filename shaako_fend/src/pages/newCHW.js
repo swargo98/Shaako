@@ -189,7 +189,7 @@ const NewCHW = () => {
                                     {
                                         sup.map((r) => {
                                             return (
-                                                <option value={r.id} style={{background-image:url(./assets/img/avatars/avatar1.jpg);}}>{r.name}</option>
+                                                <option value={r.id}>{r.name}</option>
                                             )
                                         })
                                     }

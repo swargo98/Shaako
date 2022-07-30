@@ -52,6 +52,7 @@ const ViewContents = () => {
                                 return (
                                     <div className="col">
                                         <div className="p-4">
+                                            
                                             <a style={{ textDecoration: "none" }} href="/blog_post"><h4>{r.title}</h4></a>
                                             <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
                                                 width="50" height="50"

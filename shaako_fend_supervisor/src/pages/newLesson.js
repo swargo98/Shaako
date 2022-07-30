@@ -70,7 +70,7 @@ const NewLesson = () => {
                     theme="snow"
                     value={content}
                     onChange={handleChangeContent}
-                    placeholder={"Write something awesome..."}
+                    placeholder={"এখানে লেখা শুরু করুন..."}
                     modules={modules('t2')}
                     formats={formats}
                     /> 

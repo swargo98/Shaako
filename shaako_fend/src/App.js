@@ -11,7 +11,7 @@ import UpdateSupervisor from "./pages/updateSupervisor";
 import CHWManagement from "./pages/CHWManagement";
 import CHWList from "./pages/chwList";
 import NewCHW from "./pages/newCHW";
-import UpdateCHW from "./pages/updateCHW";
+// import UpdateCHW from "./pages/updateCHW";
 import CampaignManagement from "./pages/campaignManagement";
 import NewCampaign from "./pages/newCampaign";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -35,7 +35,7 @@ function App() {
                     <Route path='/chw_management' element={<CHWManagement/>} />
                     <Route path='/chw_list' element={<CHWList/>} />
                     <Route path='/new_chw' element={<NewCHW/>} />
-                    <Route path='/update_chw' element={<UpdateCHW/>} />
+                    {/* <Route path='/update_chw' element={<UpdateCHW/>} /> */}
                     <Route path='/campaign_list' element={<CampaignManagement/>} />
                     <Route path='/new_campaign' element={<NewCampaign/>} />
                 </Routes>

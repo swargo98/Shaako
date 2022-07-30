@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import views, views2
+from . import views, views2, viewsSwargo, viewsIft, viewsSaha
 
 urlpatterns = [
     path('organization/login', views.login),

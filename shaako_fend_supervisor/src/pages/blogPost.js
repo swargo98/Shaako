@@ -9,13 +9,12 @@ const BlogPost = () => {
     }, [])
 
     let getContents = async () => {
-        console.log('came eefwfewfewf')
         let response = await fetch('http://127.0.0.1:8000/supervisor/getMyContent', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(4)
+            body: JSON.stringify(7)
         })
         let d = await response.json()
         console.log(d)
