@@ -15,6 +15,7 @@ import UpdateCHW from "./pages/updateCHW";
 import CampaignManagement from "./pages/campaignManagement";
 import NewCampaign from "./pages/newCampaign";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Profile from './pages/profile';
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                     <Route path='/update_chw' element={<UpdateCHW/>} />
                     <Route path='/campaign_list' element={<CampaignManagement/>} />
                     <Route path='/new_campaign' element={<NewCampaign/>} />
+                    <Route path='/profile' element={<Profile/>} />
                 </Routes>
             </div>
             <Footer />
