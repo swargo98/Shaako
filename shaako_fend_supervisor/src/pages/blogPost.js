@@ -1,22 +1,24 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useParams, Navigate } from 'react-router-dom';
 
 const BlogPost = () => {
     let [result, setresult] = useState('');
+    let { id } = useParams();
 
     useEffect(() => {
         getContents()
     }, [])
 
     let getContents = async () => {
+        console.log(id)
         let response = await fetch('http://127.0.0.1:8000/supervisor/getMyContent', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization':'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify(7)
+            body: JSON.stringify(id)
         })
         let d = await response.json()
         console.log(d)

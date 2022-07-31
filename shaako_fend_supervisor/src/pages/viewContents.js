@@ -7,18 +7,19 @@ import { useState, useEffect } from "react";
 
 const ViewContents = () => {
     let [result, setresult] = useState([])
-    let [sup_id, setsup_id] = useState(19)
+    let sup_id = localStorage.getItem('sup_id')
+    let [sup_image,setsup_image] = useState(null);
+
     useEffect(() => {
         getContents()
     }, [])
 
     let getContents = async () => {
-        console.log('came eefwfewfewf')
         let response = await fetch('http://127.0.0.1:8000/supervisor/getL', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(sup_id)
         })
@@ -30,13 +31,34 @@ const ViewContents = () => {
             console.log(now.id + " " + now.title + " " + now.content + " " + now.supervisor_name + " " + now.upload_time)
             setresult(prevArray => [...prevArray, now]);
         }
+
+        let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(sup_id)
+        })
+        // let result = stackSizeSync();
+        // console.log(result)
+
+        //take image respone from bufferIO
+        let image = await response2.blob()
+        //convert to base64
+        let image64 = await image.arrayBuffer()
+        //convert to base64
+        let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+        //convert to url
+        let imageurl = `data:image/png;base64,${image64base64}`
+        //push to array
+        setsup_image(imageurl)
     }
 
     return (
 
         <main className="page landing-page">
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
-            {/* {!localStorage.getItem('logged') && <Navigate to="/login" replace={true} />} */}
             <section className="clean-block features" style={{ background: "#a6f9d6", margin: "-67px" }}>
                 <div className="container">
                     <div className="block-heading" style={{ padding: "24px 0px 0px" }}>
@@ -54,11 +76,10 @@ const ViewContents = () => {
                                 return (
                                     <div className="col">
                                         <div className="p-4">
-                                            
-                                            <a style={{ textDecoration: "none" }} href="/blog_post"><h4>{r.title}</h4></a>
+                                            <a style={{ textDecoration: "none" }} href={`/blog_post/${r.id}`}><h4>{r.title}</h4></a>
                                             <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
                                                 width="50" height="50"
-                                                src={man1} alt="man" />
+                                                src={sup_image} alt="man" />
                                                 <div>
                                                     <p className="fw-bold mb-0">{r.supervisor_name}</p>
                                                     <p className="text-muted mb-0">Upload date: {r.upload_time}</p>

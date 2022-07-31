@@ -32,46 +32,49 @@ from rest_framework.authtoken.models import Token
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def getL(request):
-    print('baire')
     if request.method == 'POST':
-        print("asche")
-        data=request.data
+        data = request.data
         print(data)
-        sup_id=data
-        #find all contents of the supervisor with id=sup_id
-        lessons=Lesson.objects.filter(supervisor_id=sup_id)
-        ret=[]
+        sup_id = data
+        # find all contents of the supervisor with id=sup_id
+        lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        ret = []
         for lesson in lessons:
-            ret.append({'id':lesson.id,'title':lesson.title,'content':lesson.content,'supervisor_name':lesson.supervisor.name,'upload_time':lesson.upload_date.date()})
+            ret.append({'id': lesson.id, 'title': lesson.title, 'content': lesson.content,
+                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date()})
         return Response(ret)
+
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def addContent(request):
     if request.method == 'POST':
-        print('came here')
-        data=request.data
-        title=data['title']
-        content=data['content']
+        data = request.data
+        title = data['title']
+        content = data['content']
+        sup_id = data['sup_id']
         print(title)
         print(len(content))
-        # find supervisor with id 19
-        supervisor=Supervisor.objects.get(id=19)
+        supervisor = Supervisor.objects.get(id=sup_id)
         # create new less with title and content and upload_date and save it
-        newLess = Lesson(supervisor=supervisor,title=title, content=content, upload_date=datetime.datetime.now())
+        newLess = Lesson(supervisor=supervisor, title=title, content=content, upload_date=datetime.datetime.now())
         newLess.save()
 
         return Response('ok')
+
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def getMyContent(request):
     if request.method == 'POST':
-        lesson_id=request.data
-        lesson=Lesson.objects.get(id=lesson_id)
-        print(lesson.title , lesson.content)
-        return Response({'title':lesson.title,'content':lesson.content,'author':lesson.supervisor.name,'upload_time':lesson.upload_date.date()})
+        lesson_id = request.data
+        lesson = Lesson.objects.get(id=lesson_id)
+        print(lesson.title, lesson.content)
+        return Response({'title': lesson.title, 'content': lesson.content, 'author': lesson.supervisor.name,
+                         'upload_time': lesson.upload_date.date()})
+
 
 # Create your views here.
 @api_view(['POST'])
@@ -92,14 +95,13 @@ def login(request):
             try:
                 ph().verify(user[0]['password'], password)
 
-                token=Token.objects.get(user=User.objects.get(username=email))
+                token = Token.objects.get(user=User.objects.get(username=email))
 
                 dict = {}
                 dict['correct'] = 'True'
                 dict['id'] = user[0]['id']
                 dict['organization'] = user[0]['organization']
-                dict['token']=token.key
-                
+                dict['token'] = token.key
 
                 return Response(dict)
             except:
@@ -176,7 +178,7 @@ def home(request):
 def createSupervisor(request):
     print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     print(request.user)
-    print(request.auth  )
+    print(request.auth)
     if request.method == 'POST':
         print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         data = request.data
@@ -238,9 +240,9 @@ def createSupervisor(request):
                                     organization=organization, recruitment_date=recruitment_date)
 
             supervisor.save()
-            U=User(username=supervisor.email)
+            U = User(username=supervisor.email)
             U.save()
-            token=Token.objects.create(user=U)
+            token = Token.objects.create(user=U)
             token.save()
 
             try:
@@ -288,7 +290,7 @@ def getSupervisorDetailed(request):
         ret = []
         data = request.data
         organization = data
-        #print(organization)
+        # print(organization)
         # get all supervisor under this organization
         supervisors = Supervisor.objects.filter(organization=organization)
         for supervisor in supervisors:
