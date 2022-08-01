@@ -1,22 +1,44 @@
 import RichTextEditor from "../components/richTextEditor";
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 
 import ReactQuill from "react-quill";
 import EditorToolbar, { modules, formats } from "../components/EditorToolbar";
 import "react-quill/dist/quill.snow.css";
-//import "./TextEditor.css";
+
 
 const NewLesson = () => {
     let [title, settitle] = useState(null)
     let [content, setcontent] = useState('')
     let [done, setdone] = useState(false)
     let sup_id = localStorage.getItem('sup_id')
-    
+    let { id } = useParams();
+    useEffect(() => {
+        getContents()
+    }, [])
+
+    let getContents = async () => {
+        console.log(id)
+        let response = await fetch('http://127.0.0.1:8000/supervisor/getMyContent', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(id)
+        })
+        let d = await response.json()
+        let now = d
+        console.log(now.title + " " + now.content + " " + now.author + " " + now.upload_time)
+        settitle(now.title)
+        setcontent(now.content)
+    }
+
     let handleChangeContent = (value) => {
         setcontent(value);
     }
+
     let ChangeTitle = (value) => {
         settitle(value);
     }
@@ -24,16 +46,16 @@ const NewLesson = () => {
     let submit = async () => {
         console.log(title)
         console.log(content)
-        let response = await fetch('http://127.0.0.1:8000/supervisor/addContent', {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/editContent', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({ title, content, sup_id })
+            body: JSON.stringify({id, title, content})
         })
         let data = await response.json()
-        if (data == "ok") {
+        if (data == "True") {
             setdone(true)
         }
         console.log(data)
@@ -59,7 +81,7 @@ const NewLesson = () => {
                             <div className="col-xl-1">
                                 <p style={{ width: "400px" }}>শিরোনামঃ&nbsp;</p>
                             </div>
-                            <div className="col"><input type="text" style={{ width: "500px" }} onChange={(e) => { ChangeTitle(e.target.value) }} value={title?.body} /></div>
+                            <div className="col"><input type="text" style={{ width: "500px" }} onChange={(e) => { ChangeTitle(e.target.value) }} value={title} /></div>
                         </div>
                         <div className="row gy-4 row-cols-1 row-cols-md-1 row-cols-xl-1"
                             style={{ padding: "0px", margin: "22px -12px 0px" }}>
@@ -77,17 +99,16 @@ const NewLesson = () => {
                                     formats={formats}
                                 />
                             </div>
-                            {/* <RichTextEditor content2={content} setmycontent={handleChangeContent} /> */}
                         </div>
                         <button className="btn btn-primary" type="submit"
-                            style={{ margin: "22px 0px 0px", background: "rgb(52,163,0)" }} onClick={submit}> পাঠ যোগ করুন
+                            style={{ margin: "22px 0px 0px", background: "rgb(52,163,0)" }} onClick={submit}> পাঠ সেভ করুন
                         </button>
                     </div>
 
 
                 </section>
             </main>
-            {done && <Navigate to="/view_contents" replace={true} />}
+            {done && <Navigate to={`/blog_post/${id}`} replace={true} />}
         </>
     );
 }

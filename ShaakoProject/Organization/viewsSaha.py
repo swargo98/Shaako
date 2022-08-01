@@ -66,3 +66,20 @@ def getCampaignList(request):
             ret.append(camp_dict)
         print(ret)
         return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def editLesson(request):
+    if request.method == 'POST':
+        data = request.data
+        lesson_id = data['id']
+        # check data['title'] or data['content'] is null
+        if data['title'] == "" or data['content'] == "":
+            return Response("False")
+        lesson = Lesson.objects.get(id=lesson_id)
+        lesson.title = data['title']
+        lesson.content = data['content']
+        lesson.save()
+        return Response("True")

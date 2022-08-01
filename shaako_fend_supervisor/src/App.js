@@ -8,6 +8,7 @@ import CHWList from "./pages/chwList";
 import ViewContents from "./pages/viewContents";
 import BlogPost from "./pages/blogPost";
 import NewQuiz from "./pages/newQuiz";
+import EditLesson from "./pages/editLesson";
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ function App() {
                     <Route exact path='/view_contents' element={<ViewContents/>} />
                     <Route exact path='/blog_post/:id' element={<BlogPost/>} />
                     <Route exact path='/new_quiz' element={<NewQuiz/>} />
+                    <Route exact path='/edit_lesson/:id' element={<EditLesson/>} />
                 </Routes>
             </div>
             <Footer />
