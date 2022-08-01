@@ -3,5 +3,5 @@ from . import viewsIft
 urlpatterns = [
     path('supervisor/login', viewsIft.supervisorlogin),
     path('supervisor/getCHW', viewsIft.supGetCHWList),
-    path('supervisor/searchCHW', viewsIft.searchCHW),
+    path('supervisor/searchCHW', viewsIft.searchCHW)
 ]
