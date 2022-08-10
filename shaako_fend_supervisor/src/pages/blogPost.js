@@ -16,7 +16,7 @@ const BlogPost = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(id)
         })
@@ -28,31 +28,38 @@ const BlogPost = () => {
     }
     return (
         <>{!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
-        <div>
-            <br />
-            <header className="masthead" style={{ backgroundColor: "lightyellow" }}>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-10 col-lg-8 mx-auto position-relative">
-                            <div className="post-heading">
-                                <h1>{result.title}</h1><span className="meta">Posted by&nbsp;
-                                    {result.author}&nbsp;on {result.upload_time}</span>
+            <div>
+                <br />
+                <header className="masthead" style={{ backgroundColor: "lightyellow" }}>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-10 col-lg-8 mx-auto position-relative">
+                                <div className="post-heading">
+                                    <h1>{result.title}</h1><span className="meta">Posted by&nbsp;
+                                        {result.author}&nbsp;on {result.upload_time}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </header>
-            <article>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-10 col-lg-8 mx-auto">
-                            <br />
-                            <div className="content" dangerouslySetInnerHTML={{__html: result.content}}></div>
+                </header>
+                <article>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-10 col-lg-8 mx-auto">
+                                <br />
+                                <div className="content" dangerouslySetInnerHTML={{ __html: result.content }}></div>
+                                <button type="button" class="btn btn-primary" >
+                                    <a style={{ textDecoration: "none",color : "white" }} href={`/edit_lesson/${id}`}>
+                                        Edit Content
+                                    </a>
+                                </button>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </article>
-        </div>
+                </article>
+                <br />
+            </div>
         </>
     );
 }

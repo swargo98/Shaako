@@ -80,7 +80,7 @@ const NewLesson = () => {
                             {/* <RichTextEditor content2={content} setmycontent={handleChangeContent} /> */}
                         </div>
                         <button className="btn btn-primary" type="submit"
-                            style={{ margin: "12px", background: "rgb(52,163,0)" }} onClick={submit}> পাঠ যোগ করুন
+                            style={{ margin: "22px 0px 0px", background: "rgb(52,163,0)" }} onClick={submit}> পাঠ যোগ করুন
                         </button>
                     </div>
 
