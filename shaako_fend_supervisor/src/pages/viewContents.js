@@ -7,11 +7,13 @@ import { useState, useEffect } from "react";
 
 const ViewContents = () => {
     let [result, setresult] = useState([])
+    let [result2, setresult2] = useState([])
     let sup_id = localStorage.getItem('sup_id')
     let [sup_image,setsup_image] = useState(null);
 
     useEffect(() => {
         getContents()
+        getQuizes()
     }, [])
 
     let getContents = async () => {
@@ -30,6 +32,47 @@ const ViewContents = () => {
             let now = d[i]
             console.log(now.id + " " + now.title + " " + now.content + " " + now.supervisor_name + " " + now.upload_time)
             setresult(prevArray => [...prevArray, now]);
+        }
+
+        let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(sup_id)
+        })
+        // let result = stackSizeSync();
+        // console.log(result)
+
+        //take image respone from bufferIO
+        let image = await response2.blob()
+        //convert to base64
+        let image64 = await image.arrayBuffer()
+        //convert to base64
+        let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+        //convert to url
+        let imageurl = `data:image/png;base64,${image64base64}`
+        //push to array
+        setsup_image(imageurl)
+    }
+
+    let getQuizes = async () => {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/getQ', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(sup_id)
+        })
+        let d = await response.json()
+        setresult2([])
+        console.log(d)
+        for (let i = 0; i < d.length; i++) {
+            let now = d[i]
+            // console.log(now.id + " " + now.title + " " + now.content + " " + now.supervisor_name + " " + now.upload_time)
+            setresult2(prevArray => [...prevArray, now]);
         }
 
         let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
@@ -92,7 +135,6 @@ const ViewContents = () => {
                         }
 
                     </div>
-                    <button className="btn btn-primary" type="button" style={{ margin: "12px" }}>আরও দেখুন</button>
                     <button className="btn btn-primary" type="button"
                         style={{ margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/new_lesson">পাঠ যোগ করুন</a>
                     </button>
@@ -102,63 +144,32 @@ const ViewContents = () => {
                     <div className="row mb-5">
                         <div className="col-md-8 col-xl-7 text-center mx-auto">
                             <h2>স্বাস্থ্যসেবা বিষয়ক কুইজ</h2>
-                            <p className="w-lg-50">Curae hendrerit donec commodo hendrerit egestas tempus, turpis
-                                facilisis nostra nunc. Vestibulum dui eget ultrices.</p>
                         </div>
                     </div>
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-                        <div className="col">
-                            <div className="p-4">
-                                <a style={{ textDecoration: "none" }} href="/blog_post"><h4>পোলিও টিকা</h4></a>
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
-                                    facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
-                                    metus.</p>
-                                <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
-                                    width="50" height="50"
-                                    src={man1} alt="man" />
-                                    <div>
-                                        <p className="fw-bold mb-0">John Smith</p>
-                                        <p className="text-muted mb-0">Erat netus</p>
+                        {
+                            result2.map((r) => {
+                                return (
+                                    <div className="col">
+                                        <div className="p-4">
+                                            <a style={{ textDecoration: "none" }} href={`/quiz_post/${r.id}`}><h4>{r.title}</h4></a>
+                                            <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
+                                                width="50" height="50"
+                                                src={sup_image} alt="man" />
+                                                <div>
+                                                    <p className="fw-bold mb-0">{r.supervisor_name}</p>
+                                                    <p className="text-muted mb-0">Upload date: {r.upload_time}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col">
-                            <div className="p-4">
-                                <a style={{ textDecoration: "none" }} href="/blog_post"><h4>কোভিড-১৯ সচেতনতা</h4></a>
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
-                                    facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
-                                    metus.</p>
-                                <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
-                                    width="50" height="50"
-                                    src={man2} alt="man" />
-                                    <div>
-                                        <p className="fw-bold mb-0">John Smith</p>
-                                        <p className="text-muted mb-0">Erat netus</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col">
-                            <div className="p-4">
-                                <a style={{ textDecoration: "none" }} href="/blog_post"><h4>প্রাথমিক চিকিৎসা</h4></a>
-                                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac
-                                    facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
-                                    metus.</p>
-                                <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
-                                    width="50" height="50"
-                                    src={man3} alt="man" />
-                                    <div>
-                                        <p className="fw-bold mb-0">John Smith</p>
-                                        <p className="text-muted mb-0">Erat netus</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                );
+                            })
+                        }
+
                     </div>
-                    <button className="btn btn-primary" type="button" style={{ margin: "12px" }}>আরও দেখুন</button>
                     <button className="btn btn-primary" type="button"
-                        style={{ margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/">কুইজ যোগ করুন</a>
+                        style={{ margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/new_quiz">কুইজ যোগ করুন</a>
                     </button>
                 </div>
             </section>

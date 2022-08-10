@@ -133,7 +133,7 @@ class Lesson(models.Model):
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
     upload_date = models.DateTimeField()
-    relatedLesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE, null=True)
 
 
 # create QuizItem with Quiz, Question, option_1, option_2, option_3, option_4, point, correct_option
