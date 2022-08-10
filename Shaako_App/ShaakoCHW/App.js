@@ -1,20 +1,18 @@
 import React from "react";
 import LoginScreen from "react-native-login-screen";
-import {View, Text, StyleSheet, Button, Image} from "react-native";
-import { NativeRouter ,Link } from "react-router-native";
+import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Authentication from './src/pages/auth.js'
 
-
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <LoginScreen
-      logoImageSource={require("./assets/logo.png")}
-      onLoginPress={() => {}}
-      onSignupPress={() => {}}
-      onEmailChange={(email: string) => {}}
-      onPasswordChange={(password: string) => {}}
-      disableSocialButtons={true}
-      signupText=""
-    />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Authentication} options={{header: () => null}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
