@@ -1,6 +1,6 @@
 import React from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Button, Image, AppRegistry } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
