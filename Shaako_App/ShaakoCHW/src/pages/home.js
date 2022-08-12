@@ -2,17 +2,17 @@ import React from "react";
 import LoginScreen from "react-native-login-screen";
 import {View, Text, StyleSheet, Button, Image} from "react-native";
 //import { NativeRouter ,Link } from "react-router-native";
-import MaterialButtonViolet from "./components/MaterialButtonViolet";
-import Navbar from "./components/Navbar";
-import MaterialFixedLabelTextbox from "./components/MaterialFixedLabelTextbox";
-import MaterialButtonViolet1 from "./components/MaterialButtonViolet1";
-import MaterialButtonViolet2 from "./components/MaterialButtonViolet2";
-import MaterialButtonViolet3 from "./components/MaterialButtonViolet3";
+import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
+import Navbar from "./../../components/Navbar";
+import MaterialFixedLabelTextbox from "./../../components/MaterialFixedLabelTextbox";
+import MaterialButtonViolet1 from "./../../components/MaterialButtonViolet1";
+import MaterialButtonViolet2 from "./../../components/MaterialButtonViolet2";
+import MaterialButtonViolet3 from "./../../components/MaterialButtonViolet3";
 
 
 
 
-export default function App() {
+export default function Home({Navigate}) {
   // return (
   //   <View>
   //     <Navbar></Navbar>

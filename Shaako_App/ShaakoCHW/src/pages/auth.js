@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 
-const Authentication = () => {
+const Authentication = ({Navigate}) => {
   let [username, setusername] = useState(null)
   let [password, setpassword] = useState(null)
   let [isLoggedIn, setisLoggedIn] = useState(false)
