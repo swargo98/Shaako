@@ -71,7 +71,7 @@ def getMyContent(request):
     if request.method == 'POST':
         lesson_id = request.data
         lesson = Lesson.objects.get(id=lesson_id)
-        print(lesson.title, lesson.content)
+        # print(lesson.title, lesson.content)
         return Response({'title': lesson.title, 'content': lesson.content, 'author': lesson.supervisor.name,
                          'upload_time': lesson.upload_date.date()})
 

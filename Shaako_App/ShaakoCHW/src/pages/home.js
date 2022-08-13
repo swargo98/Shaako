@@ -51,7 +51,7 @@ export default function Home({ navigation }) {
 
 	}
 	let handleClick1 = () => {
-		navigation.navigate('BlogPost')
+		navigation.navigate('BlogList')
 	}
 	return (
 		<View style={styles.container}>

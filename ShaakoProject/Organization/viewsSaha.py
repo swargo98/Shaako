@@ -83,3 +83,22 @@ def editLesson(request):
         lesson.content = data['content']
         lesson.save()
         return Response("True")
+
+
+# CHW functions
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getLessonList(request):
+    if request.method == 'POST':
+        data = request.data
+        print(data)
+        sup_id = data
+        # find all contents of the supervisor with id=sup_id
+        lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        ret = []
+        for lesson in lessons:
+            ret.append({'id': lesson.id, 'title': lesson.title,
+                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date()})
+        print(ret)
+        return Response(ret)

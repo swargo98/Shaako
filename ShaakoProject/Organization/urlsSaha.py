@@ -4,4 +4,6 @@ from . import viewsSaha
 urlpatterns = [
     path('organization/getCampaignList', viewsSaha.getCampaignList),
     path('supervisor/editContent', viewsSaha.editLesson),
+
+    path('CHW/getLessonList', viewsSaha.getLessonList),
 ]

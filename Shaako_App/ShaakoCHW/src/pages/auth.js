@@ -70,10 +70,10 @@ const Authentication = ({ navigation }) => {
       console.log(data)
       if (data.correct === 'True') {
         try {
-          await AsyncStorage.setItem('token', JSON.stringify(data.token));
-          await AsyncStorage.setItem('organization', JSON.stringify(data.org_id));
-          await AsyncStorage.setItem('chw_id', JSON.stringify(data.chw_id));
-          await AsyncStorage.setItem('sup_id', JSON.stringify(data.sup_id));
+          await AsyncStorage.setItem('token', data.token);
+          await AsyncStorage.setItem('organization', data.org_id);
+          await AsyncStorage.setItem('chw_id', data.chw_id);
+          await AsyncStorage.setItem('sup_id', data.sup_id);
         }
         catch (error) {
           console.log("hoynaaaaaaaaaaaaaaai")
