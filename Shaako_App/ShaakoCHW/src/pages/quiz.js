@@ -24,7 +24,7 @@ const Quiz = ({ route, navigation }) => {
   // console.log(id)
   let sup_id = 0;
   const [data, setdata] = useState(null)
-  let [data2,setdata2] = useState([])
+  let [data2, setdata2] = useState([])
   let [a, seta] = useState(true)
   useEffect(() => {
     getQuiz()
@@ -66,7 +66,7 @@ const Quiz = ({ route, navigation }) => {
         now.answer = d.items[i].option4
       }
       setdata(data => [now, ...data])
-      setdata2(data2 => [d.items[i],...data2])
+      setdata2(data2 => [d.items[i], ...data2])
     }
     seta(false)
   }
@@ -75,39 +75,47 @@ const Quiz = ({ route, navigation }) => {
     console.log(results)
     let now = []
     for (let i = 0; i < results.length; i++) {
-      let now2 = {}
-      now2.id = data2[i].id
-      if(results[i].response === data2[i].option1)
-      {
-        now2.response = 1
+      for (let j = 0; j < data2.length; j++) {
+        if (results[i].question === data2[j].ques) {
+          let now2 = {}
+          now2.id = data2[j].id
+          now2.response = 0
+          // console.log(data2[i].option1 + ' ' + data2[i].option2 + ' ' + results[i].response)
+          if (results[i].response === data2[j].option1) {
+            now2.response = 1
+          }
+          else if (results[i].response === data2[j].option2) {
+            now2.response = 2
+          }
+          else if (results[i].response === data2[j].option3) {
+            now2.response = 3
+          }
+          else if (results[i].response === data2[j].option4) {
+            now2.response = 4
+          }
+          now.push(now2)
+          break
+        }
       }
-      else if(results[i].response === data2[i].option2)
-      {
-        now2.response = 2
-      }
-      else if(results[i].response === data2[i].option3)
-      {
-        now2.response = 3
-      }
-      else if(results[i].response === data2[i].option4)
-      {
-        now2.response = 4
-      }
-      now.push(now2)
+
     }
-    // console.log(now)
+    console.log('----------------------------------------------------')
+    console.log(now)
+    console.log(id)
     let tok = await AsyncStorage.getItem('token')
-    let response = await fetch(global.ip + '/', {
+    let chw_id = await AsyncStorage.getItem('chw_id')
+    let response = await fetch(global.ip + '/chw/submitQuiz', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'TOKEN ' + tok
       },
-      body: JSON.stringify({ id, now })
+      body: JSON.stringify({ id, now, chw_id })
 
     })
     let data = await response.json()
-
+    console.log("got back "+data)
+    navigation.navigate('QuizSubmission', { submission_id: data })
   }
 
   return a ? null : (

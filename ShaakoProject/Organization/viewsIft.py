@@ -249,3 +249,68 @@ def getNosContent(request):
         dict['quiz_count']=quizes.count()
 
         return Response(dict)
+
+@api_view(['POST'])
+def submitQuiz(request):
+    if request.method == 'POST':
+        data = request.data
+        print(data)
+        quiz_id=data['id']
+        # make new quiz submission with quiz_id=quiz_id and chw_id=chw_id
+
+        # find quiz with quiz_id
+        quiz = Quiz.objects.get(id=quiz_id)
+
+        newQuizSubmission = QuizSubmission(quiz=quiz, chw_id=data['chw_id'],date=datetime.datetime.now())
+        newQuizSubmission.save()
+        items=data['now']
+        for item in items:
+            quizItem = QuizItem.objects.get(id=item['id'])
+            submissionItem = SubmissionItem(quizSubmission=newQuizSubmission, quizItem=quizItem, chosenOption=item['response'])
+            submissionItem.save()
+        return Response(newQuizSubmission.id)
+
+
+@api_view(['POST'])
+def getQuizSubmission(request):
+    if request.method == 'POST':
+        data = request.data
+        print(data)
+        
+        submission_id=data['submission_id']
+
+
+        # find quiz submission with id=submission_id
+        submission = QuizSubmission.objects.get(id=submission_id)
+        # find quiz of the quiz submission
+        quiz = submission.quiz
+        # find all submission items of the quiz submission
+        submissionItems = SubmissionItem.objects.filter(quizSubmission=submission)
+        
+        response={}
+
+        response['quiz_name']=quiz.title
+
+        ret=[]
+        cnt=0
+        tot=0
+        for items in submissionItems:
+            dict={}
+            dict['question']=items.quizItem.question
+            dict['option1']=items.quizItem.option_1
+            dict['option2']=items.quizItem.option_2
+            dict['option3']=items.quizItem.option_3
+            dict['option4']=items.quizItem.option_4
+            dict['correct']=items.quizItem.correct_option
+            dict['chosen']=items.chosenOption
+            ret.append(dict)
+            if dict['chosen']==dict['correct']:
+                cnt+=1
+            tot+=1
+        response['ret']=ret
+        response['cnt']=cnt
+        response['tot']=tot
+        print("came here")
+        print(ret)
+
+        return Response(response)

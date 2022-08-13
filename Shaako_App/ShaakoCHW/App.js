@@ -12,6 +12,7 @@ import BlogPost from "./src/pages/blogPost.js";
 import Quiz from "./src/pages/quiz.js";
 import Schedule from "./src/pages/schedule.js";
 import Auth from "./src/pages/auth.js";
+import QuizSubmission from "./src/pages/QuizSubmission";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Auth">
         <Stack.Screen name="Auth" component={Auth} options={{header: () => null}} />
+        <Stack.Screen name="QuizSubmission" component={QuizSubmission} options={{header: () => null}} />
         <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
         <Stack.Screen name="Notification" component={Notification} options={{header: () => null}} />
         <Stack.Screen name="BlogList" component={BlogList} options={{header: () => null}} />
