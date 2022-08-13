@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 	rect: {
 		top: 0,
 		left: 0,
-		width: 360,
+		width: "100%",
 		height: 232,
 		position: "absolute",
 		backgroundColor: "rgba(112,245,177,1)",
@@ -135,14 +135,14 @@ const styles = StyleSheet.create({
 		height: 127,
 		width: 137,
 		backgroundColor: "rgba(225,85,22,1)",
-		marginLeft: 35
+		marginLeft: "10%"
 	},
 	materialButtonViolet1Row: {
 		height: 127,
 		flexDirection: "row",
 		flex: 1,
 		marginRight: 27,
-		marginLeft: 21,
+		marginLeft: "6%",
 		marginTop: 41
 	},
 	materialHeader1: {
@@ -156,14 +156,14 @@ const styles = StyleSheet.create({
 		height: 43,
 		width: 280,
 		marginTop: "70%",
-		marginLeft: 39,
+		marginLeft: "10%",
 		borderRadius: 10
 	},
 	materialButtonViolet4: {
 		height: 43,
 		width: 280,
 		marginTop: 17,
-		marginLeft: 39,
+		marginLeft: "10%",
 		borderRadius: 10
 	}
 });
