@@ -9,25 +9,21 @@ import MaterialButtonViolet1 from "../../components/MaterialButtonViolet1";
 import MaterialButtonViolet2 from "../../components/MaterialButtonViolet2";
 import MaterialButtonViolet3 from "../../components/MaterialButtonViolet3";
 import MaterialButtonViolet from "../../components/MaterialButtonViolet";
-
 import { useState, useEffect } from 'react'
-// import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-
+import '../../global.js'
 
 export default function Home() {
   let [data1, setdata1] = useState("12")
   // let [data2, setdata2] = useState(23)
   // let [data3, setdata3] = useState(34)
 
-  useEffect(() => {
+  useEffect(() => { 
       getData()
   }, [])
-  // let getData = () => {
-  //     console.log("hello")
-  // }
   let getData = async () => {
-      let response = await fetch('http://192.168.31.36:8000/chw/kichuekta',
+    
+      console.log(global.ip)
+      let response = await fetch(global.ip+'/chw/kichuekta',
       {
           method: "GET",
           headers: {
