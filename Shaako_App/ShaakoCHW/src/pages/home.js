@@ -26,9 +26,9 @@ export default function Home({ navigation }) {
 		getData()
 	}, [])
 	let getData = async () => {
-		let c= await AsyncStorage.getItem('chw_id')
+		let c= AsyncStorage.getItem('chw_id')
 		setchw_id(c)
-		c=await AsyncStorage.getItem('sup_id')
+		c= AsyncStorage.getItem('sup_id')
 		setsup_id(c)
 		console.log("paisi     "+sup_id+"     "+chw_id)
 
@@ -55,6 +55,7 @@ export default function Home({ navigation }) {
 						<MaterialButtonViolet1
 							style={styles.materialButtonViolet1}
 							text={lesson_count}
+							onPress={() => navigation.navigate("BlogList")}
 						></MaterialButtonViolet1>
 						<MaterialButtonViolet2
 							style={styles.materialButtonViolet2}
@@ -66,9 +67,11 @@ export default function Home({ navigation }) {
 			</View>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet3}
+				text="চলমান ক্যাম্পেইনসমূহ"
 			></MaterialButtonViolet3>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
+				text="নিকটবর্তী সহযোগিতা"
 			></MaterialButtonViolet3>
 		</View>
 	);

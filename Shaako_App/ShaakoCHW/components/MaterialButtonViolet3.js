@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, Text } from "react-native";
 function MaterialButtonViolet3(props) {
   return (
     <TouchableOpacity style={[styles.container, props.style]}>
-      <Text style={styles.চলমানক্যাম্পেইনসমূহ}>চলমান ক্যাম্পেইনসমূহ</Text>
+      <Text style={styles.buttonStyle}>{props.text}</Text>
     </TouchableOpacity>
   );
 }
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16
   },
-  চলমানক্যাম্পেইনসমূহ: {
+  buttonStyle: {
     color: "#fff",
     fontSize: 21
   }
