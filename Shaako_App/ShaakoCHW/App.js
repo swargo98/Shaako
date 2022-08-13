@@ -11,12 +11,14 @@ import AddPatient from "./src/pages/addPatient.js";
 import BlogPost from "./src/pages/blogPost.js";
 import Quiz from "./src/pages/quiz.js";
 import Schedule from "./src/pages/schedule.js";
+import Auth from "./src/pages/auth.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="BlogPost">
+      <Stack.Navigator initialRouteName="Auth">
+        <Stack.Screen name="Auth" component={Auth} options={{header: () => null}} />
         <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
         <Stack.Screen name="Notification" component={Notification} options={{header: () => null}} />
         <Stack.Screen name="BlogList" component={BlogList} options={{header: () => null}} />
