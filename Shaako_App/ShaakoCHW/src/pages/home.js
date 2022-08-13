@@ -70,7 +70,6 @@ export default function Home({ navigation }) {
 						></MaterialButtonViolet2>
 					</View>
 				</View>
-				{/* <MaterialHeader4 style={styles.materialHeader1}></MaterialHeader4> */}
 			</View>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet3}
@@ -128,12 +127,13 @@ const styles = StyleSheet.create({
 	},
 	materialButtonViolet1: {
 		height: 127,
-		width: 140,
-		backgroundColor: "rgba(61,124,183,1)"
+		width: "45%",
+		backgroundColor: "rgba(61,124,183,1)",
+		marginLeft: "0%"
 	},
 	materialButtonViolet2: {
 		height: 127,
-		width: 137,
+		width: "45%",
 		backgroundColor: "rgba(225,85,22,1)",
 		marginLeft: "10%"
 	},
@@ -145,23 +145,16 @@ const styles = StyleSheet.create({
 		marginLeft: "6%",
 		marginTop: 41
 	},
-	materialHeader1: {
-		height: 56,
-		width: 360,
-		position: "absolute",
-		top: 0,
-		left: 0
-	},
 	materialButtonViolet3: {
 		height: 43,
-		width: 280,
+		width: "80%",
 		marginTop: "70%",
 		marginLeft: "10%",
 		borderRadius: 10
 	},
 	materialButtonViolet4: {
 		height: 43,
-		width: 280,
+		width: "80%",
 		marginTop: 17,
 		marginLeft: "10%",
 		borderRadius: 10
