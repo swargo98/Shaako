@@ -26,18 +26,22 @@ export default function Home({ navigation }) {
 		getData()
 	}, [])
 	let getData = async () => {
-		let c= AsyncStorage.getItem('chw_id')
+		var c=await AsyncStorage.getItem('chw_id')
+		var d=await AsyncStorage.getItem('sup_id')
+		console.log("c="+c)
+		console.log("d="+d)
 		setchw_id(c)
-		c= AsyncStorage.getItem('sup_id')
-		setsup_id(c)
-		console.log("paisi     "+sup_id+"     "+chw_id)
+		setsup_id(d)
+
+		console.log("chw_id="+chw_id)
+		console.log("sup_id="+sup_id)
 
 		let response = await fetch(global.ip+'/chw/getNosContent', {
 			method: "POST",
 			headers: {
 			  'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ sup_id })
+			body: JSON.stringify({ 'sup_id':d })
 		  })
 		  let data = await response.json()
 		  console.log(data)
@@ -45,6 +49,9 @@ export default function Home({ navigation }) {
 		  setLessonCount(data.lesson_count)
 		  setQuizCount(data.quiz_count)
 
+	}
+	let handleClick1 = () => {
+		navigation.navigate('BlogPost')
 	}
 	return (
 		<View style={styles.container}>
@@ -55,7 +62,7 @@ export default function Home({ navigation }) {
 						<MaterialButtonViolet1
 							style={styles.materialButtonViolet1}
 							text={lesson_count}
-							onPress={() => navigation.navigate("BlogList")}
+							clicked={handleClick1}
 						></MaterialButtonViolet1>
 						<MaterialButtonViolet2
 							style={styles.materialButtonViolet2}
@@ -72,6 +79,22 @@ export default function Home({ navigation }) {
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="নিকটবর্তী সহযোগিতা"
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
+				text="আপনার সুপারভাইজর"
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
+				text="রোগীর তালিকা"
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
+				text="নতুন ভিজিট হালনাগাদ"
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
+				text="নতুন রোগী যুক্ত"
 			></MaterialButtonViolet3>
 		</View>
 	);

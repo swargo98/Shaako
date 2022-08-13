@@ -17,14 +17,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
-const Authentication = ({navigation }) => {
-  let [username, setusername] = useState(null)
-  let [password, setpassword] = useState(null)
+const Authentication = ({ navigation }) => {
+  let [username, setusername] = useState('nhs@gmail.com')
+  let [password, setpassword] = useState('ABCD')
   let [isLoggedIn, setisLoggedIn] = useState(false)
   let [failedLogin, setfailedLogin] = useState(false)
 
   useEffect(() => {
-    
+
     checkAlreadyLogged()
 
     let _retrieveData = async () => {
@@ -43,7 +43,7 @@ const Authentication = ({navigation }) => {
   }, [])
 
   let checkAlreadyLogged = () => {
-    
+
   }
 
   let handleChangeUsername = (value) => {
@@ -59,7 +59,7 @@ const Authentication = ({navigation }) => {
   let handleSubmit = async () => {
     if (username && password) {
       console.log("Username : ", username, " Password : ", password)
-      let response = await fetch(global.ip+'/chw/login', {
+      let response = await fetch(global.ip + '/chw/login', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -70,11 +70,11 @@ const Authentication = ({navigation }) => {
       console.log(data)
       if (data.correct === 'True') {
         try {
-          AsyncStorage.setItem('token', data.token);
-          AsyncStorage.setItem('organization', data.org_id);
-          AsyncStorage.setItem('chw_id', data.chw_id);
-          AsyncStorage.setItem('sup_id', data.sup_id);
-        } 
+          await AsyncStorage.setItem('token', JSON.stringify(data.token));
+          await AsyncStorage.setItem('organization', JSON.stringify(data.org_id));
+          await AsyncStorage.setItem('chw_id', JSON.stringify(data.chw_id));
+          await AsyncStorage.setItem('sup_id', JSON.stringify(data.sup_id));
+        }
         catch (error) {
           console.log("hoynaaaaaaaaaaaaaaai")
           console.log(error)
@@ -110,7 +110,7 @@ const Authentication = ({navigation }) => {
           placeholderTextColor="white"
           secureTextEntry={true}
           onChangeText={handleChangePassword}
-          value = {password?.body}
+          value={password?.body}
         />
       </View>
 
@@ -119,7 +119,7 @@ const Authentication = ({navigation }) => {
       </TouchableOpacity>
       <View>
         {failedLogin && <Text style={styles.failedLogin}>লগ ইন ফেইলড</Text>}
-        {isLoggedIn && navigation.navigate('Home') }
+        {isLoggedIn && navigation.navigate('Home')}
       </View>
     </View>
 
