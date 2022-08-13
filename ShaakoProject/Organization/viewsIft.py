@@ -185,3 +185,8 @@ def getMyQuiz(request):
         dict['items']=items
         print(dict)
         return Response(dict)
+
+@api_view(['GET'])
+def kichuekta(request):
+    if request.method == 'GET':
+        return Response("Eseche")

@@ -7,5 +7,6 @@ urlpatterns = [
     path('supervisor/addNewQuiz', viewsIft.addNewQuiz),
     path('supervisor/getQ', viewsIft.getQ),
     path('supervisor/getMyQuiz', viewsIft.getMyQuiz),
+    path('chw/kichuekta', viewsIft.kichuekta),
     
 ]

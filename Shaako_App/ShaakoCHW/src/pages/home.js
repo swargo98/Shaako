@@ -2,25 +2,42 @@ import React from "react";
 import LoginScreen from "react-native-login-screen";
 import {View, Text, StyleSheet, Button, Image} from "react-native";
 //import { NativeRouter ,Link } from "react-router-native";
-import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
-import Navbar from "./../../components/Navbar";
-import MaterialFixedLabelTextbox from "./../../components/MaterialFixedLabelTextbox";
-import MaterialButtonViolet1 from "./../../components/MaterialButtonViolet1";
-import MaterialButtonViolet2 from "./../../components/MaterialButtonViolet2";
-import MaterialButtonViolet3 from "./../../components/MaterialButtonViolet3";
+// import MaterialButtonViolet from "../../components/MaterialButtonViolet";
+import Navbar from "../../components/Navbar";
+import MaterialFixedLabelTextbox from "../../components/MaterialFixedLabelTextbox";
+import MaterialButtonViolet1 from "../../components/MaterialButtonViolet1";
+import MaterialButtonViolet2 from "../../components/MaterialButtonViolet2";
+import MaterialButtonViolet3 from "../../components/MaterialButtonViolet3";
+import MaterialButtonViolet from "../../components/MaterialButtonViolet";
+
+import { useState, useEffect } from 'react'
+// import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
 
+export default function Home() {
+  let [data1, setdata1] = useState("12")
+  // let [data2, setdata2] = useState(23)
+  // let [data3, setdata3] = useState(34)
 
-export default function Home({Navigate}) {
-  // return (
-  //   <View>
-  //     <Navbar></Navbar>
-  //     <MaterialFixedLabelTextbox
-  //       style={styles.materialFixedLabelTextbox}
-  //     ></MaterialFixedLabelTextbox>
-  //   </View>
-  // );
+  useEffect(() => {
+      getData()
+  }, [])
+  // let getData = () => {
+  //     console.log("hello")
+  // }
+  let getData = async () => {
+      let response = await fetch('http://192.168.31.36:8000/chw/kichuekta',
+      {
+          method: "GET",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      })
+      let d = await response.json()
+      console.log("d "+d)
+      setdata1(d)
+  }
   return (
     <View style={styles.container}>
       <Navbar></Navbar>
@@ -29,6 +46,7 @@ export default function Home({Navigate}) {
           <View style={styles.materialButtonViolet1Row}>
             <MaterialButtonViolet1
               style={styles.materialButtonViolet1}
+              text={data1}
             ></MaterialButtonViolet1>
             <MaterialButtonViolet2
               style={styles.materialButtonViolet2}
