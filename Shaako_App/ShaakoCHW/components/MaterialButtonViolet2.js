@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, Text } from "react-native";
 function MaterialButtonViolet2(props) {
   return (
     <TouchableOpacity style={[styles.container, props.style]}>
-      <Text style={styles.কুইজ২}>কুইজ {"\n"}২</Text>
+      <Text style={styles.কুইজ২}>কুইজ {"\n"}{props.text}</Text>
     </TouchableOpacity>
   );
 }

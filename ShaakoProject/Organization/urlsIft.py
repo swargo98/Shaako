@@ -8,5 +8,7 @@ urlpatterns = [
     path('supervisor/getQ', viewsIft.getQ),
     path('supervisor/getMyQuiz', viewsIft.getMyQuiz),
     path('chw/kichuekta', viewsIft.kichuekta),
+    path('chw/login', viewsIft.chwlogin),
+    path('chw/getNosContent', viewsIft.getNosContent),
     
 ]

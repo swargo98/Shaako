@@ -456,6 +456,10 @@ def createCHW(request):
                       presentAddress=presentAddress, imagePath=imagePath, location=location,
                       supervisor=supervisor, recruitment_date=recruitment_date)
             chw.save()
+            U = User(username=chw.email)
+            U.save()
+            token = Token.objects.create(user=U)
+            token.save()
             return Response('True')
 
     return Response('False')

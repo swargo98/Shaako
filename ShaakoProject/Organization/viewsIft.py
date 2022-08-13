@@ -190,3 +190,62 @@ def getMyQuiz(request):
 def kichuekta(request):
     if request.method == 'GET':
         return Response("Eseche")
+
+@api_view(['POST'])
+def chwlogin(request):
+    if request.method == 'POST':
+        data = request.data
+        email = data['username']
+        password = data['password']
+        
+        user = CHW.objects.values('password', 'supervisor', 'id').filter(email=email)
+
+        
+
+        if user:
+            try:
+                sup_id=user[0]['supervisor']
+                org_id=Supervisor.objects.get(id=sup_id).organization_id
+
+                ph().verify(user[0]['password'], password)
+
+                token = Token.objects.get(user=User.objects.get(username=email))
+
+                dict = {}
+                dict['correct'] = 'True'
+                dict['chw_id'] = user[0]['id']
+                dict['org_id'] = org_id
+                dict['token'] = token.key
+                dict['sup_id'] = sup_id
+
+                return Response(dict)
+            except:
+                dict = {}
+                dict['correct'] = 'False'
+                return Response(dict)
+        else:
+            dict = {}
+            dict['correct'] = 'False'
+            return Response(dict)
+
+
+@api_view(['POST'])
+def getNosContent(request):
+    if request.method == 'POST':
+        data = request.data
+        sup_id=data['sup_id']
+        print(sup_id)
+
+        # get number of lessons of the supervisor with id=sup_id
+        lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        # get number of quiz of the supervisor with id=sup_id
+        quizes = Quiz.objects.filter(supervisor_id=sup_id)
+
+        print(lessons)
+        print(quizes)
+
+        dict={}
+        dict['lesson_count']=lessons.count()
+        dict['quiz_count']=quizes.count()
+
+        return Response(dict)

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import LoginScreen from "react-native-login-screen";
 import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import {
   StyleSheet,
   Text,
@@ -14,13 +17,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
-const Authentication = ({Navigate}) => {
+const Authentication = ({navigation }) => {
   let [username, setusername] = useState(null)
   let [password, setpassword] = useState(null)
   let [isLoggedIn, setisLoggedIn] = useState(false)
   let [failedLogin, setfailedLogin] = useState(false)
 
   useEffect(() => {
+    
     checkAlreadyLogged()
 
     let _retrieveData = async () => {
@@ -44,18 +48,18 @@ const Authentication = ({Navigate}) => {
 
   let handleChangeUsername = (value) => {
     console.log(value)
-    setusername(username => ({ ...username, 'username': value }))
+    setusername(value)
   }
 
   let handleChangePassword = (value) => {
     console.log(value)
-    setpassword(password => ({ ...password, 'password': value }))
+    setpassword(value)
   }
 
   let handleSubmit = async () => {
     if (username && password) {
       console.log("Username : ", username, " Password : ", password)
-      let response = await fetch('http://127.0.0.1:8000/chw/login', {
+      let response = await fetch(global.ip+'/chw/login', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -63,23 +67,19 @@ const Authentication = ({Navigate}) => {
         body: JSON.stringify({ username, password })
       })
       let data = await response.json()
+      console.log(data)
       if (data.correct === 'True') {
+        try {
+          AsyncStorage.setItem('token', data.token);
+          AsyncStorage.setItem('organization', data.org_id);
+          AsyncStorage.setItem('chw_id', data.chw_id);
+          AsyncStorage.setItem('sup_id', data.sup_id);
+        } 
+        catch (error) {
+          console.log("hoynaaaaaaaaaaaaaaai")
+          console.log(error)
+        }
         setisLoggedIn(true)
-
-        let _storeData = async () => {
-          try {
-            await AsyncStorage.setItem('token', data.token);
-            await AsyncStorage.setItem('organization', data.organization);
-            await AsyncStorage.setItem('chw_id', data.id);
-          } catch (error) {
-            // Error saving data
-            console.log(error)
-          }
-        };
-        // AsyncStorageStatic.setItem('token', data.token)
-        // AsyncStorageStatic.setItem('organization', data.organization)
-        // AsyncStorageStatic.setItem('chw_id', data.id)
-        console.log(data.token)
       }
       else {
         setfailedLogin(true)
@@ -119,7 +119,7 @@ const Authentication = ({Navigate}) => {
       </TouchableOpacity>
       <View>
         {failedLogin && <Text style={styles.failedLogin}>লগ ইন ফেইলড</Text>}
-        {isLoggedIn && <Navigate to="/home" replace={true} />}
+        {isLoggedIn && navigation.navigate('Home') }
       </View>
     </View>
 
