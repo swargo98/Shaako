@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Schedule">
+      <Stack.Navigator initialRouteName="BlogPost">
         <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
         <Stack.Screen name="Notification" component={Notification} options={{header: () => null}} />
         <Stack.Screen name="BlogList" component={BlogList} options={{header: () => null}} />
