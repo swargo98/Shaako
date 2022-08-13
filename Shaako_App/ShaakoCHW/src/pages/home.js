@@ -53,6 +53,9 @@ export default function Home({ navigation }) {
 	let handleClick1 = () => {
 		navigation.navigate('BlogList')
 	}
+	let handleClick2 = () => {
+		navigation.navigate('QuizList')
+	}
 	return (
 		<View style={styles.container}>
 			<Navbar></Navbar>
@@ -67,6 +70,7 @@ export default function Home({ navigation }) {
 						<MaterialButtonViolet2
 							style={styles.materialButtonViolet2}
 							text={quiz_count}
+							clicked={handleClick2}
 						></MaterialButtonViolet2>
 					</View>
 				</View>

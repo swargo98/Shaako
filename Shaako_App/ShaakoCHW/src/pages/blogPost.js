@@ -57,10 +57,7 @@ const BlogPost = ({ route, navigation }) => {
         }
     };
     let getLesson = async () => {
-        console.log(lesson_id)
-        console.log("haha")
         let tok = await AsyncStorage.getItem('token')
-        console.log("heelo " + tok)
         let response = await fetch(global.ip + '/supervisor/getMyContent', {
             method: "POST",
             headers: {

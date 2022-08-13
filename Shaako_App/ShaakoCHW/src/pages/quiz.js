@@ -1,88 +1,165 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Image, AppRegistry } from "react-native";
+// import { View, Text, StyleSheet, Image, AppRegistry } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
 import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow";
+import { View, Text, StyleSheet, AppRegistry, ScrollView } from "react-native";
+
+// import { Card, ListItem, Button, Icon, Header } from 'react-native-elements';
+// import blog from "./../../assets/blog.json";
+import HTMLView from 'react-native-htmlview';
+import styled from 'styled-components';
+import { Image } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import QuizeSingleChoice from "react-native-react-native-quiz-single-choice";
 
-const Quiz = ({ Navigate }) => {
-    const data = [
-        {
-          question:
-            "Pendant la préhistoire, quelle période a suivi l’age de la pierre taillée ?",
-          optionA: "l’âge de la pierre polie",
-          optionB: "l’âge du fer",
-          optionC: "l’âge du bronze",
-          optionD: "l’âge de la pierre ponce",
-          answer: "l’âge de la pierre polie",
-        },
-        {
-          question: "Une personne qui parle couramment le français est :",
-          optionA: "Francilienne",
-          optionB: "Francophone",
-          optionC: "Tchatcheuse",
-          optionD: "Francophile",
-          answer: "Francophone",
-        },
-        {
-          question: "Quel petit signe place-t-on parfois sous la lettre C ?",
-          optionA: "Une virgule",
-          optionB: "Une cédille",
-          optionC: "Une apostrophe",
-          optionD: "Un petit cygne",
-          answer: "Une cédille",
-        },
-      ];
-    return (
-        <QuizeSingleChoice
-      containerStyle={{ backgroundColor: "#61dafb", paddingTop: 30 }}
-      questionTitleStyle={{ fontSize: 22, color: "#FFF" }}
-      responseStyle={{
-        borderRadius: 15,
-      }}
-      responseTextStyle={{ fontSize: 12, fontWeight: "normal" }}
-      selectedResponseStyle={{
-        borderRadius: 15,
-        backgroundColor: "#fa5541",
-      }}
-      selectedResponseTextStyle={{
-        fontSize: 14,
-        fontWeight: "normal",
-      }}
-      responseRequired={true}
-      nextButtonText={"Next"}
-      nextButtonStyle={{ backgroundColor: "#06d755" }}
-      nextButtonTextStyle={{ color: "#FFF" }}
-      prevButtonText={"Prev"}
-      prevButtonStyle={{ backgroundColor: "#fa5541" }}
-      prevButtonTextStyle={{ color: "#FFF" }}
-      endButtonText={"Done"}
-      endButtonStyle={{ backgroundColor: "#000" }}
-      endButtonTextStyle={{ color: "#FFF" }}
-      buttonsContainerStyle={{ marginTop: "auto" }}
-      onEnd={(results) => {
-        console.log(results);
-      }}
-      data={data}
-    />
-    );
+const Quiz = ({ route, navigation }) => {
+  let { id } = route.params;
+  // console.log(id)
+  let sup_id = 0;
+  const [data, setdata] = useState(null)
+  let [data2,setdata2] = useState([])
+  let [a, seta] = useState(true)
+  useEffect(() => {
+    getQuiz()
+  }, [])
+
+  let getQuiz = async () => {
+    // console.log(typeof data2)
+    sup_id = await AsyncStorage.getItem('sup_id');
+    let tok = await AsyncStorage.getItem('token')
+    let response = await fetch(global.ip + '/supervisor/getMyQuiz', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + tok
+      },
+      body: JSON.stringify({ id, sup_id })
+    })
+    let d = await response.json()
+    console.log(d)
+    //iterate in d.items
+    setdata([])
+    for (let i = 0; i < d.items.length; i++) {
+      let now = {}
+      now.question = d.items[i].ques
+      now.optionA = d.items[i].option1
+      now.optionB = d.items[i].option2
+      now.optionC = d.items[i].option3
+      now.optionD = d.items[i].option4
+      if (d.items[i].correct === 1) {
+        now.answer = d.items[i].option1
+      }
+      if (d.items[i].correct === 2) {
+        now.answer = d.items[i].option2
+      }
+      if (d.items[i].correct === 3) {
+        now.answer = d.items[i].option3
+      }
+      if (d.items[i].correct === 4) {
+        now.answer = d.items[i].option4
+      }
+      setdata(data => [now, ...data])
+      setdata2(data2 => [d.items[i],...data2])
+    }
+    seta(false)
+  }
+
+  let handleSubmit = async (results) => {
+    console.log(results)
+    let now = []
+    for (let i = 0; i < results.length; i++) {
+      let now2 = {}
+      now2.id = data2[i].id
+      if(results[i].response === data2[i].option1)
+      {
+        now2.response = 1
+      }
+      else if(results[i].response === data2[i].option2)
+      {
+        now2.response = 2
+      }
+      else if(results[i].response === data2[i].option3)
+      {
+        now2.response = 3
+      }
+      else if(results[i].response === data2[i].option4)
+      {
+        now2.response = 4
+      }
+      now.push(now2)
+    }
+    // console.log(now)
+    let tok = await AsyncStorage.getItem('token')
+    let response = await fetch(global.ip + '/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + tok
+      },
+      body: JSON.stringify({ id, now })
+
+    })
+    let data = await response.json()
+
+  }
+
+  return a ? null : (
+    <View style={styles.container}>
+      <Navbar></Navbar>
+      <QuizeSingleChoice
+        containerStyle={{ backgroundColor: "#61dafb", paddingTop: 30 }}
+        questionTitleStyle={{ fontSize: 22, color: "#FFF" }}
+        responseStyle={{
+          borderRadius: 15,
+        }}
+        responseTextStyle={{ fontSize: 12, fontWeight: "normal" }}
+        selectedResponseStyle={{
+          borderRadius: 15,
+          backgroundColor: "#fa5541",
+        }}
+        selectedResponseTextStyle={{
+          fontSize: 14,
+          fontWeight: "normal",
+        }}
+        responseRequired={true}
+        nextButtonText={"Next"}
+        nextButtonStyle={{ backgroundColor: "#06d755" }}
+        nextButtonTextStyle={{ color: "#FFF" }}
+        prevButtonText={"Prev"}
+        prevButtonStyle={{ backgroundColor: "#fa5541" }}
+        prevButtonTextStyle={{ color: "#FFF" }}
+        endButtonText={"Done"}
+        endButtonStyle={{ backgroundColor: "#000" }}
+        endButtonTextStyle={{ color: "#FFF" }}
+        buttonsContainerStyle={{ marginTop: "auto" }}
+        onEnd={(results) => {
+          handleSubmit(results)
+        }}
+        data={data}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "column",
-        backgroundColor: "#41cca6"
-    },
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#41cca6"
+  },
 
-    posts: {
-        flex: 1,
-        flexDirection: "row"
-    },
-    
+  posts: {
+    flex: 1,
+    flexDirection: "row"
+  },
+
 });
 
 export default Quiz;

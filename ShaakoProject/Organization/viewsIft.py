@@ -180,7 +180,7 @@ def getMyQuiz(request):
         items=[]
 
         for quizItem in quizItems:
-            items.append({'ques':quizItem.question,'option1':quizItem.option_1,'option2':quizItem.option_2,'option3':quizItem.option_3,'option4':quizItem.option_4,'correct':quizItem.correct_option,'point':quizItem.point})
+            items.append({'ques':quizItem.question,'option1':quizItem.option_1,'option2':quizItem.option_2,'option3':quizItem.option_3,'option4':quizItem.option_4,'correct':quizItem.correct_option,'point':quizItem.point,'id':quizItem.id})
 
         dict['items']=items
         print(dict)
