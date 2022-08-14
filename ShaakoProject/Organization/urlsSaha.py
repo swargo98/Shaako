@@ -6,4 +6,6 @@ urlpatterns = [
     path('supervisor/editContent', viewsSaha.editLesson),
 
     path('CHW/getLessonList', viewsSaha.getLessonList),
+    path('CHW/addCHW', viewsSaha.addCHW),
+    path('CHW/getPastQuiz', viewsSaha.getPastQuiz),
 ]

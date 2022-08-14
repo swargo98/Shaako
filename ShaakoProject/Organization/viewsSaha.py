@@ -24,6 +24,7 @@ from rest_framework.decorators import authentication_classes
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from datetime import datetime
 
 
 @api_view(['POST'])
@@ -100,5 +101,53 @@ def getLessonList(request):
         for lesson in lessons:
             ret.append({'id': lesson.id, 'title': lesson.title,
                         'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date()})
+        print(ret)
+        return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def addCHW(request):
+    if request.method == 'POST':
+        data = request.data
+        name = data['name']
+        address = data['address']
+        phone = data['phone']
+        gen = data['gen']
+        birthdate = data['date']
+        print(name, address, phone, gen, birthdate)
+        # check if any of the fields is empty or null
+        if name == "" or address == "" or phone == "" or gen == "" or birthdate == "":
+            return Response("False")
+        # convert birtdate to datetime
+        birthdate = datetime.strptime(birthdate, '%d/%m/%Y').date()
+        # create a new Patient object and add it to Patient table
+        patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate)
+        patient.save()
+        return Response("True")
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getPastQuiz(request):
+    if request.method == 'POST':
+        data = request.data
+        print("hello", data)
+        chw_id = data
+        # get chw with chw_id
+        chw = CHW.objects.get(id=chw_id)
+        # find all QuizSubmission where chw id= chw_id
+        quiz_submissions = QuizSubmission.objects.filter(chw=chw)
+        ret = []
+        for quiz_submission in quiz_submissions:
+            # get the id of the quiz
+            quiz = quiz_submission.quiz
+            # get quiz title and upload_date
+
+            quiz_dict = {'id': quiz.id, 'title': quiz.title, 'upload_date': quiz.upload_date.date(),
+                         'submission_id': quiz_submission.id}
+            ret.append(quiz_dict)
         print(ret)
         return Response(ret)

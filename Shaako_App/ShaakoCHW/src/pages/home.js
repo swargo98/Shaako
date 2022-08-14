@@ -56,6 +56,9 @@ export default function Home({ navigation }) {
 	let handleClick2 = () => {
 		navigation.navigate('QuizList')
 	}
+	let handleClick3 = () => {
+		navigation.navigate('AddPatient')
+	}
 	return (
 		<View style={styles.container}>
 			<Navbar></Navbar>
@@ -98,6 +101,7 @@ export default function Home({ navigation }) {
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="নতুন রোগী যুক্ত"
+				clicked={handleClick3}
 			></MaterialButtonViolet3>
 		</View>
 	);
