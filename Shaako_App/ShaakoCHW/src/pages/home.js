@@ -61,7 +61,7 @@ export default function Home({ navigation }) {
 	}
 	return (
 		<View style={styles.container}>
-			<Navbar></Navbar>
+			<Navbar navigation={navigation}></Navbar>
 			<View>
 				<View style={styles.rect}>
 					<View style={styles.materialButtonViolet1Row}>
