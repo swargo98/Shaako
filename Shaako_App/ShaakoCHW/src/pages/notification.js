@@ -1,75 +1,69 @@
 import React from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Button, Image, AppRegistry } from "react-native";
+import { View, Text, StyleSheet, Button, Image, AppRegistry, ScrollView } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
 import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow";
+import CupertinoButtonInfo from "../../components/CupertinoButtonInfo";
+import { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+function Notification({navigation}) {
+    let [result, setresult] = useState([])
 
-const Notification = ({ Navigate }) => {
+    useEffect(() => {
+        getData()
+    }, [])
+    let getData = async () => {
+        let chw_id = await AsyncStorage.getItem('chw_id')
+        let tok = await AsyncStorage.getItem('token')
+        console.log('----------------------------------------------------')
+        console.log(chw_id + ' ' + tok)
+        let response = await fetch(global.ip + '/chw/getNotification', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + tok
+            },
+            body: JSON.stringify({ 'chw_id': chw_id })
+        })
+        let d = await response.json()
+        setresult(d)
+        console.log(d)
+    }
     return (
+
         <View style={styles.container}>
-            <View style={styles.rect}></View>
-            <View style={styles.materialCardWithoutImageStackRow}>
-                <View style={styles.materialCardWithoutImageStack}>
-                    <MaterialCardWithoutImage
-                        style={styles.materialCardWithoutImage}
-                    ></MaterialCardWithoutImage>
-                    <Text style={styles.date01012022}>Date : 01.01.2022</Text>
-                </View>
-                <MaterialButtonWithShadow
-                    style={styles.materialButtonWithShadow}
-                ></MaterialButtonWithShadow>
-            </View>
+            <Navbar navigation={navigation}></Navbar>
+            <ScrollView>
+                {result.map(a => {
+                    return (
+                        <CupertinoButtonInfo
+                            style={styles.cupertinoButtonInfo}
+                            text={a.description}
+                            handleClick={() => navigation.navigate('Quiz', { id: a.type_id })}
+                        ></CupertinoButtonInfo>
+                    );
+                })}
+            </ScrollView>
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: "row"
+        flex: 1
     },
-    rect: {
-        width: 100,
-        height: 100,
-        backgroundColor: "#E6E6E6",
-        marginLeft: 708,
-        marginTop: 224
+    cupertinoButtonInfo: {
+        height: 68,
+        width: "100%",
+        marginTop: "10%",
+        alignSelf: "center"
     },
-    materialCardWithoutImage: {
-        height: 83,
-        width: 275,
-        position: "absolute",
-        left: 0,
-        top: 0,
-        backgroundColor: "rgba(208,203,203,1)"
-    },
-    date01012022: {
-        top: 56,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 17,
-        width: 245,
-        left: 18
-    },
-    materialCardWithoutImageStack: {
-        width: 275,
-        height: 83
-    },
-    materialButtonWithShadow: {
-        height: 83,
-        width: 100,
-        backgroundColor: "rgba(122,110,110,1)"
-    },
-    materialCardWithoutImageStackRow: {
-        height: 83,
-        flexDirection: "row",
-        flex: 1,
-        marginRight: -15,
-        marginLeft: -808,
-        marginTop: 104
+    cupertinoButtonInfo2: {
+        height: 68,
+        width: "100%",
+        marginTop: "3%",
+        alignSelf: "center"
     }
 });
 

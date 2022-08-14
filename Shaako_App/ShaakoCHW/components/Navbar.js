@@ -3,17 +3,15 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function Navbar(props) {
-  // console.log("clicked")
   let handleClick = () => {
-    console.log("clicked")
+    props.navigation.navigate('Notification');
   }
   return (
-    <View style={[styles.container, props.style]}>
+    <View style={[styles.container]}>
       <View style={styles.leftIconButtonRow}>
         
         <View style={styles.textWrapper}>
           <Text numberOfLines={1} style={styles.title} onPress={handleClick} >
-            
             সাঁকো
           </Text>
         </View>

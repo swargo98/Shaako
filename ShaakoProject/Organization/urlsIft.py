@@ -12,6 +12,7 @@ urlpatterns = [
     path('chw/getNosContent', viewsIft.getNosContent),
     path('chw/getQuizSubmission', viewsIft.getQuizSubmission),
     path('chw/submitQuiz', viewsIft.submitQuiz),
+    path('chw/getNotification', viewsIft.getNotification),
     
     
 ]

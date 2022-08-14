@@ -137,6 +137,14 @@ def addNewQuiz(request):
         for item in items:
             newQuizItem = QuizItem(quiz=newQuiz, question=item['ques'], option_1=item['option1'], option_2=item['option2'], option_3=item['option3'], option_4=item['option4'], correct_option=int(item['correct']), point=1)
             newQuizItem.save()
+        
+        # find all CHW objects with supervisor_id
+        chw_list = CHW.objects.filter(supervisor_id=sup_id)
+        for chw in chw_list:
+            # make new notification for each CHW
+            newNotification = Notification(chw_id=chw, description="নতুন কুইজ '"+quizName+"' আপলোড করা হয়েছে", timestamp=datetime.datetime.now(),notification_type="quiz",type_id=newQuiz.id,is_read=False)
+            newNotification.save()
+
         return Response('successful')
 
 @api_view(['POST'])
@@ -187,6 +195,8 @@ def getMyQuiz(request):
         return Response(dict)
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def kichuekta(request):
     if request.method == 'GET':
         return Response("Eseche")
@@ -314,3 +324,31 @@ def getQuizSubmission(request):
         print(ret)
 
         return Response(response)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getNotification(request):
+    if request.method == 'POST':
+        chw_id = request.data['chw_id']
+        print("-------------------------------------------------")
+        print(chw_id)
+
+        # find all notifications of the chw with id=chw_id
+        notifications = Notification.objects.filter(chw_id=chw_id)
+        print(notifications)
+
+        ret=[]
+
+        for notification in notifications:
+            dict={}
+            dict['id']=notification.id
+            dict['description']=notification.description
+            dict['date']=notification.timestamp.date()
+            dict['is_read']=notification.is_read
+            dict['type_id']=notification.type_id
+
+            ret.append(dict)
+        print(ret)
+        return Response(ret)
