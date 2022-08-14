@@ -30,13 +30,7 @@ class Location(models.Model):
     ward_union = models.CharField(max_length=100, null=True)
 
 
-# create notification class with timestamp, description, notification_type, type_id, is_read
-class Notification(models.Model):
-    timestamp = models.DateTimeField()
-    description = models.CharField(max_length=100)
-    notification_type = models.CharField(max_length=100)
-    type_id = models.CharField(max_length=100)
-    is_read = models.BooleanField(default=False)
+
 
 
 # create Supervisor with Organization, name, password, email, contact no, present_address, image_path
@@ -168,3 +162,12 @@ class SubmissionItem(models.Model):
     quizSubmission = models.ForeignKey(QuizSubmission, on_delete=models.CASCADE)
     quizItem = models.ForeignKey(QuizItem, on_delete=models.CASCADE)
     chosenOption = models.IntegerField()
+
+# create notification class with timestamp, description, notification_type, type_id, is_read
+class Notification(models.Model):
+    chw_id=models.ForeignKey(CHW, on_delete=models.CASCADE,default=None)
+    timestamp = models.DateTimeField()
+    description = models.CharField(max_length=100)
+    notification_type = models.CharField(max_length=100)
+    type_id = models.IntegerField()
+    is_read = models.BooleanField(default=False)
