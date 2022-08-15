@@ -20,12 +20,36 @@ const CHWList = () => {
             body: JSON.stringify({'sup_id':localStorage.getItem('sup_id'), 'organization':organization})
         })
         let d = await response.json()
+        console.log(d)
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            console.log(now);
+            let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(now.id)
+            })
+            // let result = stackSizeSync();
+            // console.log(result)
+
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
-        console.log(d)
+        
+
     }
 
     let handleChangeSearch = (value) => {
@@ -88,7 +112,7 @@ const CHWList = () => {
                                             <tr>
                                                 
                                                 <td><a style={{textDecoration: "none"}} href="/"><img className="rounded-circle me-2" width="30" height="30"
-                                                         src={man2} alt="man" />{r.name}</a></td>
+                                                         src={r.image} alt="man" />{r.name}</a></td>
                                                 <td>{r.contactNo}
                                                 </td>
 

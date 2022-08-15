@@ -81,6 +81,7 @@ def supGetCHWList(request):
         ret = []
         for chw in chw_list:
             dict = {}
+            dict['id'] = chw.id
             dict['name'] = chw.name
             dict['contactNo'] = chw.contactNo
             dict['union'] = chw.location.ward_union
