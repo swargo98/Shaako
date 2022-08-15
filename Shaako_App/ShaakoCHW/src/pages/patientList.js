@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Card, ListItem, Button, Icon, Header, SearchBar } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import call from 'react-native-phone-call'
 
 const PatientList = ({ navigation }) => {
     let [result, setresult] = useState([]);
@@ -67,30 +68,46 @@ const PatientList = ({ navigation }) => {
         setsup_image(imageurl)
     }
 
-    
-    
+    const args = {
+        number: '+8801842223102', // String value with the number to call
+        prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+        skipCanOpen: true // Skip the canOpenURL check
+    }
+
+
     return (
         <View style={styles.container}>
             <Navbar></Navbar>
             <SearchBar
-        placeholder="রোগীর তালিকা থেকে খুঁজুন"
-        lightTheme
-      />
+                placeholder="রোগীর তালিকা থেকে খুঁজুন"
+                lightTheme
+            />
             <ScrollView>
                 <View >
                     <Card>
                         <View style={styles.cardContainer}>
                             <View>
-                                <Card.Title>Patient Name</Card.Title>
-                                <Button                
-                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='Profile' />
+                                <Card.Title>Touhid Rahman Daddy</Card.Title>
+                                <View style={{flex: 1, flexDirection: "row"}}>
+                                <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                    title='Profile'
+                                     />
+
+                                    <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
+                                    title='Call'
+                                    color="#f194ff"                                    
+                                    onPress={() => { call(args).catch(console.error) }} />
+                                </View>
+                                
+
                             </View>
 
                             <View>
                                 <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
                             </View>
-                        </View>                        
+                        </View>
                     </Card>
                 </View>
 
@@ -98,16 +115,27 @@ const PatientList = ({ navigation }) => {
                     <Card>
                         <View style={styles.cardContainer}>
                             <View>
-                                <Card.Title>Patient Name</Card.Title>
-                                <Button                
-                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='Profile' />
+                                <Card.Title>Touhid Rahman Daddy</Card.Title>
+                                <View style={{flex: 1, flexDirection: "row"}}>
+                                <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                    title='Profile'
+                                     />
+
+                                    <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
+                                    title='Call'
+                                    color="#f194ff"                                    
+                                    onPress={() => { call(args).catch(console.error) }} />
+                                </View>
+                                
+
                             </View>
 
                             <View>
                                 <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
                             </View>
-                        </View>                        
+                        </View>
                     </Card>
                 </View>
 
@@ -115,18 +143,31 @@ const PatientList = ({ navigation }) => {
                     <Card>
                         <View style={styles.cardContainer}>
                             <View>
-                                <Card.Title>Patient Name</Card.Title>
-                                <Button                
-                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='Profile' />
+                                <Card.Title>Touhid Rahman Daddy</Card.Title>
+                                <View style={{flex: 1, flexDirection: "row"}}>
+                                <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                    title='Profile'
+                                     />
+
+                                    <Button
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
+                                    title='Call'
+                                    color="#f194ff"                                    
+                                    onPress={() => { call(args).catch(console.error) }} />
+                                </View>
+                                
+
                             </View>
 
                             <View>
                                 <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
                             </View>
-                        </View>                        
+                        </View>
                     </Card>
                 </View>
+
+                
             </ScrollView>
         </View>
     );
