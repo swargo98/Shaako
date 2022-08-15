@@ -108,7 +108,7 @@ def getLessonList(request):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def addCHW(request):
+def addPatient(request):
     if request.method == 'POST':
         data = request.data
         name = data['name']
@@ -116,14 +116,15 @@ def addCHW(request):
         phone = data['phone']
         gen = data['gen']
         birthdate = data['date']
-        print(name, address, phone, gen, birthdate)
+        chw_id = data['chw_id']
+        print(name, address, phone, gen, birthdate,chw_id)
         # check if any of the fields is empty or null
         if name == "" or address == "" or phone == "" or gen == "" or birthdate == "":
             return Response("False")
         # convert birtdate to datetime
         birthdate = datetime.strptime(birthdate, '%d/%m/%Y').date()
         # create a new Patient object and add it to Patient table
-        patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate)
+        patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate,chw_id=chw_id)
         patient.save()
         return Response("True")
 
@@ -190,6 +191,22 @@ def getCHWImage(request):
     path = str(BASE_DIR) + "//image//CHW//" + str(id) + ".png"
     if not exists(path):
         path = str(BASE_DIR) + "//image//CHW//default.png"
+    im = Image.open(path)
+    # send image as response
+    buffered = BytesIO()
+    im.save(buffered, format="PNG")
+    return HttpResponse(buffered.getvalue(), content_type="image/png")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getOrganizationAdminImage(request):
+    id = request.data
+    print(id)
+    path = str(BASE_DIR) + "//image//organization//" + str(id) + ".png"
+    if not exists(path):
+        print("path not found")
+        path = str(BASE_DIR) + "//image//organization//default.png"
     im = Image.open(path)
     # send image as response
     buffered = BytesIO()

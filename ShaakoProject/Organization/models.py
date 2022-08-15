@@ -30,9 +30,6 @@ class Location(models.Model):
     ward_union = models.CharField(max_length=100, null=True)
 
 
-
-
-
 # create Supervisor with Organization, name, password, email, contact no, present_address, image_path
 class Supervisor(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
@@ -79,9 +76,11 @@ class CHW(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     recruitment_date = models.DateTimeField(null=True)
 
+
 # create Patient with name, address, contact no, date_of_birth, gender
 class Patient(models.Model):
     name = models.CharField(max_length=100)
+    chw = models.ForeignKey(CHW, on_delete=models.CASCADE, null=True, default=None)
     address = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
     date_of_birth = models.DateTimeField()
@@ -163,9 +162,10 @@ class SubmissionItem(models.Model):
     quizItem = models.ForeignKey(QuizItem, on_delete=models.CASCADE)
     chosenOption = models.IntegerField()
 
+
 # create notification class with timestamp, description, notification_type, type_id, is_read
 class Notification(models.Model):
-    chw_id=models.ForeignKey(CHW, on_delete=models.CASCADE,default=None)
+    chw_id = models.ForeignKey(CHW, on_delete=models.CASCADE, default=None)
     timestamp = models.DateTimeField()
     description = models.CharField(max_length=100)
     notification_type = models.CharField(max_length=100)

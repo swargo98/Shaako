@@ -57,30 +57,23 @@ def updateProfile(request):
         passwordOld = data['passwordOld']
         passwordOld2 = data['passwordOld2']
         email = data['email']
+        contactNo = data['contact']
+        presentAddress = data['address']
 
+        if len(password) == 0 or len(password2) == 0:
+            OrganizationAdmin.objects.filter(id=id).update(name=name, email=email, contactNo=contactNo,
+                                                           presentAddress=presentAddress)
+            return Response({"success": "True"})
         if password == password2:
-            print("line 50")
             # match argon2 hash of passwordOld2 with passwordOld with try/except
             try:
                 ph().verify(passwordOld, passwordOld2)
-                print("line 53")
-
                 # update OrganizationAdmin with name, password, email, contactNo, presentAddress
                 passwordHash = ph().hash(password)
                 OrganizationAdmin.objects.filter(id=id).update(name=name, password=passwordHash,
-                                                                            email=email)
-                print("line 62")
+                                                               email=email, contactNo=contactNo,
+                                                               presentAddress=presentAddress)
                 return Response({"success": "True"})
 
             except:
-                print("line 68")
                 return Response({"success": "False"})
-        # if ph().verify(passwordOld2, passwordOld):
-        #     #update password, name, email
-        #     print("line 51")
-        #     # get hash of password
-        #     passwordHash = ph().hash(password)
-        #     OrganizationAdmin.objects.filter(id=request.user.id).update(name=name, password=passwordHash, email=email)
-        #     return Response({'success': True})
-        # else:
-        #     return Response({'success': False, 'error': 'Password does not match'})

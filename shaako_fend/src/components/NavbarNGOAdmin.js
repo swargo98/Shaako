@@ -20,12 +20,22 @@ const NavbarNGOAdmin = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navcol-1">
                     <ul className="navbar-nav ms-auto">
-                        <li className="nav-item"><a className="nav-link active" href="/home">হোম</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/home">হোম</a></li>
                         <li className="nav-item"><a className="nav-link" href="/supervisor_management">সুপারভাইজার</a></li>
                         <li className="nav-item"><a className="nav-link" href="/chw_management">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/campaign_list">ক্যাম্পেইন</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
-                        <li className="nav-item"><a className="nav-link active" href="/login" onClick={handleSubmit}>লগআউট</a></li>
+                        {/* <li className="nav-item"><a className="nav-link active" href="/login" onClick={handleSubmit}>লগআউট</a></li> */}
+                        <li className="nav-item">
+                            <div className="nav-item dropdown" style={{ margin: "5px" }}><a className="dropdown-toggle"
+                                aria-expanded="false"
+                                data-bs-toggle="dropdown"
+                                href="/"
+                                style={{ color: 'rgb(0,0,0)' }}></a>
+                                <div className="dropdown-menu"><a className="dropdown-item" href="/profile">প্রোফাইল</a><a
+                                    className="dropdown-item" href="/login" onClick={handleSubmit}>লগ আউট</a></div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>

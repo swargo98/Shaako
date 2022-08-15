@@ -44,16 +44,18 @@ const AddPatient = ({ navigation }) => {
         setaddress(value)
     }
     let handleSubmit = async () => {
+        let chw_id = await AsyncStorage.getItem('chw_id');
+        chw_id = JSON.parse(chw_id)
         console.log(name + " " + address + " " + phone + " " + gen + " " + date)
         let tok = await AsyncStorage.getItem('token')
-        tok=JSON.parse(tok)
-        let response = await fetch(global.ip + '/CHW/addCHW', {
+        tok = JSON.parse(tok)
+        let response = await fetch(global.ip + '/CHW/addPatient', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify({ name, address, phone, gen, date })
+            body: JSON.stringify({ name, address, phone, gen, date, chw_id })
         })
         let data = await response.json()
         console.log(data)
