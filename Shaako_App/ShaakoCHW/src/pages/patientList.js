@@ -16,66 +16,72 @@ import call from 'react-native-phone-call'
 const PatientList = ({ navigation }) => {
     let [result, setresult] = useState([]);
     let [sup_image, setsup_image] = useState(null);
-    let sup_id = 0;
-    // let sup_id = 26;
-
+    let [dummy,setdummy]=useState(true);
+ 
     useEffect(() => {
-        getContents()
+        getPatientList()
     }, [])
 
-    let getContents = async () => {
-        sup_id = await AsyncStorage.getItem('sup_id');
-        console.log(sup_id)
-        console.log(await AsyncStorage.getItem('token'))
+    let getPatientList = async () => {
+        let chw_id = await AsyncStorage.getItem('chw_id')
         let tok = await AsyncStorage.getItem('token')
-        console.log(tok)
-        let response = await fetch(global.ip + '/CHW/getLessonList', {
+        chw_id = JSON.parse(chw_id)
+        tok = JSON.parse(tok)
+        console.log(chw_id)
+
+        let response = await fetch(global.ip + '/chw/getPatientList', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify(chw_id)
         })
+        console.log('came')
+
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            console.log(now.id + " " + now.title + " " + now.supervisor_name + " " + now.upload_time)
+            console.log(now.id + " " + now.name + " " + now.contact_no)
+
+            now.args = {
+                number: now.contact_no, // String value with the number to call
+                prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+                skipCanOpen: true // Skip the canOpenURL check
+            }
+
+            let response2 = await fetch(global.ip + '/patient/getPatientImage', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + tok
+                },
+                body: JSON.stringify(now.id)
+            })
+
+            let image = await response2.blob()
+            var reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onloadend = function () {
+                var base64data = reader.result;
+                now.image = base64data
+                console.log(now.image)
+            }
+            console.log(1)
+            let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            await sleep(1000);
+            console.log(2)
+
             setresult(prevArray => [...prevArray, now]);
         }
-
-        let response2 = await fetch(global.ip + '/organization/image/supervisor', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + tok
-            },
-            body: JSON.stringify(sup_id)
-        })
-        // let result = stackSizeSync();
-        // console.log(result)
-
-        //take image respone from bufferIO
-        let image = await response2.blob()
-        //convert to base64
-        let image64 = await image.arrayBuffer()
-        //convert to base64
-        let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-        //convert to url
-        let imageurl = `data:image/png;base64,${image64base64}`
-        //push to array
-        setsup_image(imageurl)
-    }
-
-    const args = {
-        number: '+8801842223102', // String value with the number to call
-        prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
-        skipCanOpen: true // Skip the canOpenURL check
-    }
+        console.log(result)
+        setdummy(false)
+        
+    } 
 
 
-    return (
+    return  dummy? null : ( 
         <View style={styles.container}>
             <Navbar></Navbar>
             <SearchBar
@@ -83,91 +89,36 @@ const PatientList = ({ navigation }) => {
                 lightTheme
             />
             <ScrollView>
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{flex: 1, flexDirection: "row"}}>
-                                <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                    title='Profile'
-                                     />
+                {result.map(a => { 
+                    return (  
+                        <View >
+                            <Card>
+                                <View style={styles.cardContainer}>
+                                    <View>
+                                        <Card.Title>{a.name}</Card.Title>
+                                        <View style={{ flex: 1, flexDirection: "row" }}>
+                                            <Button
+                                                buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                                title='Profile'
+                                            />
 
-                                    <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                    title='Call'
-                                    color="#f194ff"                                    
-                                    onPress={() => { call(args).catch(console.error) }} />
+                                            <Button
+                                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
+                                                title='Call'
+                                                color="#f194ff"
+                                                onPress={() => { call(a.args).catch(console.error) }} />
+                                        </View>
+
+
+                                    </View>
+
+                                    <View>   
+                                        <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: a.image, scale: 1 }} />
+                                    </View>
                                 </View>
-                                
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
-                        </View>
-                    </Card>
-                </View>
-
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{flex: 1, flexDirection: "row"}}>
-                                <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                    title='Profile'
-                                     />
-
-                                    <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                    title='Call'
-                                    color="#f194ff"                                    
-                                    onPress={() => { call(args).catch(console.error) }} />
-                                </View>
-                                
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
-                        </View>
-                    </Card>
-                </View>
-
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{flex: 1, flexDirection: "row"}}>
-                                <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                    title='Profile'
-                                     />
-
-                                    <Button
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                    title='Call'
-                                    color="#f194ff"                                    
-                                    onPress={() => { call(args).catch(console.error) }} />
-                                </View>
-                                
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
-                        </View>
-                    </Card>
-                </View>
-
-                
+                            </Card>
+                        </View>);
+                })} 
             </ScrollView>
         </View>
     );

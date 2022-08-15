@@ -3,7 +3,10 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 function Navbar(props) {
-  let handleClick = () => {
+  let handleClickHome = () => {
+    props.navigation.navigate('Home');
+  }
+  let handleClickBell = () => {
     props.navigation.navigate('Notification');
   }
   return (
@@ -11,7 +14,7 @@ function Navbar(props) {
       <View style={styles.leftIconButtonRow}>
         
         <View style={styles.textWrapper}>
-          <Text numberOfLines={1} style={styles.title} onPress={handleClick} >
+          <Text numberOfLines={1} style={styles.title} onPress={handleClickHome} >
             সাঁকো
           </Text>
         </View>
@@ -22,7 +25,7 @@ function Navbar(props) {
           <MaterialCommunityIconsIcon
             name="bell"
             style={styles.rightIcon1}
-            onPress={handleClick}
+            onPress={handleClickBell}
           ></MaterialCommunityIconsIcon>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>

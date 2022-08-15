@@ -13,6 +13,8 @@ urlpatterns = [
     path('chw/getQuizSubmission', viewsIft.getQuizSubmission),
     path('chw/submitQuiz', viewsIft.submitQuiz),
     path('chw/getNotification', viewsIft.getNotification),
+    path('chw/getPatientList', viewsIft.getPatientList),
+    path('patient/getPatientImage', viewsIft.getPatientImage),
     
     
 ]

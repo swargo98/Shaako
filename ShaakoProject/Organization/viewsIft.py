@@ -1,6 +1,7 @@
 from __future__ import division
 import datetime
 from email import message
+from http.client import HTTPResponse
 from io import BytesIO
 
 from PIL import Image
@@ -369,3 +370,42 @@ def getNotification(request):
             ret.append(dict)
         print(ret)
         return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getPatientList(request):
+    if request.method == 'POST':
+        chw_id = request.data
+        # find chw with id=chw_id
+        chw = CHW.objects.get(id=chw_id)
+        # find all patients
+        patients = Patient.objects.all()
+        print(patients)
+
+        ret = []
+        for patient in patients:
+            if patient.chw.location != chw.location:
+                continue
+            dict = {}
+            dict['id'] = patient.id
+            dict['name'] = patient.name
+            dict['contact_no'] = patient.contactNo
+            ret.append(dict)
+
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getPatientImage(request):
+    if request.method == 'POST':
+        patient_id = request.data
+        path = str(BASE_DIR) + "//image//patient//" + str(patient_id) + ".png"
+        if not exists(path):
+            path = str(BASE_DIR) + "//image//patient//default.png"
+        im = Image.open(path)
+        # send image as response
+        buffered = BytesIO()
+        im.save(buffered, format="PNG")
+        return HttpResponse(buffered.getvalue(), content_type="image/png")
