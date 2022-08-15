@@ -16,7 +16,10 @@ function Notification({navigation}) {
     }, [])
     let getData = async () => {
         let chw_id = await AsyncStorage.getItem('chw_id')
+        chw_id = JSON.parse(chw_id)
         let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+        
         console.log('----------------------------------------------------')
         console.log(chw_id + ' ' + tok)
         let response = await fetch(global.ip + '/chw/getNotification', {

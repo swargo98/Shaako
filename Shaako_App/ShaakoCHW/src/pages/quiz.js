@@ -33,7 +33,11 @@ const Quiz = ({ route, navigation }) => {
   let getQuiz = async () => {
     // console.log(typeof data2)
     sup_id = await AsyncStorage.getItem('sup_id');
+    sup_id=JSON.parse(sup_id)
+
     let tok = await AsyncStorage.getItem('token')
+    tok = JSON.parse(tok)
+
     let response = await fetch(global.ip + '/supervisor/getMyQuiz', {
       method: "POST",
       headers: {
@@ -103,7 +107,11 @@ const Quiz = ({ route, navigation }) => {
     console.log(now)
     console.log(id)
     let tok = await AsyncStorage.getItem('token')
+    tok = JSON.parse(tok)
+
     let chw_id = await AsyncStorage.getItem('chw_id')
+    chw_id = JSON.parse(chw_id)
+    
     let response = await fetch(global.ip + '/chw/submitQuiz', {
       method: "POST",
       headers: {

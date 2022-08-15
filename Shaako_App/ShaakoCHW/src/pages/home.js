@@ -27,7 +27,10 @@ export default function Home({ navigation }) {
 	}, [])
 	let getData = async () => {
 		var c=await AsyncStorage.getItem('chw_id')
+		c=JSON.parse(c)
 		var d=await AsyncStorage.getItem('sup_id')
+		d=JSON.parse(d)
+		
 		console.log("c="+c)
 		console.log("d="+d)
 		setchw_id(c)

@@ -26,6 +26,8 @@ function QuizSubmission({ route, navigation }) {
 	let getData = async () => {
 		console.log('====================================')
 		let tok = await AsyncStorage.getItem('token')
+		tok = JSON.parse(tok)
+		
 		let response = await fetch(global.ip + '/chw/getQuizSubmission', {
 			method: "POST",
 			headers: {

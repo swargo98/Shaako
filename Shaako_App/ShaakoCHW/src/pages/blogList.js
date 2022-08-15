@@ -24,9 +24,11 @@ const BlogList = ({ navigation }) => {
 
     let getContents = async () => {
         sup_id = await AsyncStorage.getItem('sup_id');
-        console.log(sup_id)
-        console.log(await AsyncStorage.getItem('token'))
+        sup_id = JSON.parse(sup_id)
+
         let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+        
         console.log(tok)
         let response = await fetch(global.ip + '/CHW/getLessonList', {
             method: "POST",

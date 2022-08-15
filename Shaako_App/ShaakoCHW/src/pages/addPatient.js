@@ -21,7 +21,7 @@ const AddPatient = ({ navigation }) => {
     const [phone, setphone] = useState('');
     const [gen, setgen] = useState('');
     let [isLoggedIn, setisLoggedIn] = useState(false)
-    let [failedLogin, setfailedLogin] = useState(true)
+    let [failedLogin, setfailedLogin] = useState(false)
 
     const gender = [
         {
@@ -46,6 +46,7 @@ const AddPatient = ({ navigation }) => {
     let handleSubmit = async () => {
         console.log(name + " " + address + " " + phone + " " + gen + " " + date)
         let tok = await AsyncStorage.getItem('token')
+        tok=JSON.parse(tok)
         let response = await fetch(global.ip + '/CHW/addCHW', {
             method: "POST",
             headers: {

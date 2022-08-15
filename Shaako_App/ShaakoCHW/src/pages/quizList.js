@@ -24,8 +24,14 @@ const QuizList = ({ navigation }) => {
     }, [])
     let getPastQuiz = async () => {
         sup_id = await AsyncStorage.getItem('sup_id');
+        sup_id = JSON.parse(sup_id)
+
         chw_id = await AsyncStorage.getItem('chw_id');
+        chw_id = JSON.parse(chw_id)
+
         let tok = await AsyncStorage.getItem('token');
+        tok = JSON.parse(tok)
+
         console.log(chw_id)
         let response = await fetch(global.ip + '/CHW/getPastQuiz', {
             method: "POST",
@@ -44,7 +50,11 @@ const QuizList = ({ navigation }) => {
     }
     let getContents = async () => {
         sup_id = await AsyncStorage.getItem('sup_id');
+        sup_id = JSON.parse(sup_id)
+
         let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+        
         let response = await fetch(global.ip + '/supervisor/getQ', {
             method: "POST",
             headers: {

@@ -58,6 +58,8 @@ const BlogPost = ({ route, navigation }) => {
     };
     let getLesson = async () => {
         let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+        
         let response = await fetch(global.ip + '/supervisor/getMyContent', {
             method: "POST",
             headers: {
