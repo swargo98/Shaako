@@ -122,7 +122,7 @@ def addPatient(request):
         if name == "" or address == "" or phone == "" or gen == "" or birthdate == "":
             return Response("False")
         # convert birtdate to datetime
-        birthdate = datetime.strptime(birthdate, '%d/%m/%Y').date()
+        birthdate = datetime.strptime(birthdate, '%d-%m-%Y').date()
         # create a new Patient object and add it to Patient table
         patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate,chw_id=chw_id)
         patient.save()
