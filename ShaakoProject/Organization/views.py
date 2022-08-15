@@ -115,8 +115,8 @@ def login(request):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def getAssignableSupervisor(request):
     if request.method == 'POST':
         chw_id = request.data
@@ -141,8 +141,8 @@ def getAssignableSupervisor(request):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def changeSupervisorOfCHW(request):
     if request.method == 'POST':
         data = request.data
@@ -329,8 +329,8 @@ def getUnionsOfSupervisor(request):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def updateSupervisor(request):
     data = request.data
     supervisor = Supervisor.objects.get(id=data['sup_id'])
@@ -348,8 +348,8 @@ def updateSupervisor(request):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def fetchLocationSupervisor(request):
     if request.method == 'POST':
         data = request.data

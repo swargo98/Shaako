@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
 		height: 258,
 		backgroundColor: "rgba(198,218,208,1)",
 		marginTop: "5%",
-		marginLeft: 11
+		marginLeft: "8%"
 	},
 	loremIpsum: {
 		fontFamily: "roboto-regular",
@@ -196,7 +196,8 @@ const styles = StyleSheet.create({
 	},
 	loremIpsum3: {
 		fontFamily: "roboto-regular",
-		color: "#121212"
+		color: "#121212",
+		// marginLeft: "8%"
 	},
 	স্কোর৫১০: {
 		fontFamily: "roboto-regular",
