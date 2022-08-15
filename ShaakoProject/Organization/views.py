@@ -38,6 +38,8 @@ def getL(request):
         sup_id = data
         # find all contents of the supervisor with id=sup_id
         lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        # order lessons by creation date newest first
+        lessons = lessons.order_by('-upload_date')
         ret = []
         for lesson in lessons:
             ret.append({'id': lesson.id, 'title': lesson.title, 'content': lesson.content,

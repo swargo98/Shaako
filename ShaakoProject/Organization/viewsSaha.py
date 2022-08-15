@@ -151,3 +151,31 @@ def getPastQuiz(request):
             ret.append(quiz_dict)
         print(ret)
         return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def supervisorHome(request):
+    if request.method == 'POST':
+        sup_id = request.data
+        # get total number of lessons of this supervisor
+        lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        total_lessons = len(lessons)
+
+        # get total number of CHWs of this supervisor
+        chws = CHW.objects.filter(supervisor_id=sup_id)
+        total_chws = len(chws)
+
+        # get total number of patients
+        patients = Patient.objects.all()
+        total_patients = len(patients)
+
+        # get total number of quizes of this supervisor
+        quizes = Quiz.objects.filter(supervisor_id=sup_id)
+        total_quizes = len(quizes)
+
+        ret = {'total_lessons': total_lessons, 'total_chws': total_chws, 'total_patients': total_patients,
+               'total_quizes': total_quizes}
+        print(ret)
+        return Response(ret)
