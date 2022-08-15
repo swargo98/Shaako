@@ -196,7 +196,7 @@ const BlogPost = () => {
                     <div className="p-4" style={{ color: "var(--bs-gray-800)", width: "831px", transform: "translate(244px)", margin: "15px" }}>
                         <div className="row">
                             <div className="col-md-6">
-                                <button className="btn btn-primary" type="button" style={{ margin: "-70px", padding: "12px", transform: "translate(500px)", position: "static" }} onClick={toggle}>এডিট</button>
+                                {/* <button className="btn btn-primary" type="button" style={{ margin: "-70px", padding: "12px", transform: "translate(500px)", position: "static" }} onClick={toggle}>এডিট</button> */}
                             </div>
                         </div>
                     </div>
