@@ -9,21 +9,31 @@ import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow"
 import { Card, ListItem, Button, Icon, Header } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
 
-const Schedule = ({ Navigate }) => {
+const Schedule = ({ navigation }) => {
+    let onDateChange = (date) => {
+        console.log("here")
+        console.log(date)
+      }
     return (
         <View style={styles.container}>
-            <View>
+            <Navbar navigation={navigation}></Navbar>
+            {/* <View>
             <Header
                 leftComponent={{ icon: 'menu', color: '#fff' }}
                 centerComponent={{ text: 'শিডিউল', style: { color: '#fff' } }}
                 rightComponent={{ icon: 'home', color: '#fff' }}
                 />
-            </View>
+            </View> */}
             <View style = {{alignItems: 'center'}}>
-                <Text>তারিখ নির্বাচন করুন</Text>
+                {/* <Text>তারিখ নির্বাচন করুন</Text> */}
             <Card>
             {/* https://www.npmjs.com/package/react-native-calendar-picker */}
-            <CalendarPicker
+            <CalendarPicker weekdays={['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি']}
+            months={['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর']}
+            previousTitle='পূর্ববর্তী'
+            nextTitle='পরবর্তী'
+            selectedDayColor='#2578f5'
+            onDateChange={onDateChange}
         />
             </Card>
             </View>

@@ -53,7 +53,7 @@ const BlogList = ({ navigation }) => {
         // const nodeFetch = require('node-fetch');
         // global.fetch = nodeFetch;
 
-        let response2 = await fetch('http://192.168.31.36:8000/organization/image/supervisor', {
+        let response2 = await fetch(global.ip+'/organization/image/supervisor', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,6 @@ const BlogList = ({ navigation }) => {
         reader.readAsDataURL(image);
         reader.onloadend = function () {
             var base64data = reader.result;
-            console.log(base64data);
             setsup_image(base64data)
         }
     }

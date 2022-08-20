@@ -34,6 +34,19 @@ function Notification({navigation}) {
         setresult(d)
         console.log(d)
     }
+    let handleClick = (notification) => {
+        console.log("asche")
+        console.log(notification)
+        if (notification.notification_type === "quiz")
+        {
+            navigation.navigate('Quiz', { id: notification.type_id })
+        }
+        if (notification.notification_type === "blogpost")
+        {
+            navigation.navigate('BlogPost', { lesson_id: notification.type_id })
+        }
+        
+    }
     return (
 
         <View style={styles.container}>
@@ -44,7 +57,7 @@ function Notification({navigation}) {
                         <CupertinoButtonInfo
                             style={styles.cupertinoButtonInfo}
                             text={a.description}
-                            handleClick={() => navigation.navigate('Quiz', { id: a.type_id })}
+                            handleClick={() => handleClick(a)}
                         ></CupertinoButtonInfo>
                     );
                 })}

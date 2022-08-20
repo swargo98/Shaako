@@ -9,6 +9,9 @@ function Navbar(props) {
   let handleClickBell = () => {
     props.navigation.navigate('Notification');
   }
+  let handleClickCalendar = () => {
+    props.navigation.navigate('Schedule');
+  }
   return (
     <View style={[styles.container]}>
       <View style={styles.leftIconButtonRow}>
@@ -32,6 +35,7 @@ function Navbar(props) {
           <MaterialCommunityIconsIcon
             name="calendar"
             style={styles.rightIcon2}
+            onPress={handleClickCalendar}
           ></MaterialCommunityIconsIcon>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>

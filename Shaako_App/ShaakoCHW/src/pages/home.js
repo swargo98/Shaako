@@ -62,6 +62,9 @@ export default function Home({ navigation }) {
 	let handleClick3 = () => {
 		navigation.navigate('AddPatient')
 	}
+	let handleClick4 = () => {
+		navigation.navigate('PatientList')
+	}
 	return (
 		<View style={styles.container}>
 			<Navbar navigation={navigation}></Navbar>
@@ -96,6 +99,7 @@ export default function Home({ navigation }) {
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="রোগীর তালিকা"
+				clicked={handleClick4}
 			></MaterialButtonViolet3>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}

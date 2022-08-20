@@ -3,6 +3,7 @@ import datetime
 from email import message
 from io import BytesIO
 import re
+from sqlite3 import TimeFromTicks
 
 from PIL import Image
 from os.path import exists
@@ -63,6 +64,13 @@ def addContent(request):
         newLess = Lesson(supervisor=supervisor, title=title, content=content, upload_date=datetime.datetime.now())
         newLess.save()
 
+        chw_list = CHW.objects.filter(supervisor_id=sup_id)
+        for chw in chw_list:
+            # make new notification for each CHW
+            newNotification = Notification(chw_id=chw, description="নতুন পাঠ '" + title + "' আপলোড করা হয়েছে",
+                                           timestamp=datetime.datetime.now(), notification_type="blogpost",
+                                           type_id=newLess.id, is_read=False)
+            newNotification.save()
         return Response('ok')
 
 
@@ -175,9 +183,10 @@ def home(request):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def createSupervisor(request):
+    print(request.data)
     print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     print(request.user)
     print(request.auth)

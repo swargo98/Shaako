@@ -365,7 +365,9 @@ def getNotification(request):
             dict['description'] = notification.description
             dict['date'] = notification.timestamp.date()
             dict['is_read'] = notification.is_read
+            dict['notification_type']=notification.notification_type
             dict['type_id'] = notification.type_id
+            dict['is_read'] = notification.is_read
 
             ret.append(dict)
         print(ret)
