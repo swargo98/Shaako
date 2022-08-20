@@ -14,12 +14,15 @@ import Schedule from "./src/pages/schedule.js";
 import Auth from "./src/pages/auth.js";
 import QuizSubmission from "./src/pages/QuizSubmission";
 import PatientList from "./src/pages/patientList.js";
+import Profile from "./src/pages/profile.js";
+import CampaignDetails from "./src/pages/campaignDetails.js";
+import SymptomsForm from "./src/pages/symptomsForm.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PatientList">
+      <Stack.Navigator initialRouteName="Auth">
         <Stack.Screen name="Auth" component={Auth} options={{header: () => null}} />
         <Stack.Screen name="QuizSubmission" component={QuizSubmission} options={{header: () => null}} />
         <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
@@ -32,6 +35,10 @@ export default function App() {
         <Stack.Screen name="Quiz" component={Quiz} options={{header: () => null}} />
         <Stack.Screen name="Schedule" component={Schedule} options={{header: () => null}} />
         <Stack.Screen name="PatientList" component={PatientList} options={{header: () => null}} />
+        <Stack.Screen name="Profile" component={Profile} options={{header: () => null}} />
+        <Stack.Screen name="CampaignDetails" component={CampaignDetails} options={{header: () => null}} />
+        <Stack.Screen name="SymptomsForm" component={SymptomsForm} options={{header: () => null}} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
