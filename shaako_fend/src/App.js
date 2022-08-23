@@ -16,6 +16,7 @@ import CampaignManagement from "./pages/campaignManagement";
 import NewCampaign from "./pages/newCampaign";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Profile from './pages/profile';
+import Statistics from './pages/Statistics';
 
 function App() {
     return (
@@ -40,6 +41,7 @@ function App() {
                     <Route path='/campaign_list' element={<CampaignManagement/>} />
                     <Route path='/new_campaign' element={<NewCampaign/>} />
                     <Route path='/profile' element={<Profile/>} />
+                    <Route path='/statistics' element={<Statistics/>} />
                 </Routes>
             </div>
             <Footer />

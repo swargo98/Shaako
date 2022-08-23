@@ -29,7 +29,7 @@ const NavbarSupervisor = () => {
                         <li className="nav-item"><a className="nav-link" href="/"
                                                     style={{margin: "0px"}}>স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">ক্যাম্পেইন</a></li>
-                        <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/statistics">পরিসংখ্যান</a></li>
                         <li className="nav-item"><a className="nav-link active" href="/"><i className="far fa-bell"
                                                                                             style={{fontSize: "17px"}}></i></a>
                         </li>

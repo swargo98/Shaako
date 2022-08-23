@@ -24,7 +24,7 @@ const NavbarNGOAdmin = () => {
                         <li className="nav-item"><a className="nav-link" href="/supervisor_management">সুপারভাইজার</a></li>
                         <li className="nav-item"><a className="nav-link" href="/chw_management">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/campaign_list">ক্যাম্পেইন</a></li>
-                        <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/statistics">পরিসংখ্যান</a></li>
                         {/* <li className="nav-item"><a className="nav-link active" href="/login" onClick={handleSubmit}>লগআউট</a></li> */}
                         <li className="nav-item">
                             <div className="nav-item dropdown" style={{ margin: "5px" }}><a className="dropdown-toggle"
