@@ -30,7 +30,7 @@ const NavbarSupervisor = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navcol-1">
                     <ul className="navbar-nav ms-auto">
-                        <li className="nav-item"><a className="nav-link active" href="/home">হোম</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/home">হোম</a></li>
                         <li className="nav-item"><a className="nav-link" href="/view_contents">পাঠসমূহ</a></li>
                         <li className="nav-item"><a className="nav-link" href="/chw_list">স্বাস্থ্যকর্মী</a></li>
                         <li className="nav-item"><a className="nav-link" href="/">ক্যাম্পেইন</a></li>
@@ -52,7 +52,7 @@ const NavbarSupervisor = () => {
                                                                                        data-bs-toggle="dropdown"
                                                                                        href="/"
                                                                                        style={{color: 'rgb(0,0,0)'}}></a>
-                                <div className="dropdown-menu"><a className="dropdown-item" href="/">প্রোফাইল</a><a
+                                <div className="dropdown-menu"><a className="dropdown-item" href="/profile">প্রোফাইল</a><a
                                     className="dropdown-item" href="/login" onClick={handleSubmit}>লগ আউট</a></div>
                             </div>
                         </li>

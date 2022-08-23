@@ -117,14 +117,15 @@ def addPatient(request):
         gen = data['gen']
         birthdate = data['date']
         chw_id = data['chw_id']
-        print(name, address, phone, gen, birthdate,chw_id)
+        print(name, address, phone, gen, birthdate, chw_id)
         # check if any of the fields is empty or null
         if name == "" or address == "" or phone == "" or gen == "" or birthdate == "":
             return Response("False")
         # convert birtdate to datetime
         birthdate = datetime.strptime(birthdate, '%d-%m-%Y').date()
         # create a new Patient object and add it to Patient table
-        patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate,chw_id=chw_id)
+        patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate,
+                          chw_id=chw_id)
         patient.save()
         return Response("True")
 
@@ -197,6 +198,7 @@ def getCHWImage(request):
     im.save(buffered, format="PNG")
     return HttpResponse(buffered.getvalue(), content_type="image/png")
 
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -212,3 +214,89 @@ def getOrganizationAdminImage(request):
     buffered = BytesIO()
     im.save(buffered, format="PNG")
     return HttpResponse(buffered.getvalue(), content_type="image/png")
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def adminPictureUpdate(request):
+    print(request.data)
+    if request.method == 'POST':
+        try:
+            image = request.data['inputimage']
+            id = request.data['admin_id']
+            print(image)
+            print(id)
+            img = Image.open(image)
+            # find size of img in kB
+            # resize image as 100kB
+
+            width, height = img.size
+            TARGET_WIDTH = 200
+            coefficient = width / TARGET_WIDTH
+            new_height = height / coefficient
+            img = img.resize((int(TARGET_WIDTH), int(new_height)), Image.ANTIALIAS)
+            print("ei")
+            img.save(str(BASE_DIR) + "\\image\\organization\\" + str(id) + ".png", qualtity=95,
+                     optimize=True)
+            return Response("True")
+        except:
+            print("here")
+            return Response("False")
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSupervisorProfile(request):
+    if request.method == 'POST':
+        data = request.data
+        sup_id = data
+        # get supervisor with sup_id
+        supervisor = Supervisor.objects.get(id=sup_id)
+        # get organization with organization_id
+        organization = Organization.objects.get(id=supervisor.organization_id)
+
+        # get all details of supervisor in a dictionary
+        sup_dict = {'id': supervisor.id, 'name': supervisor.name, 'address': supervisor.presentAddress,
+                    'contactNo': supervisor.contactNo, 'email': supervisor.email,
+                    'recruitment_date': supervisor.recruitment_date.date(), 'organization': organization.name,
+                    'division': supervisor.location.division, 'district': supervisor.location.district,
+                    'upazilla': supervisor.location.upazilla_thana, 'password': supervisor.password}
+        print(sup_dict)
+        return Response(sup_dict)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateSupervisorProfile(request):
+    if request.method == 'POST':
+        data = request.data
+        id = data['id']
+        name = data['name']
+        password = data['password']
+        password2 = data['password2']
+        passwordOld = data['passwordOld']
+        passwordOld2 = data['passwordOld2']
+        email = data['email']
+        contactNo = data['contact']
+        presentAddress = data['address']
+
+        if len(password) == 0 or len(password2) == 0:
+            Supervisor.objects.filter(id=id).update(name=name, email=email, contactNo=contactNo,
+                                                    presentAddress=presentAddress)
+            return Response({"success": "True"})
+        if password == password2:
+            # match argon2 hash of passwordOld2 with passwordOld with try/except
+            try:
+                ph().verify(passwordOld, passwordOld2)
+                # update OrganizationAdmin with name, password, email, contactNo, presentAddress
+                passwordHash = ph().hash(password)
+                Supervisor.objects.filter(id=id).update(name=name, password=passwordHash,
+                                                        email=email, contactNo=contactNo,
+                                                        presentAddress=presentAddress)
+                return Response({"success": "True"})
+
+            except:
+                return Response({"success": "False"})
