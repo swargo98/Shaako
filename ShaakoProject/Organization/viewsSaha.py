@@ -400,8 +400,62 @@ def getCHWRecruitmentStat(request):
         chw_recruitment = {}
         for month in months:
             # find how many supervisors are recruited in this month in this year
-            total = len(CHW.objects.filter(recruitment_date__month=months.index(month) + 1,
-                                           recruitment_date__year=current_year))
+            total = len(chws.filter(recruitment_date__month=months.index(month) + 1,
+                                    recruitment_date__year=current_year))
             chw_recruitment[month] = total
         print(chw_recruitment)
         return Response(chw_recruitment)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSupervisorCHW(request):
+    if request.method == 'POST':
+        data = request.data['organization']
+        sup_id = int(request.data['id'])
+        print(sup_id)
+        ret = []
+        for chw in CHW.objects.filter(supervisor__organization=data):
+            location = chw.location
+            supervisor = chw.supervisor
+            if supervisor.id != sup_id:
+                continue
+            dict = {'name': chw.name, 'division': location.division, 'district': location.district,
+                    'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                    'recruitment_date': chw.recruitment_date.date(),
+                    'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress,
+                    'imagePath': chw.imagePath,
+                    'supervisor_name': supervisor.name, 'supervisor_id': supervisor.id}
+            ret.append(dict)
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def searchSupervisorCHW(request):
+    if request.method == 'POST':
+        data = request.data
+        searchtext = data['search']
+        organization_id = data['organization']
+        sup_id = int(request.data['id'])
+        organization = Organization.objects.get(id=organization_id)
+        chws = CHW.objects.filter(supervisor__organization=organization).distinct()
+        ret = []
+        for chw in chws:
+            # print(chw.name)
+            if chw.supervisor.id != sup_id:
+                continue
+            location = chw.location
+            if searchtext in chw.name or (location is not None and (
+                    searchtext in location.division or searchtext in location.district or searchtext in location.upazilla_thana or searchtext in location.ward_union
+            )) or searchtext in chw.email or searchtext in chw.presentAddress or searchtext in chw.contactNo or searchtext in chw.supervisor.name:
+                dict = {'name': chw.name, 'division': location.division, 'district': location.district,
+                        'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                        'recruitment_date': chw.recruitment_date.date(),
+                        'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo,
+                        'presentAddress': chw.presentAddress, 'imagePath': chw.imagePath,
+                        'supervisor_name': chw.supervisor.name, 'supervisor_id': chw.supervisor.id}
+                ret.append(dict)
+        # print(ret)
+        return Response(ret)
