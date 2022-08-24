@@ -20,7 +20,7 @@ const UpdateSupervisor = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -28,6 +28,24 @@ const UpdateSupervisor = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(now.id)
+            })
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -42,7 +60,7 @@ const UpdateSupervisor = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(id)
         })
@@ -55,14 +73,33 @@ const UpdateSupervisor = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify(search)
+            body: JSON.stringify({search,organization})
         })
         let d = await response.json()
         setresult([])
+        console.log(d)
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(now.id)
+            })
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -93,9 +130,16 @@ const UpdateSupervisor = () => {
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
+            <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
+                <a href='/new_supervisor'><h4>সুপারভাইজার নিয়োগ</h4></a>
+            </div>
             <div className="card shadow">
                 <div className="card-header py-3">
-                    <p className="text-primary m-0 fw-bold">সুপারভাইজার আপডেটঃ এলাকা পরিবর্তন এবং অব্যহতি</p>
+                    <div className="row">
+                        <div className="col">
+                            <p className="text-primary m-0 fw-bold">সুপারভাইজার তালিকা, এলাকা পরিবর্তন এবং অব্যহতি</p>
+                        </div>
+                    </div>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -113,9 +157,10 @@ const UpdateSupervisor = () => {
                             <thead>
                                 <tr>
                                     <th>নাম</th>
-                                    <th>বিভাগ</th>
-                                    <th>জেলা</th>
-                                    <th>উপজেলা</th>
+                                    <th>ইমেইল</th>
+                                    <th>মোবাইল নম্বর</th>
+                                    <th>বর্তমান ঠিকানা</th>
+                                    <th>কর্মরত এলাকা</th>
                                     <th>পরিবর্তন</th>
                                     <th>নিয়োগ তারিখ</th>
                                     <th>অব্যহতি</th>
@@ -127,12 +172,14 @@ const UpdateSupervisor = () => {
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
-                                                    src={man2} alt="man" />{r.name}</td>
-                                                <td>{r.division}
+                                                    src={r.image} alt="man" />{r.name}</td>
+                                                <td>{r.email}
                                                 </td>
-                                                <td>{r.district}
+                                                <td>{r.contactNo}
                                                 </td>
-                                                <td>{r.upazilla_thana}
+                                                <td>{r.presentAddress}
+                                                </td>
+                                                <td>{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
                                                 </td>
                                                 <td>
                                                     <Container triggerText={"এলাকা পরিবর্তন"} sup_id={r.id} />

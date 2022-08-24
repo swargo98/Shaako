@@ -1,87 +1,12 @@
-import man2 from './assets/img/avatars/avatar2.jpg'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 
 const Statistics = () => {
-    let [result, setresult] = useState([])
-    let [search, setsearch] = useState('')
     let organization = localStorage.getItem('organization')
+
     useEffect(() => {
-        getCHW()
     }, [])
 
-    let getCHW = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/getCHW', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify(organization)
-        })
-        let d = await response.json()
-        setresult([])
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            // let response2 = await fetch('http://127.0.0.1:8000/organization/image/CHW', {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(now.id)
-            // })
-            // //take image respone from bufferIO
-            // let image = await response2.blob()
-            // //convert to base64
-            // let image64 = await image.arrayBuffer()
-            // //convert to base64
-            // let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            // //convert to url
-            // let imageurl = `data:image/png;base64,${image64base64}`
-            // //push to array
-            // now.image = imageurl
-            setresult(prevArray => [...prevArray, now]);
-        }
-    }
-
-    let handleChangeSearch = (value) => {
-        setsearch(value)
-    }
-
-    let handleSubmit = async () => {
-        console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({ search, organization })
-        })
-        let d = await response.json()
-        setresult([])
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            // let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(now.id)
-            // })
-            // //take image respone from bufferIO
-            // let image = await response2.blob()
-            // //convert to base64
-            // let image64 = await image.arrayBuffer()
-            // //convert to base64
-            // let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            // //convert to url
-            // let imageurl = `data:image/png;base64,${image64base64}`
-            // //push to array
-            // now.image = imageurl
-            setresult(prevArray => [...prevArray, now]);
-        }
-    }
     return (
         <div className="container-fluid">
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}

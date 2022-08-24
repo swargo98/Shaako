@@ -267,7 +267,7 @@ const NewSupervisor = () => {
                     </section>
                 </section>
             </main>
-            {/* {done && <Navigate to="/supervisor_list" replace={true} />} */}
+            {done && <Navigate to="/update_supervisor" replace={true} />}
         </>
     );
 }

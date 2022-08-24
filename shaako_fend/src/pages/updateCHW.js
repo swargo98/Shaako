@@ -25,7 +25,7 @@ const UpdateCHW = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(organization)
         })
@@ -33,6 +33,27 @@ const UpdateCHW = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(now.id)
+            })
+            // let result = stackSizeSync();
+            // console.log(result)
+
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -47,7 +68,7 @@ const UpdateCHW = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify({ search, organization })
         })
@@ -55,6 +76,27 @@ const UpdateCHW = () => {
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
+            let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(now.id)
+            })
+            // let result = stackSizeSync();
+            // console.log(result)
+
+            //take image respone from bufferIO
+            let image = await response2.blob()
+            //convert to base64
+            let image64 = await image.arrayBuffer()
+            //convert to base64
+            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+            //convert to url
+            let imageurl = `data:image/png;base64,${image64base64}`
+            //push to array
+            now.image = imageurl
             setresult(prevArray => [...prevArray, now]);
         }
     }
@@ -84,7 +126,7 @@ const UpdateCHW = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'TOKEN ' + localStorage.getItem('token')
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
             body: JSON.stringify(id)
         })
@@ -96,9 +138,12 @@ const UpdateCHW = () => {
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
+            <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
+                <a href='/new_chw'><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
+            </div>
             <div className="card shadow">
                 <div className="card-header py-3">
-                    <p className="text-primary m-0 fw-bold">স্বাস্থ্যকর্মী আপডেটঃ সুপারভাইজার পরিবর্তন এবং অব্যহতি</p>
+                    <p className="text-primary m-0 fw-bold">স্বাস্থ্যকর্মী আপডেট, সুপারভাইজার পরিবর্তন এবং অব্যহতি</p>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -116,6 +161,9 @@ const UpdateCHW = () => {
                             <thead>
                                 <tr>
                                     <th>নাম</th>
+                                    <th>ইমেইল</th>
+                                    <th>মোবাইল নম্বর</th>
+                                    <th>বর্তমান ঠিকানা</th>
                                     <th>কর্মরত এলাকা</th>
                                     <th>সুপারভাইজার</th>
                                     <th>নিয়োগ তারিখ</th>
@@ -129,7 +177,13 @@ const UpdateCHW = () => {
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
-                                                    src={man2} alt="man" />{r.name}</td>
+                                                    src={r.image} alt="man" />{r.name}</td>
+                                                <td>{r.email}
+                                                </td>
+                                                <td>{r.contactNo}
+                                                </td>
+                                                <td>{r.presentAddress}
+                                                </td>
                                                 <td>{r.ward_union},&nbsp;{r.upazilla_thana},&nbsp;{r.district},&nbsp;{r.division}
                                                 </td>
                                                 <td>{r.supervisor_name}</td>

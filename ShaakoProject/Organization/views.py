@@ -412,7 +412,8 @@ def getSupervisor(request):
             location = supervisor.location
             dict = {'name': supervisor.name, 'division': location.division, 'district': location.district,
                     'upazilla_thana': location.upazilla_thana, 'recruitment_date': supervisor.recruitment_date.date(),
-                    'id': supervisor.id}
+                    'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
+                    'presentAddress': supervisor.presentAddress}
             ret.append(dict)
         return Response(ret)
 

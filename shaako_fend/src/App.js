@@ -41,7 +41,7 @@ function App() {
                     <Route path='/campaign_list' element={<CampaignManagement/>} />
                     <Route path='/new_campaign' element={<NewCampaign/>} />
                     <Route path='/profile' element={<Profile/>} />
-                    <Route path='/' element={<Statistics/>}/>
+                    <Route path='/statistics' element={<Statistics/>}/>
                 </Routes>
             </div>
             <Footer />
