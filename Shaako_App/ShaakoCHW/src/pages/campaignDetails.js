@@ -13,17 +13,33 @@ import { Card, ListItem, Button, Icon, Header, SearchBar } from 'react-native-el
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CheckBox } from '@rneui/themed'
 import call from 'react-native-phone-call'
-
 const CampaignDetails = ({ route, navigation }) => {
     let { campaign_id } = route.params;
     let [result, setresult] = useState([]);
     let [searchtext, setsearchtext] = useState('');
-
     useEffect(() => {
         getContents()
     }, [])
 
     let getContents = async () => {
+        
+
+        if (navigator.geolocation) {
+            // navigator.geolocation.getCurrentPosition(getCoordinates, handelLocationError);
+      
+            navigator.geolocation.getCurrentPosition((position) => {
+              setCoordinates({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              });
+      
+              setAddressVisiblitly(true);
+            });
+
+            console.log('came here')
+      
+          } else
+            console.log("Geolocation is not supported by this browser.");
 
         let chw_id = await AsyncStorage.getItem('chw_id')
         chw_id = JSON.parse(chw_id)

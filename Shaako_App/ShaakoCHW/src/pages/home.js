@@ -52,6 +52,9 @@ export default function Home({ navigation }) {
 		  setLessonCount(data.lesson_count)
 		  setQuizCount(data.quiz_count)
 
+		  // find my location with api
+
+
 	}
 	let handleClick1 = () => {
 		navigation.navigate('BlogList')
@@ -67,6 +70,9 @@ export default function Home({ navigation }) {
 	}
 	let handleClick5 = () => {
 		navigation.navigate('CampaignList')
+	}
+	let handleClick6 = () => {
+		navigation.navigate('Nearby')
 	}
 	return (
 		<View style={styles.container}>
@@ -95,6 +101,7 @@ export default function Home({ navigation }) {
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="নিকটবর্তী সহযোগিতা"
+				clicked={handleClick6}
 			></MaterialButtonViolet3>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
