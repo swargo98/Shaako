@@ -13,6 +13,45 @@ const SymptosForm = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   let [selectedItems, setselectedItems] = useState([])
   let [items, setitems] = useState([])
+  let [showPrediction, setshowPrediction] = useState(false)
+  let [predictedDisease, setpredictedDisease] = useState('')
+  let [confideceScore, setconfideceScore] = useState('')
+  let [temperature, settemperature] = useState('')
+  let [bloodPressure, setbloodPressure] = useState('')
+  let [suggestion, setsuggestion] = useState('')
+  let [summary, setsummary] = useState('')
+  let [assumedDisease, setassumedDisease] = useState('')
+  let [nextVisit, setnextVisit] = useState(new Date())
+
+  let handleChangeTemperature = (value) => {
+    console.log(value)
+    settemperature(value)
+  }
+
+  let handleChangeBloodPressure = (value) => {
+    console.log(value)
+    setbloodPressure(value)
+  }
+
+  let handleChangeSuggestion = (value) => {
+    console.log(value)
+    setsuggestion(value)
+  }
+
+  let handleChangeAssumedDisease = (value) => {
+    console.log(value)
+    setassumedDisease(value)
+  }
+
+  let handleChangeNextVisit = (value) => {
+    console.log(value)
+    setnextVisit(value)
+  }
+
+  let handleChangeSummary = (value) => {
+    console.log(value)
+    setsummary(value)
+  }
 
   useEffect(() => {
     getContents()
@@ -58,6 +97,54 @@ const SymptosForm = ({ navigation }) => {
 
   const ref = useRef(null)
 
+  let handleSubmit = async () => {
+    console.log(selectedItems)
+    let tok = await AsyncStorage.getItem('token')
+    tok = JSON.parse(tok)
+    console.log(tok)
+    let response = await fetch(global.ip + '/chw/getPrediction', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + tok
+      },
+      body: JSON.stringify({selectedItems})
+    })
+    let data = await response.json()
+    setshowPrediction(true);
+    setpredictedDisease(data.predicteddisease);
+    setconfideceScore(data.confidencescore);
+    console.log(data)
+    console.log(predictedDisease)
+    console.log(confidenceScore)
+
+  }
+
+  let handleSubmitFinal = async () => {
+    let chw_id = await AsyncStorage.getItem('chw_id');
+    chw_id = JSON.parse(chw_id)
+    console.log(temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary)
+    console.log(selectedItems)
+    let tok = await AsyncStorage.getItem('token')
+    tok = JSON.parse(tok)
+    let response = await fetch(global.ip + '/chw/saveVisitForm', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'TOKEN ' + tok
+        },
+        body: JSON.stringify({ selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary })
+    })
+    let data = await response.json()
+    console.log(data)
+    if (data === 'True') {
+        setisLoggedIn(true)
+    }
+    else {
+        setfailedLogin(true)
+    }
+
+}
 
   return (
     <View style={styles.container}>
@@ -77,23 +164,13 @@ const SymptosForm = ({ navigation }) => {
       <ScrollView>
 
         <View style={styles.text2}>
-          <Text style={styles.textLabel}>    ওজন: </Text>
-          <Input />
-        </View>
-
-        <View style={styles.text2}>
-          <Text style={styles.textLabel}>    উচ্চতা: </Text>
-          <Input />
-        </View>
-
-        <View style={styles.text2}>
-          <Text style={styles.textLabel}>    তাপমাত্রা: </Text>
-          <Input />
+          <Text style={styles.textLabel}>    তাপমাত্রা (ফারেনহাইট): </Text>
+          <Input onChangeText={handleChangeTemperature} />
         </View>
 
         <View style={styles.text2}>
           <Text style={styles.textLabel}>    রক্তচাপ: </Text>
-          <Input />
+          <Input onChangeText={handleChangeBloodPressure} />
         </View>
 
         <View>
@@ -132,25 +209,46 @@ const SymptosForm = ({ navigation }) => {
           </View>
 
           <TouchableOpacity style={styles.loginBtn}>
-            <Text style={styles.loginText}>প্রেডিকশন দেখুন</Text>
+            <Text style={styles.loginText} onPress={handleSubmit}>প্রেডিকশন দেখুন</Text>
           </TouchableOpacity>
+
+          <View style={ [showPrediction? styles.text2 : styles.text3] }>
+            <Text style={styles.text}>    সম্ভাব্য রোগ: {predictedDisease}</Text>
+            <Text style={styles.text}>    সম্ভাবনা: {confideceScore}%</Text>
+          </View>
+
+          <View style={styles.text2}>
+          <Text style={styles.textLabel}>    অনুমিত রোগ: </Text>
+          <Input onChangeText={handleChangeAssumedDisease} />
+        </View>
+
+          <View style={styles.text2}>
+            <Text style={styles.textLabel}>    পরামর্শ: </Text>
+            <Input
+              multiline={true}
+              numberOfLines={3}
+              onChangeText={handleChangeSuggestion} />
+          </View>
+
+          <View style={styles.text2}>
+            <Text style={styles.textLabel}>    সামারি: </Text>
+            <Input
+              multiline={true}
+              numberOfLines={3}
+              onChangeText={handleChangeSummary} />
+          </View>
 
           <View style={styles.text2}>
             <Text style={styles.textLabel}>    পরবর্তী ভিজিট এর তারিখ: </Text>
             <DatePicker
               style={styles.datePickerStyle}
-              date={date}
+              date={nextVisit}
               mode="date"
               placeholder="select date"
               format="DD/MM/YYYY"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{
-                dateIcon: {
-
-
-
-                },
                 dateInput: {
                   borderColor: "gray",
                   alignItems: "center",
@@ -163,26 +261,13 @@ const SymptosForm = ({ navigation }) => {
                 }
               }}
               onDateChange={(date) => {
-                setDate(date);
+                console.log(date)
+                setnextVisit(date);
               }}
             />
           </View>
 
-          <View style={styles.text2}>
-            <Text style={styles.textLabel}>    পরামর্শ: </Text>
-            <Input
-              multiline={true}
-              numberOfLines={3} />
-          </View>
-
-          <View style={styles.text2}>
-            <Text style={styles.textLabel}>    সামারি: </Text>
-            <Input
-              multiline={true}
-              numberOfLines={3} />
-          </View>
-
-          <TouchableOpacity style={styles.loginBtn}>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleSubmitFinal}>
             <Text style={styles.loginText}>সংরক্ষণ করুন</Text>
           </TouchableOpacity>
 
@@ -243,6 +328,10 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     borderRadius: 10,
     margin: 5
+  },
+
+  text3: {
+    display: "none"
   },
 
   textLabel: {

@@ -21,6 +21,7 @@ from .models import *
 from .serializers import *
 
 import joblib as jb
+import datetime
 
 model = jb.load('trained_model')
 
@@ -167,7 +168,7 @@ def getPrediction(request):
                        'Arthritis', '(vertigo) Paroymsal  Positional Vertigo', 'Acne', 'Urinary tract infection',
                        'Psoriasis', 'Impetigo']
 
-        symptomslist = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills',
+        symptomslistOld = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills',
                         'joint_pain',
                         'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting',
                         'burning_micturition', 'spotting_ urination',
@@ -205,6 +206,7 @@ def getPrediction(request):
                         'red_sore_around_nose',
                         'yellow_crust_ooze']
 
+        symptomslist = sorted(symptomslistOld)
         inputno = len(psymptoms)
         print(inputno)
         if (inputno == 0):
@@ -224,9 +226,11 @@ def getPrediction(request):
 
             # update 1 where symptoms gets matched...
             for k in range(0, len(symptomslist)):
-
                 for z in psymptoms:
-                    testingsymptoms[int(z)] = 1
+                    symptom_name = symptomslist[int(z)]
+                    index = symptomslistOld.index(symptom_name)
+                    testingsymptoms[index] = 1
+                    print(symptomslistOld[index])
 
             inputtest = [testingsymptoms]
 
@@ -247,3 +251,106 @@ def getPrediction(request):
             predicted_disease = predicted[0]
 
             return JsonResponse({'predicteddisease': predicted_disease, 'confidencescore': confidencescore})
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def addVisitForm(request):
+    symptomslistOld = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills',
+                    'joint_pain',
+                    'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting',
+                    'burning_micturition', 'spotting_ urination',
+                    'fatigue', 'weight_gain', 'anxiety', 'cold_hands_and_feets', 'mood_swings', 'weight_loss',
+                    'restlessness', 'lethargy',
+                    'patches_in_throat', 'irregular_sugar_level', 'cough', 'high_fever', 'sunken_eyes',
+                    'breathlessness', 'sweating',
+                    'dehydration', 'indigestion', 'headache', 'yellowish_skin', 'dark_urine', 'nausea',
+                    'loss_of_appetite', 'pain_behind_the_eyes',
+                    'back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine',
+                    'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach',
+                    'swelled_lymph_nodes', 'malaise', 'blurred_and_distorted_vision', 'phlegm', 'throat_irritation',
+                    'redness_of_eyes', 'sinus_pressure', 'runny_nose', 'congestion', 'chest_pain',
+                    'weakness_in_limbs',
+                    'fast_heart_rate', 'pain_during_bowel_movements', 'pain_in_anal_region', 'bloody_stool',
+                    'irritation_in_anus', 'neck_pain', 'dizziness', 'cramps', 'bruising', 'obesity', 'swollen_legs',
+                    'swollen_blood_vessels', 'puffy_face_and_eyes', 'enlarged_thyroid', 'brittle_nails',
+                    'swollen_extremeties', 'excessive_hunger', 'extra_marital_contacts', 'drying_and_tingling_lips',
+                    'slurred_speech', 'knee_pain', 'hip_joint_pain', 'muscle_weakness', 'stiff_neck',
+                    'swelling_joints',
+                    'movement_stiffness', 'spinning_movements', 'loss_of_balance', 'unsteadiness',
+                    'weakness_of_one_body_side', 'loss_of_smell', 'bladder_discomfort', 'foul_smell_of urine',
+                    'continuous_feel_of_urine', 'passage_of_gases', 'internal_itching', 'toxic_look_(typhos)',
+                    'depression', 'irritability', 'muscle_pain', 'altered_sensorium', 'red_spots_over_body',
+                    'belly_pain',
+                    'abnormal_menstruation', 'dischromic _patches', 'watering_from_eyes', 'increased_appetite',
+                    'polyuria', 'family_history', 'mucoid_sputum',
+                    'rusty_sputum', 'lack_of_concentration', 'visual_disturbances', 'receiving_blood_transfusion',
+                    'receiving_unsterile_injections', 'coma', 'stomach_bleeding', 'distention_of_abdomen',
+                    'history_of_alcohol_consumption', 'fluid_overload', 'blood_in_sputum',
+                    'prominent_veins_on_calf',
+                    'palpitations', 'painful_walking', 'pus_filled_pimples', 'blackheads', 'scurring',
+                    'skin_peeling',
+                    'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails', 'blister',
+                    'red_sore_around_nose',
+                    'yellow_crust_ooze']
+    symptomslist = sorted(symptomslistOld)
+
+    if request.method == 'POST':
+        print("inside addVisitForm")
+        # selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary
+        data = request.data
+        selectedItems = data['selectedItems']
+        chw_id = data['chw_id']
+        temperature = data['temperature']
+        bloodPressure = data['bloodPressure']
+        suggestion = data['suggestion']
+        assumedDisease = data['assumedDisease']
+        nextVisit = data['nextVisit']
+        summary = data['summary']
+
+        #print all fetched data...
+        print("selectedItems : {0}".format(selectedItems))
+        print(chw_id)
+        print("temperature : {0}".format(temperature))
+        print("bloodPressure : {0}".format(bloodPressure))
+        print("suggestion : {0}".format(suggestion))
+        print("assumedDisease : {0}".format(assumedDisease))
+        print("nextVisit : {0}".format(nextVisit))
+        print("summary : {0}".format(summary))
+
+        # get symptoms from selectedItems...
+        symptoms = []
+        for x in selectedItems:
+            symptoms.append(symptomslist[int(x)])
+
+        #print symptoms...
+        print("symptoms : {0}".format(symptoms))
+
+        #add symptoms to database if not already present...
+        for symptom in symptoms:
+            if not Symptom.objects.filter(symptom_name=symptom).exists():
+                Symptom.objects.create(symptom_name=symptom)
+
+        #find patient with id = 1
+        patient = Patient.objects.get(id=1)
+
+        #find chw with id = chw_id
+        chw = CHW.objects.get(id=chw_id)
+
+        #get current date and time
+        current_date = datetime.datetime.now()
+
+        #format nextVisit date
+        nextVisit = datetime.datetime.strptime(nextVisit, '%d/%m/%Y')
+
+        #save visit form to database...
+        VisitForm.objects.create(patient=patient, chw=chw, date=current_date, temperature=temperature, blood_pressure=bloodPressure, suggestions=suggestion, assumed_disease=assumedDisease, next_visit_date=nextVisit, summary=summary)
+
+        #save relationship between symptoms and visit form to database...
+        for symptom in symptoms:
+            symptom = Symptom.objects.get(symptom_name=symptom)
+            visitForm = VisitForm.objects.get(date=current_date, chw=chw, patient=patient)
+            SymptomForm.objects.create(visitForm=visitForm, symptom=symptom)
+
+        return Response("True")
+

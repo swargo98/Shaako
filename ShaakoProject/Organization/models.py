@@ -100,7 +100,7 @@ class VisitForm(models.Model):
     chw = models.ForeignKey(CHW, on_delete=models.CASCADE)
     date = models.DateTimeField()
     temperature = models.FloatField()
-    blood_pressure = models.FloatField()
+    blood_pressure = models.CharField(max_length=10)
     assumed_disease = models.CharField(max_length=100)
     suggestions = models.CharField(max_length=200)
     summary = models.CharField(max_length=200)
