@@ -101,18 +101,19 @@ class VisitForm(models.Model):
     date = models.DateTimeField()
     temperature = models.FloatField()
     blood_pressure = models.FloatField()
-    headache_level = models.IntegerField()
-    nausea_level = models.IntegerField()
-    insomniac_level = models.IntegerField()
-    dyspnoea_level = models.IntegerField()
-    cough_level = models.IntegerField()
-    other_problems = models.CharField(max_length=200)
     assumed_disease = models.CharField(max_length=100)
     suggestions = models.CharField(max_length=200)
-    summary_impression = models.CharField(max_length=200)
-    next_visit_date = models.DateTimeField()
+    summary = models.CharField(max_length=200)
+    next_visit_date = models.DateTimeField(null=True)
+
+class Symptom(models.Model):
+    symptom_name=models.CharField(max_length=100)
 
 
+class SymptomForm(models.Model):
+    visitForm = models.ForeignKey(VisitForm, on_delete=models.CASCADE)
+    symptom = models.ForeignKey(Symptom, on_delete=models.CASCADE)
+    
 # create Lesson with supervisor, title, content, upload_date
 class Lesson(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
