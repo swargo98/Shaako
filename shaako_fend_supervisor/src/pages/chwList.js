@@ -113,6 +113,7 @@ const CHWList = () => {
                                                 
                                                 <td><a style={{textDecoration: "none"}} href="/"><img className="rounded-circle me-2" width="30" height="30"
                                                          src={r.image} alt="man" />{r.name}</a></td>
+                                                         
                                                 <td>{r.contactNo}
                                                 </td>
 

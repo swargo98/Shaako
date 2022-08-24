@@ -300,3 +300,108 @@ def updateSupervisorProfile(request):
 
             except:
                 return Response({"success": "False"})
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getDiseaseStat(request):
+    if request.method == 'POST':
+        sup_id = request.data['sup_id']
+        organization = request.data['organization']
+        # get all chw of this supervisor
+        chws = CHW.objects.filter(supervisor_id=sup_id)
+        if sup_id == 0:
+            # get all supervisors of this organization
+            supervisors = Supervisor.objects.filter(organization_id=organization)
+            chws = CHW.objects.filter(supervisor_id__in=supervisors)
+        # get all the patient of all the chw in chws
+        patients = Patient.objects.filter(chw_id__in=chws)
+        # get all the VisitForm of all the patient in patients
+        # if a patient has multiple VisitForm then keep the one with the latest date
+
+        diseases = {}
+        for patient in patients:
+            # get the latest VisitForm of this patient
+            # if no VisitForm then continue
+            try:
+                latest_visit = VisitForm.objects.filter(patient_id=patient.id).order_by('-date').first()
+                # get the disease of this VisitForm
+                disease = latest_visit.assumed_disease
+                # if disease is not in diseases then add it to diseases
+                if disease not in diseases:
+                    diseases[disease] = 1
+                else:
+                    diseases[disease] += 1
+            except:
+                continue
+
+        # calculate percentage of each disease
+        total = 0
+        for disease in diseases:
+            total += diseases[disease]
+        if total != 0:
+            for disease in diseases:
+                diseases[disease] = (diseases[disease] / total) * 100
+                # round to 2 decimal places
+                diseases[disease] = round(diseases[disease], 2)
+        # if there are more than 10 entries then keep  10 entries with most value
+        if len(diseases) > 10:
+            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:10]
+            # dictionary
+            diseases = dict(diseases)
+            total = 0
+            for disease in diseases:
+                total += diseases[disease]
+            if total != 0:
+                diseases['Other'] = 100 - total
+        print(diseases)
+        return Response(diseases)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSupervisorRecruitmentStat(request):
+    if request.method == 'POST':
+        organization = request.data['organization']
+        # get current year
+        current_year = datetime.now().year
+        # for all the months of current year get the number of supervisors recruited in that month
+        # create a dictionary with key as month and value as number of supervisors recruited in that month
+        # if no supervisors recruited in that month then value is 0
+
+        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                  'November', 'December']
+        sup_recruitment = {}
+        for month in months:
+            # find how many supervisors are recruited in this month in this year
+            total = len(Supervisor.objects.filter(recruitment_date__month=months.index(month) + 1,
+                                                  recruitment_date__year=current_year, organization_id=organization))
+            sup_recruitment[month] = total
+        print(sup_recruitment)
+        return Response(sup_recruitment)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getCHWRecruitmentStat(request):
+    if request.method == 'POST':
+        organization = request.data['organization']
+        # get current year
+        current_year = datetime.now().year
+
+        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                  'November', 'December']
+        supervisors = Supervisor.objects.filter(organization_id=organization)
+        chws = CHW.objects.filter(supervisor_id__in=supervisors)
+
+        chw_recruitment = {}
+        for month in months:
+            # find how many supervisors are recruited in this month in this year
+            total = len(CHW.objects.filter(recruitment_date__month=months.index(month) + 1,
+                                           recruitment_date__year=current_year))
+            chw_recruitment[month] = total
+        print(chw_recruitment)
+        return Response(chw_recruitment)
