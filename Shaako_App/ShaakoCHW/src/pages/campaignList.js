@@ -1,52 +1,84 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Image, AppRegistry } from "react-native";
+import { View, Text, StyleSheet, Image, AppRegistry, ScrollView } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
 import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Card, ListItem, Button, Icon, Header } from 'react-native-elements'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const CampaignList = ({ Navigate }) => {
+const CampaignList = ({ navigation }) => {
+    let [result, setresult] = useState([]);
+    let sup_id = 0;
+
+    useEffect(() => {
+        getContents()
+    }, [])
+
+
+
+    let getContents = async () => {
+        
+        let chw_id = await AsyncStorage.getItem('chw_id');
+        chw_id = JSON.parse(chw_id)
+        
+        let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+
+        console.log(tok)
+        let response = await fetch(global.ip + '/CHW/getAllCampaigns', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + tok
+            },
+            body: JSON.stringify(chw_id)
+        })
+        let d = await response.json()
+        setresult([])
+        for (let i = 0; i < d.length; i++) {
+            let now = d[i]
+            console.log(now.id + " " + now.title + " " + now.campaign_details + " " + now.start_date)
+            setresult(prevArray => [...prevArray, now]);
+        }
+        console.log("etuku")
+    }
+
     return (
         <View style={styles.container}>
-            <View>
-            <Header
-                leftComponent={{ icon: 'menu', color: '#fff' }}
-                centerComponent={{ text: 'ক্যাম্পেইনসমূহ', style: { color: '#fff' } }}
-                rightComponent={{ icon: 'home', color: '#fff' }}
-                />
-            </View>
-            <View >
-            <Card>
-                <Card.Title>HELLO WORLD</Card.Title>
-                <Card.Divider/>
-                <Card.Image source={require("./../../assets/logo.png")} />
-                <Text style={{marginBottom: 10}}>
-                    The idea with React Native Elements is more about component structure than actual design.
-                </Text>
-                <Button
-                    icon={<Icon name='code' color='#ffffff' />}
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                    title='VIEW NOW' />
-            </Card>
-            </View>
+            <Navbar navigation={navigation}></Navbar>
+            <ScrollView>
 
-            <View >
-            <Card>
-                <Card.Title>HELLO WORLD2</Card.Title>
-                <Card.Divider/>
-                <Card.Image source={require("./../../assets/logo.png")} />
-                <Text style={{marginBottom: 10}}>
-                    The idea with React Native Elements is more about component structure than actual design.
-                </Text>
-                <Button
-                    icon={<Icon name='code' color='#ffffff' />}
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                    title='VIEW NOW' />
-            </Card>
-            </View>
+                {result.map(a => {
+                    return (
+                        <View >
+                            <Card>
+                                <Card.Title style={{backgroundColor: '#a3e6d9', fontSize: 22}}>{a.title}</Card.Title>
+                                <Card.Divider />
+                                <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold' }}>
+                                    বিবরণ: {a.campaign_details}
+                                </Text>
+                                <Card.Divider />
+                                <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', }}>
+                                    সেবা নিয়েছেন: {a.count}
+                                </Text>
+                                <Card.Divider />
+                                <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', }}>
+                                    সময়সীমা: {a.end_date}
+                                </Text>
+                                <Card.Divider />
+                                <Button
+                                    buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                    title='নতুন যুক্ত করুন' onPress={() => navigation.navigate('CampaignDetails', { campaign_id: a.id })} />
+                            </Card>
+                        </View>);
+                })}
+            </ScrollView>
         </View>
     );
 }
@@ -62,7 +94,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row"
     },
-    
+
 });
 
 export default CampaignList;

@@ -111,7 +111,7 @@ const PatientList = ({ navigation }) => {
 
 
                                     </View>
-
+                                    <Card.Divider />
                                     <View>   
                                         <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: a.image, scale: 1 }} />
                                     </View>

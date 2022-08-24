@@ -2,11 +2,12 @@ from __future__ import division
 import datetime
 from email import message
 from http.client import HTTPResponse
+from importlib.resources import path
 from io import BytesIO
 
 from PIL import Image
 from os.path import exists
-
+from django.utils import timezone
 from django.shortcuts import render
 from pyparsing import Or
 from rest_framework import viewsets
@@ -411,3 +412,98 @@ def getPatientImage(request):
         buffered = BytesIO()
         im.save(buffered, format="PNG")
         return HttpResponse(buffered.getvalue(), content_type="image/png")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getAllCampaigns(request):
+    if request.method == 'POST':
+        chw_id = request.data
+        
+        # find chw with id=chw_id
+        chw = CHW.objects.get(id=chw_id)
+        # find supervisor of chw
+        supervisor = chw.supervisor
+        # find all Supervisor_Campaign where supervisor is supervisor
+        sup_campaigns = Supervisor_Campaign.objects.filter(supervisor=supervisor)
+
+        campaigns=[]
+        for sup_camp in sup_campaigns:
+            campaigns.append(sup_camp.campaign)
+
+        #sort campaigns by decreasing state_date
+        campaigns = sorted(campaigns, key=lambda x: x.state_date, reverse=True)
+
+        # filter all campaigns if end_date<current_date
+        now = timezone.now()
+        campaigns = [campaign for campaign in campaigns if campaign.end_date >= now]
+        
+        print(campaigns)
+
+        ret=[]
+        for campaign in campaigns:
+            dict={}
+            dict['title']=campaign.title
+            dict['start_date']=campaign.state_date
+            dict['end_date']=campaign.end_date.date()
+            dict['id']=campaign.id
+            dict['campaign_details']=campaign.campaign_details
+            dict['goal']=campaign.goal
+            # find number of entries in PatientCampaign where campaign=campaign
+            entries = PatientCampaign.objects.filter(campaign=campaign)
+            dict['count']=len(entries)
+            ret.append(dict)
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getUnenrolledPatient(request):
+    if request.method == 'POST':
+        campaign_id = request.data['campaign_id']
+        chw_id = request.data['chw_id']
+        
+        # find campaign with campaign_id
+        campaign = Campaign.objects.get(id=campaign_id)
+
+        # find chw with chw_id
+        chw = CHW.objects.get(id=chw_id)
+        location = chw.location
+
+        # find all patients if location of his chw is location
+        patients = Patient.objects.filter(chw__location=location)
+
+        fin={}
+
+        ret=[]
+        for patient in patients:
+            patient_id=patient.id
+            # find all entries in PatientCampaign where patient=patient and campaign=campaign
+            entries = PatientCampaign.objects.filter(patient=patient, campaign=campaign)
+            if len(entries)==0:
+                dict={}
+                dict['id']=patient.id
+                dict['name']=patient.name
+                dict['contact_no']=patient.contactNo
+                ret.append(dict)
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def enrollCHW(request):
+    if request.method == 'POST':
+        chw_id=request.data['chw_id']
+        campaign_id=request.data['campaign_id']
+        patient_id=request.data['patient_id']
+
+        # find chw with chw_id
+        chw = CHW.objects.get(id=chw_id)
+        # find campaign with campaign_id
+        campaign = Campaign.objects.get(id=campaign_id)
+        # find patient with patient_id
+        patient = Patient.objects.get(id=patient_id)
+        # create new PatientCampaign with enrollment_date=now
+        PatientCampaign.objects.create(patient=patient, campaign=campaign, chw=chw, enrollment_date=datetime.datetime.now())
+
+        return Response("done")

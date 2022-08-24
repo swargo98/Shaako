@@ -14,171 +14,178 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CheckBox } from '@rneui/themed'
 import call from 'react-native-phone-call'
 
-const CampaignDetails = ({ navigation }) => {
+const CampaignDetails = ({ route, navigation }) => {
+    let { campaign_id } = route.params;
     let [result, setresult] = useState([]);
-    let [sup_image, setsup_image] = useState(null);
-    let sup_id = 0;
-    // let sup_id = 26;
+    let [searchtext, setsearchtext] = useState('');
 
     useEffect(() => {
         getContents()
     }, [])
 
     let getContents = async () => {
-        sup_id = await AsyncStorage.getItem('sup_id');
-        console.log(sup_id)
-        console.log(await AsyncStorage.getItem('token'))
+
+        let chw_id = await AsyncStorage.getItem('chw_id')
+        chw_id = JSON.parse(chw_id)
+
         let tok = await AsyncStorage.getItem('token')
-        console.log(tok)
-        let response = await fetch(global.ip + '/CHW/getLessonList', {
+        tok = JSON.parse(tok)
+
+        // console.log(tok)
+        let response = await fetch(global.ip + '/CHW/Campaign/getUnenrolledPatient', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify({ 'campaign_id': campaign_id, 'chw_id': chw_id })
         })
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            console.log(now.id + " " + now.title + " " + now.supervisor_name + " " + now.upload_time)
+            // console.log(now.id + " " + now.name + " " + now.contact_no)
+
+            now.args = {
+                number: now.contact_no, // String value with the number to call
+                prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+                skipCanOpen: true // Skip the canOpenURL check
+            }
+
+            let response2 = await fetch(global.ip + '/patient/getPatientImage', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'TOKEN ' + tok
+                },
+                body: JSON.stringify(now.id)
+            })
+
+            let image = await response2.blob()
+            var reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onloadend = function () {
+                var base64data = reader.result;
+                now.image = base64data
+                // console.log(now.image)
+            }
+            // console.log(1)
+            let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            await sleep(1000);
+            // console.log(2)
+
             setresult(prevArray => [...prevArray, now]);
         }
+        // console.log(d)
+        // console.log("etuku")
+    }
 
-        let response2 = await fetch(global.ip + '/organization/image/supervisor', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
+    let addClicked = async (a) => {
+        console.log("enroll "+a.id)
+        let chw_id = await AsyncStorage.getItem('chw_id')
+        chw_id = JSON.parse(chw_id)
+        
+        let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+
+        let response = await fetch(global.ip + '/CHW/enrollCHW', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
-            },
-            body: JSON.stringify(sup_id)
-        })
-        // let result = stackSizeSync();
-        // console.log(result)
-
-        //take image respone from bufferIO
-        let image = await response2.blob()
-        //convert to base64
-        let image64 = await image.arrayBuffer()
-        //convert to base64
-        let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-        //convert to url
-        let imageurl = `data:image/png;base64,${image64base64}`
-        //push to array
-        setsup_image(imageurl)
+			},
+			body: JSON.stringify({ 'chw_id':chw_id,'campaign_id':campaign_id,'patient_id': a.id })
+		})
+		let data = await response.json()
+		console.log(data)
+        // delete from result if id=a.id
+        let temp=[]
+        for(let i=0;i<result.length;i++){
+            if(result[i].id!=a.id){
+                temp.push(result[i])
+            }
+        }
+        setresult(temp)
     }
 
-    const args = {
-        number: '+8801842223102', // String value with the number to call
-        prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
-        skipCanOpen: true // Skip the canOpenURL check
+    let searchFilterFunction = async (text) => {
+        console.log("text = "+text)
+        setsearchtext(text)
     }
-
-    const [check1, setCheck1] = useState(false);
-
-
     return (
         <View style={styles.container}>
-            <Navbar></Navbar>
+            <Navbar navigation={navigation}></Navbar>
             <SearchBar
                 placeholder="রোগীর তালিকা থেকে খুঁজুন"
                 lightTheme
+                onChangeText={(text) => searchFilterFunction(text)}
+                onClear={(text) => searchFilterFunction('')}
+                value={searchtext}
             />
-
-            <Text style={styles.text}>ক্যাম্পেইনের অংশ হয়েছেন সর্বমোটঃ ১০০ জন</Text>
             <ScrollView>
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View style = {{alignItems: 'flex-start'}}>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{ flex: 1, flexDirection: "row" }}>
-                                <Button
-                                        buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                        title='Call'
-                                        color="#f194ff"
-                                        onPress={() => { call(args).catch(console.error) }} />
+                {result.map(a => {
+                    if(!a.name.includes(searchtext))
+                        return (<></>);
+                    return (
+                        // check if a.name contains searchtext
+                        
+                        <View>
+                            <Card>
+                                <View style={styles.cardContainer}>
+                                    <View style={{ alignItems: 'flex-start' }}>
+                                        <Card.Title>রোগীর নাম: {a.name}</Card.Title>
+                                        <View style={{ flex: 1, flexDirection: "row" }}>
+                                            <Button
+                                                buttonStyle={{ borderRadius: 10, marginRight: 0, marginBottom: 0, backgroundColor: "#56bfab" }}
+                                                title='যুক্ত করুন'
+                                                onPress={() => addClicked(a)} />
+                                        </View>
 
-                                    <CheckBox
-                                        center
-                                        title="ক্যাম্পেইন সম্পন্ন"
-                                        checked={check1}
-                                        onPress={() => setCheck1(!check1)}
-                                    />
+
+                                    </View>
+
+                                    <View>
+                                        <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: a.image, scale: 1 }} />
+                                    </View>
                                 </View>
-
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
+                            </Card>
                         </View>
-                    </Card>
-                </View>
-
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View style = {{alignItems: 'flex-start'}}>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{ flex: 1, flexDirection: "row" }}>
-                                <Button
-                                        buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                        title='Call'
-                                        color="#f194ff"
-                                        onPress={() => { call(args).catch(console.error) }} />
-
-                                    <CheckBox
-                                        center
-                                        title="ক্যাম্পেইন সম্পন্ন"
-                                        checked={check1}
-                                        onPress={() => setCheck1(!check1)}
-                                    />
-                                </View>
-
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
-                        </View>
-                    </Card>
-                </View>
-
-                <View >
-                    <Card>
-                        <View style={styles.cardContainer}>
-                            <View style = {{alignItems: 'flex-start'}}>
-                                <Card.Title>Touhid Rahman Daddy</Card.Title>
-                                <View style={{ flex: 1, flexDirection: "row" }}>
-                                <Button
-                                        buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
-                                        title='Call'
-                                        color="#f194ff"
-                                        onPress={() => { call(args).catch(console.error) }} />
-
-                                    <CheckBox
-                                        center
-                                        title="ক্যাম্পেইন সম্পন্ন"
-                                        checked={check1}
-                                        onPress={() => setCheck1(!check1)}
-                                    />
-                                </View>
-
-
-                            </View>
-
-                            <View>
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
-                            </View>
-                        </View>
-                    </Card>
-                </View>
-
+                    );
+                })}
             </ScrollView>
+
+            {/* <ScrollView>
+                <View >
+                    <Card>
+                        <View style={styles.cardContainer}>
+                            <View style={{ alignItems: 'flex-start' }}>
+                                <Card.Title>Touhid Rahman Daddy</Card.Title>
+                                <View style={{ flex: 1, flexDirection: "row" }}>
+                                    <Button
+                                        buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green" }}
+                                        title='Call'
+                                        color="#f194ff"
+                                        onPress={() => { call(args).catch(console.error) }} />
+
+                                    <CheckBox
+                                        center
+                                        title="ক্যাম্পেইন সম্পন্ন"
+                                    // checked={check1}
+                                    />
+                                </View>
+
+
+                            </View>
+
+                            <View>
+                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={require("./../../assets/logo.png")} />
+                            </View>
+                        </View>
+                    </Card>
+                </View>
+
+
+            </ScrollView> */}
         </View>
     );
 }
