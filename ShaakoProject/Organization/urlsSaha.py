@@ -10,6 +10,8 @@ urlpatterns = [
     path('organization/getCHWRecruitmentStat', viewsSaha.getCHWRecruitmentStat),
     path('organization/getSupervisorCHW', viewsSaha.getSupervisorCHW),
     path('organization/searchSupervisorCHW', viewsSaha.searchSupervisorCHW),
+    path('organization/getCHWProfile', viewsSaha.getCHWProfile),
+    path('organization/getRecentVisits', viewsSaha.getRecentVisits),
 
     path('supervisor/editContent', viewsSaha.editLesson),
     path('supervisor/home', viewsSaha.supervisorHome),
@@ -20,4 +22,7 @@ urlpatterns = [
     path('CHW/addPatient', viewsSaha.addPatient),
     path('CHW/getPastQuiz', viewsSaha.getPastQuiz),
     path('CHW/getImage', viewsSaha.getCHWImage),
+    path('CHW/getRecentQuizSubmissions', viewsSaha.getRecentQuizSubmissions),
+
+    path('patient/getPatientImage', viewsSaha.getPatientImage),
 ]

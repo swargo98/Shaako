@@ -11,7 +11,7 @@ import QuizPost from "./pages/quizPost";
 import NewQuiz from "./pages/newQuiz";
 import EditLesson from "./pages/editLesson";
 import Profile from "./pages/profile";
-
+import CHWProfile from "./pages/viewCHWProfile";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -34,6 +34,7 @@ function App() {
                     <Route exact path='/new_quiz' element={<NewQuiz />} />
                     <Route exact path='/edit_lesson/:id' element={<EditLesson />} />
                     <Route exact path='/profile' element={<Profile />} />
+                    <Route exact path='/viewCHWProfile/:id' element={<CHWProfile />} />
                 </Routes>
             </div>
             <Footer />

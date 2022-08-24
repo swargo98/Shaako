@@ -430,6 +430,7 @@ def getSupervisorCHW(request):
             ret.append(dict)
         return Response(ret)
 
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -458,4 +459,91 @@ def searchSupervisorCHW(request):
                         'supervisor_name': chw.supervisor.name, 'supervisor_id': chw.supervisor.id}
                 ret.append(dict)
         # print(ret)
+        return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getCHWProfile(request):
+    if request.method == 'POST':
+        data = request.data
+        chw_id = data
+        chw = CHW.objects.get(id=chw_id)
+        location = chw.location
+        supervisor = chw.supervisor
+        dict = {'name': chw.name, 'division': location.division, 'district': location.district,
+                'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                'recruitment_date': chw.recruitment_date.date(),
+                'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress,
+                'imagePath': chw.imagePath,
+                'supervisor_name': supervisor.name, 'supervisor_id': supervisor.id}
+        return Response(dict)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getPatientImage(request):
+    if request.method == 'POST':
+        data = request.data
+        id = data
+        path = str(BASE_DIR) + "//image//patient//" + str(id) + ".png"
+        if not exists(path):
+            path = str(BASE_DIR) + "//image//patient//default.png"
+        im = Image.open(path)
+        # send image as response
+        buffered = BytesIO()
+        im.save(buffered, format="PNG")
+        return HttpResponse(buffered.getvalue(), content_type="image/png")
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getRecentVisits(request):
+    if request.method == 'POST':
+        data = request.data
+        chw_id = data
+        # get all VisitForm of this chw_id ordered by date latest first
+        visits = VisitForm.objects.filter(chw_id=chw_id).order_by('-date')
+        ret = []
+        for visit in visits:
+            dict = {'date': visit.date.date(), 'id': visit.patient.id, 'patient_name': visit.patient.name,
+                    'dob': visit.patient.date_of_birth.date(), 'address': visit.patient.address,
+                    'gender': visit.patient.gender, 'disease': visit.assumed_disease}
+            ret.append(dict)
+        return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getRecentQuizSubmissions(request):
+    if request.method == 'POST':
+        data = request.data
+        chw_id = data
+        # get all QuizSubmission of this chw_id ordered by date latest first
+        submissions = QuizSubmission.objects.filter(chw_id=chw_id).order_by('-date')
+        ret = []
+        print(submissions)
+        for submission in submissions:
+            quiz_id = submission.quiz_id
+            quiz = Quiz.objects.get(id=quiz_id)
+            # get all QuizItem of this quiz_id
+            items = QuizItem.objects.filter(quiz_id=quiz_id)
+            print(items)
+            point = 0
+            for item in items:
+                # find SubmissionItem of this item_id
+                try:
+                    submission_item = \
+                    SubmissionItem.objects.filter(quizItem_id=item.id, quizSubmission_id=submission.id)[0]
+                    print(item.correct_option, submission_item.chosenOption)
+                    if item.correct_option == submission_item.chosenOption:
+                        point += item.point
+                except:
+                    continue
+            dict = {'date': submission.date.date(), 'quiz_name': quiz.title, 'point': point}
+            ret.append(dict)
         return Response(ret)

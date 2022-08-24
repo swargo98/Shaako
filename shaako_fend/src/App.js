@@ -18,6 +18,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Profile from './pages/profile';
 import Statistics from './pages/stat';
 import SupervisorProfile from './pages/viewSupervisorProfile'
+import CHWProfile from './pages/viewCHWProfile';
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                     <Route path='/profile' element={<Profile />} />
                     <Route path='/statistics' element={<Statistics />} />
                     <Route exact path='/viewSupervisorProfile/:id' element={<SupervisorProfile />} />
+                    <Route exact path='/viewCHWProfile/:id' element={<CHWProfile />} />
                 </Routes>
             </div>
             <Footer />

@@ -177,7 +177,9 @@ const UpdateCHW = () => {
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
-                                                    src={r.image} alt="man" />{r.name}</td>
+                                                    src={r.image} alt="man" />
+                                                    <a style={{ textDecoration: "none" }} href={`/viewCHWProfile/${r.id}`}>{r.name}</a>
+                                                    </td>
                                                 <td>{r.email}
                                                 </td>
                                                 <td>{r.contactNo}
