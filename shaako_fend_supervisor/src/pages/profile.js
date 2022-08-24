@@ -1,7 +1,3 @@
-import man1 from './assets/img/avatars/avatar1.jpg'
-import man2 from './assets/img/avatars/avatar2.jpg'
-import man3 from './assets/img/avatars/avatar3.jpg'
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -17,11 +13,15 @@ const Profile = () => {
     let [passwordOld2, setpasswordOld2] = useState('')
     let [contact, setcontact] = useState('')
     let [address, setaddress] = useState('')
+    let [location, setlocation] = useState('')
+    let [organizationname, setorganizationname] = useState('')
+    let [recruitment, setrecruitment] = useState('')
+
     let [image, setimage] = useState(null)
 
     let [inputimage, setinputimage] = useState(null)
     let organization = localStorage.getItem('organization')
-    let id = localStorage.getItem('admin_id')
+    let id = localStorage.getItem('sup_id')
 
     let handleChangename = (value) => {
         setname(value)
@@ -45,6 +45,7 @@ const Profile = () => {
     let handleChangepasswordOld2 = (value) => {
         setpasswordOld2(value)
     }
+
     useEffect(() => {
         getProfile();
     }, [])
@@ -58,7 +59,7 @@ const Profile = () => {
 
     let getProfile = async () => {
         console.log(id)
-        let response = await fetch('http://127.0.0.1:8000/organization/profile', {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/getProfile', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -74,9 +75,11 @@ const Profile = () => {
         setemail(d.email)
         setpasswordOld(d.password)
         setcontact(d.contactNo)
-        setaddress(d.presentAddress)
-
-        let response2 = await fetch('http://127.0.0.1:8000/organization/getImage', {
+        setaddress(d.address)
+        setlocation(d.upazilla + ", " + d.district + ", " + d.district)
+        setorganizationname(d.organization);
+        setrecruitment(d.recruitment_date);
+        let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -100,30 +103,30 @@ const Profile = () => {
     }
 
     let handleSubmitImage = async () => {
-        console.log(inputimage)
-        let admin_id = localStorage.getItem('admin_id')
-        let now = JSON.stringify({admin_id,inputimage})
-        console.log(now)
-        let response = await fetch('http://127.0.0.1:8000/organization/pictureUpdate', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: now
-        })
-        let data = await response.json()
-        console.log(data);
-        // if (data === 'True') {
-        //     alert('Profile Picture Updated Successfully')
-        //     Navigate('/profile', { replace: true })
-        // }
+        // console.log(inputimage)
+        // let admin_id = localStorage.getItem('admin_id')
+        // let now = JSON.stringify({admin_id,inputimage})
+        // console.log(now)
+        // let response = await fetch('http://127.0.0.1:8000/organization/pictureUpdate', {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //     },
+        //     body: now
+        // })
+        // let data = await response.json()
+        // console.log(data);
+        // // if (data === 'True') {
+        // //     alert('Profile Picture Updated Successfully')
+        // //     Navigate('/profile', { replace: true })
+        // // }
     }
 
     let handleSubmit = async () => {
-        console.log(name, email, password, contact, address)
+        console.log(name, email, password,password2, contact, address)
         if (name.length !== 0 && email.length !== 0 && contact.length !== 0 && address.length !== 0) {
-            let response = await fetch('http://127.0.0.1:8000/organization/profileUpdate', {
+            let response = await fetch('http://127.0.0.1:8000/supervisor/updateSupervisorProfile', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -202,6 +205,7 @@ const Profile = () => {
                                     </div>
                                     <div className="card-body">
                                         <form>
+
                                             <div className="row">
                                                 <div className="col">
                                                     <div className="mb-3"><label className="form-label" htmlFor="username"><strong>ইউজারনেম</strong></label><input
@@ -260,48 +264,76 @@ const Profile = () => {
                                         <p className="text-primary m-0 fw-bold">সাধারণ তথ্য</p>
                                     </div>
                                     <div className="card-body">
-                                        <form>
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="mb-3"><label className="form-label" htmlFor="username"><strong>ইউজারনেম</strong></label>
-                                                        <br />
-                                                        {name}
-                                                        {/* <input className="form-control" type="text" id="username-1" value={name} name="username" readOnly={true} /> */}
-                                                    </div>
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="username"><strong>প্রতিষ্ঠান নাম</strong></label>
+                                                    <br />
+                                                    {organizationname}
+                                                    {/* <input className="form-control" type="text" id="username-1" value={name} name="username" readOnly={true} /> */}
                                                 </div>
                                             </div>
-                                            <hr />
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="mb-3"><label className="form-label" htmlFor="email"><strong>ইমেইল এড্রেস</strong></label>
-                                                        <br />
-                                                        {email}
-                                                        {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
-                                                    </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="username"><strong>ইউজারনেম</strong></label>
+                                                    <br />
+                                                    {name}
+                                                    {/* <input className="form-control" type="text" id="username-1" value={name} name="username" readOnly={true} /> */}
                                                 </div>
                                             </div>
-                                            <hr />
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="mb-3"><label className="form-label" htmlFor="email"><strong>মোবাইল নম্বর</strong></label>
-                                                        <br />
-                                                        {contact}
-                                                        {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
-                                                    </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="email"><strong>ইমেইল এড্রেস</strong></label>
+                                                    <br />
+                                                    {email}
+                                                    {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
                                                 </div>
                                             </div>
-                                            <hr />
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="mb-3"><label className="form-label" htmlFor="email"><strong>ঠিকানা</strong></label>
-                                                        <br />
-                                                        {address}
-                                                        {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
-                                                    </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="email"><strong>মোবাইল নম্বর</strong></label>
+                                                    <br />
+                                                    {contact}
+                                                    {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
                                                 </div>
                                             </div>
-                                            <div className="mb-3"><button className="btn btn-primary btn-sm" type="button" onClick={handleEdit}>তথ্য অথবা পাসওয়ার্ড পরিবর্তন</button></div>
-                                        </form>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="email"><strong>ঠিকানা</strong></label>
+                                                    <br />
+                                                    {address}
+                                                    {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="email"><strong>কর্মরত এলাকা</strong></label>
+                                                    <br />
+                                                    {location}
+                                                    {/* <input className="form-control" type="email" id="email-1" value={email} name="email" readOnly={true} /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="mb-3"><label className="form-label" htmlFor="username"><strong>নিয়োগ তারিখ</strong></label>
+                                                    <br />
+                                                    {recruitment}
+                                                    {/* <input className="form-control" type="text" id="username-1" value={name} name="username" readOnly={true} /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-3"><button className="btn btn-primary btn-sm" type="button" onClick={handleEdit}>তথ্য অথবা পাসওয়ার্ড পরিবর্তন</button></div>
                                     </div>
                                 </div>
                             </div>
