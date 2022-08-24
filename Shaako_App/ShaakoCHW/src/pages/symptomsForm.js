@@ -1,20 +1,18 @@
-// import component
 import React, { Component } from 'react';
 import MultiSelect from 'react-native-multiple-select';
 
 import { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Image, AppRegistry, ScrollView, TouchableOpacity } from "react-native";
 import Navbar from "./../../components/Navbar";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Button } from "@rneui/themed";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Input } from 'react-native-elements';
-// import { FloatingLabelInput } from 'react-native-floating-label-input';
+import DatePicker from 'react-native-datepicker';
 
 
 const SymptosForm = ({ navigation }) => {
-
+  const [date, setDate] = useState(new Date());
   let [selectedItems, setselectedItems] = useState([])
-  let [items , setitems] = useState([])
+  let [items, setitems] = useState([])
 
   useEffect(() => {
     getContents()
@@ -60,7 +58,7 @@ const SymptosForm = ({ navigation }) => {
 
   const ref = useRef(null)
 
-  
+
   return (
     <View style={styles.container}>
       <Navbar></Navbar>
@@ -68,74 +66,128 @@ const SymptosForm = ({ navigation }) => {
         <Text style={styles.title}>ভিজিট ফর্ম</Text>
       </View>
       <View style={styles.text2}>
-        <Text style={styles.text}>   রোগীর নাম: </Text>        
+        <Text style={styles.text}>   রোগীর নাম: </Text>
       </View>
 
       <View style={styles.text2}>
-      <Text style={styles.text}>   তারিখ:  {new Date().toDateString()} </Text>        
+        <Text style={styles.text}>   তারিখ:  {new Date().toDateString()} </Text>
       </View>
-      
-      
+
+
       <ScrollView>
 
-      <View style={styles.text2}>
-      {/* <FloatingLabelInput
-        label={'label'}
-        // value={cont}
-        // onChangeText={value => setCont(value)}
-      /> */}
-        <Text style={styles.textLabel}>    ওজন: </Text>
-        <Input/>
-        <Text style={styles.textLabel}>    উচ্চতা: </Text>
-        <Input/>
-
-        <Text style={styles.textLabel}>    তাপমাত্রা: </Text>
-        <Input/>
-
-        <Text style={styles.textLabel}>    রক্তচাপ: </Text>
-        <Input/>
-      </View>
-
-      <View>
-        <MultiSelect
-          hideTags
-          items={items}
-          uniqueKey="id"
-          ref={ref}
-          onSelectedItemsChange={onSelectedItemsChange}
-          selectedItems={selectedItems}
-          selectText=" লক্ষণ সিলেক্ট করুন"
-          searchInputPlaceholderText="লক্ষণ খুঁজুন"
-          onChangeInput={(text) => console.log(text)}
-          tagRemoveIconColor="#CCC"
-          tagBorderColor="#CCC"
-          tagTextColor="#CCC"
-          selectedItemTextColor="#CCC"
-          selectedItemIconColor="#CCC"
-          itemTextColor="#000"
-          displayKey="name"
-          searchInputStyle={{ color: "#000" }}
-          styleMainWrapper={{ padding: 10 }}
-          tagContainerStyle={{ backgroundColor: "#000" }}
-          // hideSubmitButton = {true}
-          styleListContainer={{height: 256}}
-          // submitButtonColor="#0c6efc"
-          // submitButtonText="সাবমিট"
-        />
-      </View>
-        
-      <View>
-      
-
-      <View style={{ flex: 1, margin: 10 }}>
-          {ref && ref.current && ref.current.getSelectedItemsExt(selectedItems)}
+        <View style={styles.text2}>
+          <Text style={styles.textLabel}>    ওজন: </Text>
+          <Input />
         </View>
 
-      <TouchableOpacity style={styles.loginBtn}>
-                        <Text style={styles.loginText}>সাবমিট করুন</Text>
-                    </TouchableOpacity>
+        <View style={styles.text2}>
+          <Text style={styles.textLabel}>    উচ্চতা: </Text>
+          <Input />
+        </View>
 
-      </View>
+        <View style={styles.text2}>
+          <Text style={styles.textLabel}>    তাপমাত্রা: </Text>
+          <Input />
+        </View>
+
+        <View style={styles.text2}>
+          <Text style={styles.textLabel}>    রক্তচাপ: </Text>
+          <Input />
+        </View>
+
+        <View>
+          <MultiSelect
+            hideTags
+            items={items}
+            uniqueKey="id"
+            ref={ref}
+            onSelectedItemsChange={onSelectedItemsChange}
+            selectedItems={selectedItems}
+            selectText=" লক্ষণ সিলেক্ট করুন"
+            searchInputPlaceholderText="লক্ষণ খুঁজুন"
+            onChangeInput={(text) => console.log(text)}
+            tagRemoveIconColor="#CCC"
+            tagBorderColor="#CCC"
+            tagTextColor="#CCC"
+            selectedItemTextColor="#CCC"
+            selectedItemIconColor="#CCC"
+            itemTextColor="#000"
+            displayKey="name"
+            searchInputStyle={{ color: "#000" }}
+            styleMainWrapper={{ padding: 10 }}
+            tagContainerStyle={{ backgroundColor: "#000" }}
+            hideSubmitButton={true}
+            styleListContainer={{ height: 256 }}
+          // submitButtonColor="#0c6efc"
+          // submitButtonText="সাবমিট"
+          />
+        </View>
+
+        <View>
+
+
+          <View style={{ flex: 1, margin: 10 }}>
+            {ref && ref.current && ref.current.getSelectedItemsExt(selectedItems)}
+          </View>
+
+          <TouchableOpacity style={styles.loginBtn}>
+            <Text style={styles.loginText}>প্রেডিকশন দেখুন</Text>
+          </TouchableOpacity>
+
+          <View style={styles.text2}>
+            <Text style={styles.textLabel}>    পরবর্তী ভিজিট এর তারিখ: </Text>
+            <DatePicker
+              style={styles.datePickerStyle}
+              date={date}
+              mode="date"
+              placeholder="select date"
+              format="DD/MM/YYYY"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+
+
+
+                },
+                dateInput: {
+                  borderColor: "gray",
+                  alignItems: "center",
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  marginLeft: 10,
+                },
+                dateText: {
+                  fontSize: 17,
+                }
+              }}
+              onDateChange={(date) => {
+                setDate(date);
+              }}
+            />
+          </View>
+
+          <View style={styles.text2}>
+            <Text style={styles.textLabel}>    পরামর্শ: </Text>
+            <Input
+              multiline={true}
+              numberOfLines={3} />
+          </View>
+
+          <View style={styles.text2}>
+            <Text style={styles.textLabel}>    সামারি: </Text>
+            <Input
+              multiline={true}
+              numberOfLines={3} />
+          </View>
+
+          <TouchableOpacity style={styles.loginBtn}>
+            <Text style={styles.loginText}>সংরক্ষণ করুন</Text>
+          </TouchableOpacity>
+
+
+        </View>
       </ScrollView>
     </View>
   );
@@ -146,9 +198,9 @@ const styles = StyleSheet.create({
 
   submitButton: {
     position: 'absolute',
-    bottom:0,
-    left:0,
-},
+    bottom: 0,
+    left: 0,
+  },
   container: {
     flex: 1,
     flexDirection: "column",
@@ -204,14 +256,18 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
+    marginTop: "3%",
     marginLeft: "10%",
-    marginBottom: "10%",
+    marginBottom: "3%",
     backgroundColor: "#0c6efc",
-},
-loginText: {
+  },
+  loginText: {
     color: "white"
-},
+  },
+  datePickerStyle: {
+    // width: 230,
+    width: "100%",
+  },
 
 });
 
