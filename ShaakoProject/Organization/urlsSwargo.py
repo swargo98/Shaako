@@ -4,5 +4,6 @@ from . import viewsSwargo
 urlpatterns = [
     path('organization/profile', viewsSwargo.getProfile),
     path('organization/profileUpdate', viewsSwargo.updateProfile),
+    path('chw/symptomsList', viewsSwargo.getSymptomsList),
 
 ]
