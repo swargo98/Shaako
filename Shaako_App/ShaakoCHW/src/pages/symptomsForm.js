@@ -2,43 +2,14 @@
 import React, { Component } from 'react';
 import MultiSelect from 'react-native-multiple-select';
 
-import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, AppRegistry, ScrollView } from "react-native";
+import { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, Image, AppRegistry, ScrollView, TouchableOpacity } from "react-native";
 import Navbar from "./../../components/Navbar";
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Button } from "@rneui/themed";
+import { Input } from 'react-native-elements';
+// import { FloatingLabelInput } from 'react-native-floating-label-input';
 
-
-
-
-// const items = [{
-//   id: '92iijs7yta',
-//   name: 'Ondo'
-// }, {
-//   id: 'a0s0a8ssbsd',
-//   name: 'Ogun'
-// }, {
-//   id: '16hbajsabsd',
-//   name: 'Calabar'
-// }, {
-//   id: 'nahs75a5sg',
-//   name: 'Lagos'
-// }, {
-//   id: '667atsas',
-//   name: 'Maiduguri'
-// }, {
-//   id: 'hsyasajs',
-//   name: 'Anambra'
-// }, {
-//   id: 'djsjudksjd',
-//   name: 'Benue'
-// }, {
-//   id: 'sdhyaysdj',
-//   name: 'Kaduna'
-// }, {
-//   id: 'suudydjsjd',
-//   name: 'Abuja'
-// }
-// ];
 
 const SymptosForm = ({ navigation }) => {
 
@@ -79,6 +50,7 @@ const SymptosForm = ({ navigation }) => {
     // console.log(items)
   }
   let onSelectedItemsChange = (sItems) => {
+    console.log("here")
     setselectedItems([])
     for (let i = 0; i < sItems.length; i++) {
       let id = sItems[i]
@@ -86,22 +58,50 @@ const SymptosForm = ({ navigation }) => {
     }
   };
 
+  const ref = useRef(null)
+
+  
   return (
     <View style={styles.container}>
       <Navbar></Navbar>
       <View style={{ alignItems: 'center' }}>
-        <Text style={styles.title}>Symptoms Form</Text>
+        <Text style={styles.title}>ভিজিট ফর্ম</Text>
       </View>
-      <View style={{ margin: 10 }}>
-        <Text style={styles.text}>   Patient Name: </Text>
-        <Text style={styles.text}>   Date: </Text>
+      <View style={styles.text2}>
+        <Text style={styles.text}>   রোগীর নাম: </Text>        
       </View>
+
+      <View style={styles.text2}>
+      <Text style={styles.text}>   তারিখ:  {new Date().toDateString()} </Text>        
+      </View>
+      
+      
+      <ScrollView>
+
+      <View style={styles.text2}>
+      {/* <FloatingLabelInput
+        label={'label'}
+        // value={cont}
+        // onChangeText={value => setCont(value)}
+      /> */}
+        <Text style={styles.textLabel}>    ওজন: </Text>
+        <Input/>
+        <Text style={styles.textLabel}>    উচ্চতা: </Text>
+        <Input/>
+
+        <Text style={styles.textLabel}>    তাপমাত্রা: </Text>
+        <Input/>
+
+        <Text style={styles.textLabel}>    রক্তচাপ: </Text>
+        <Input/>
+      </View>
+
       <View>
         <MultiSelect
           hideTags
           items={items}
           uniqueKey="id"
-          ref={(component) => { this.multiSelect = component }}
+          ref={ref}
           onSelectedItemsChange={onSelectedItemsChange}
           selectedItems={selectedItems}
           selectText=" লক্ষণ সিলেক্ট করুন"
@@ -117,19 +117,38 @@ const SymptosForm = ({ navigation }) => {
           searchInputStyle={{ color: "#000" }}
           styleMainWrapper={{ padding: 10 }}
           tagContainerStyle={{ backgroundColor: "#000" }}
-          hideSubmitButton = {true}
+          // hideSubmitButton = {true}
           styleListContainer={{height: 256}}
+          // submitButtonColor="#0c6efc"
+          // submitButtonText="সাবমিট"
         />
-        <View style={{ flex: 1, margin: 10 }}>
-          {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
-        </View>
       </View>
+        
+      <View>
+      
+
+      <View style={{ flex: 1, margin: 10 }}>
+          {ref && ref.current && ref.current.getSelectedItemsExt(selectedItems)}
+        </View>
+
+      <TouchableOpacity style={styles.loginBtn}>
+                        <Text style={styles.loginText}>সাবমিট করুন</Text>
+                    </TouchableOpacity>
+
+      </View>
+      </ScrollView>
     </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+
+  submitButton: {
+    position: 'absolute',
+    bottom:0,
+    left:0,
+},
   container: {
     flex: 1,
     flexDirection: "column",
@@ -164,9 +183,35 @@ const styles = StyleSheet.create({
     color: "white",
     // textAlign : "center",
     paddingVertical: 5,
-    marginBottom: 10,
     borderRadius: 10
-  }
+  },
+
+  text2: {
+    backgroundColor: "#2089dc",
+    paddingVertical: 0,
+    borderRadius: 10,
+    margin: 5
+  },
+
+  textLabel: {
+    fontWeight: "bold",
+    color: "white",
+  },
+
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "10%",
+    marginLeft: "10%",
+    marginBottom: "10%",
+    backgroundColor: "#0c6efc",
+},
+loginText: {
+    color: "white"
+},
 
 });
 
