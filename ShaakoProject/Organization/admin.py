@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # register Organization
 from .models import *
+
 admin.site.register(Organization)
 admin.site.register(OrganizationAdmin)
 admin.site.register(Location)
@@ -20,3 +21,5 @@ admin.site.register(QuizItem)
 admin.site.register(Lesson_CHW)
 admin.site.register(QuizSubmission)
 admin.site.register(SubmissionItem)
+admin.site.register(Symptom)
+admin.site.register(SymptomForm)
