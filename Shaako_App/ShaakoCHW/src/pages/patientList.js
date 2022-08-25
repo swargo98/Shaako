@@ -100,6 +100,7 @@ const PatientList = ({ navigation }) => {
                                             <Button
                                                 buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                                                 title='Profile'
+                                                onPress={() => navigation.navigate('Profile', { patient_id: a.id })}
                                             />
 
                                             <Button

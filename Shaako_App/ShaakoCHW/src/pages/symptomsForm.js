@@ -9,7 +9,9 @@ import { Input } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 
 
-const SymptosForm = ({ navigation }) => {
+const SymptosForm = ({ route, navigation }) => {
+  let { patient_id } = route.params;
+
   const [date, setDate] = useState(new Date());
   let [selectedItems, setselectedItems] = useState([])
   let [items, setitems] = useState([])
@@ -22,6 +24,11 @@ const SymptosForm = ({ navigation }) => {
   let [summary, setsummary] = useState('')
   let [assumedDisease, setassumedDisease] = useState('')
   let [nextVisit, setnextVisit] = useState(new Date())
+
+  
+  let [name, setname] = useState('')
+  let [age, setage] = useState('')
+  let [gender, setgender] = useState('')
 
   let handleChangeTemperature = (value) => {
     console.log(value)
@@ -58,9 +65,6 @@ const SymptosForm = ({ navigation }) => {
   }, [])
 
   let getContents = async () => {
-    let sup_id = await AsyncStorage.getItem('sup_id');
-    sup_id = JSON.parse(sup_id)
-
     let tok = await AsyncStorage.getItem('token')
     tok = JSON.parse(tok)
 
@@ -71,10 +75,13 @@ const SymptosForm = ({ navigation }) => {
         'Content-Type': 'application/json',
         'Authorization': 'TOKEN ' + tok
       },
-      body: JSON.stringify(sup_id)
+      body: JSON.stringify(patient_id)
     })
     let d = await response.json()
     // console.log(d)
+    setname(d.name)
+    setage(d.age)
+    setgender(d.gender)
     for (let i = 0; i < d.list.length; i++) {
       let now = d.list[i]
       let id = i.toString()
@@ -153,7 +160,9 @@ const SymptosForm = ({ navigation }) => {
         <Text style={styles.title}>ভিজিট ফর্ম</Text>
       </View>
       <View style={styles.text2}>
-        <Text style={styles.text}>   রোগীর নাম: </Text>
+        <Text style={styles.text}>   রোগীর নাম: {name}</Text>
+        <Text style={styles.text}>   লিঙ্গ: {gender}</Text>
+        <Text style={styles.text}>   বয়স: {age}</Text>
       </View>
 
       <View style={styles.text2}>

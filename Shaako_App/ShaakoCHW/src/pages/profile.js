@@ -14,74 +14,52 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import call from 'react-native-phone-call'
 import email from 'react-native-email'
 
-const Profile = ({ navigation }) => {
-    let [result, setresult] = useState([]);
-    let [sup_image, setsup_image] = useState(null);
-    let sup_id = 0;
-    // let sup_id = 26;
+const Profile = ({ route, navigation }) => {
+    let { patient_id } = route.params;
+    
+    // name, address, contactNo, age, gender, chwName
+    let [name, setname] = useState('');
+    let [address, setaddress] = useState('');
+    let [contactNo, setcontactNo] = useState('');
+    let [age, setage] = useState('');
+    let [gender, setgender] = useState('');
+    let [chwName, setchwName] = useState('');
 
     useEffect(() => {
         getContents()
     }, [])
 
     let getContents = async () => {
-        sup_id = await AsyncStorage.getItem('sup_id');
-        console.log(sup_id)
-        console.log(await AsyncStorage.getItem('token'))
+        console.log("patient_id: " + patient_id)
         let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
         console.log(tok)
-        let response = await fetch(global.ip + '/CHW/getLessonList', {
+        let response = await fetch(global.ip + '/chw/patientProfile', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify(patient_id)
         })
         let d = await response.json()
-        setresult([])
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            console.log(now.id + " " + now.title + " " + now.supervisor_name + " " + now.upload_time)
-            setresult(prevArray => [...prevArray, now]);
-        }
+        // set name, address, contactNo, age, gender, chwName
+        setname(d['name'])
+        setaddress(d['address'])
+        setcontactNo(d['contactNo'])
+        setage(d['age'])
+        setgender(d['gender'])
+        setchwName(d['chwName'])
 
-        let response2 = await fetch(global.ip + '/organization/image/supervisor', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + tok
-            },
-            body: JSON.stringify(sup_id)
-        })
-        // let result = stackSizeSync();
-        // console.log(result)
-
-        //take image respone from bufferIO
-        let image = await response2.blob()
-        //convert to base64
-        let image64 = await image.arrayBuffer()
-        //convert to base64
-        let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-        //convert to url
-        let imageurl = `data:image/png;base64,${image64base64}`
-        //push to array
-        setsup_image(imageurl)
+        console.log(name)
+        console.log(address)
+        console.log(contactNo)
     }
 
     const args = {
-        number: '+8801842223102', // String value with the number to call
+        number: contactNo, // String value with the number to call
         prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
         skipCanOpen: true // Skip the canOpenURL check
-    }
-
-    let handleEmail = () => {
-        const to = ['tiaan@email.com'] // string or array of email addresses
-        email(to, {
-            subject: 'Show how to use',
-            body: 'Some body right here',
-            checkCanOpen: false // Call Linking.canOpenURL prior to Linking.openURL
-        }).catch(console.error)
     }
 
 
@@ -97,32 +75,81 @@ const Profile = ({ navigation }) => {
                         </View>
 
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.title}>Touhid Rahman Daddy</Text>
+                            <Text style={styles.title}>{name}</Text>
                         </View>
 
                         
 
                         <View style={styles.posts}>
                             <Button
-                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green", width: 150 }}
+                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
                                 title='কল করুন'                            
                                 onPress={() => { call(args).catch(console.error) }} />
-
+                            
                             <Button
                                 buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green", width: 150 }}
-                                title='ইমেইল পাঠান'
-                                onPress={handleEmail} />
+                                title='নতুন ভিজিট ফর্ম'                            
+                                onPress={() => navigation.navigate('SymptomsForm', { patient_id: patient_id })} />
                         </View>
 
                     
                         <Card.Divider></Card.Divider>
                         <View style={{margin: 10}}>
                             <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>
-                            <Text><Text style={{fontWeight: "bold"}}>বর্তমান ঠিকানাঃ </Text>Dhaka </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ফোনঃ </Text>01744922677 </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ইমেইলঃ </Text>tbkds@gmail.com </Text>
+                            <Text><Text style={{fontWeight: "bold"}}>বয়সঃ </Text>{age} </Text>
+                            <Text><Text style={{fontWeight: "bold"}}>লিঙ্গঃ </Text>{gender} </Text>                    
+                            <Text><Text style={{fontWeight: "bold"}}>বর্তমান ঠিকানাঃ </Text>{address} </Text>
+                            <Text><Text style={{fontWeight: "bold"}}>ফোনঃ </Text>{contactNo} </Text>
+                            <Text><Text style={{fontWeight: "bold"}}>ডাটাবেইজ এ যুক্ত করেছেনঃ </Text>{chwName} </Text>                    
+
                         </View>
+
+                        <Card.Divider></Card.Divider>
+                        <View style={{margin: 10}}>
+                            <Text style={styles.text}>পূর্ববর্তী ভিজিটসমূহ</Text>                                            
+                        </View>
+
+                        <View>
+                        <View style={{flexDirection:"row"}}>
+                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
+                            <Button
+                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
+                                title='ভিজিট দেখুন'                            
+                                onPress={() => { call(args).catch(console.error) }} />
+                            
+                        </View>
+                        <Card.Divider></Card.Divider>
+                        </View>
+
+                        <View>
+                        <View style={{flexDirection:"row"}}>
+                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
+                            <Button
+                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
+                                title='ভিজিট দেখুন'                            
+                                onPress={() => { call(args).catch(console.error) }} />
+                            
+                        </View>
+                        <Card.Divider></Card.Divider>
+                        </View>
+
+                        <View>
+                        <View style={{flexDirection:"row"}}>
+                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
+                            <Button
+                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
+                                title='ভিজিট দেখুন'                            
+                                onPress={() => { call(args).catch(console.error) }} />
+                            
+                        </View>
+                        <Card.Divider></Card.Divider>
+                        </View>
+
                     </Card>
+
+                    <ScrollView>
+                        
+                    </ScrollView>
                 </View>
 
 
@@ -141,7 +168,7 @@ const styles = StyleSheet.create({
 
     posts: {
         flex: 1,
-        flexDirection: "row",
+        flexDirection: "column",
         alignItems: 'center',
         padding: 10,
     },
