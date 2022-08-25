@@ -40,6 +40,7 @@ const CampaignList = ({ navigation }) => {
             body: JSON.stringify(chw_id)
         })
         let d = await response.json()
+        console.log(d)
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]

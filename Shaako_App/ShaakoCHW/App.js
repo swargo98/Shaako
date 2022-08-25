@@ -17,6 +17,7 @@ import PatientList from "./src/pages/patientList.js";
 import Profile from "./src/pages/profile.js";
 import CampaignDetails from "./src/pages/campaignDetails.js";
 import SymptomsForm from "./src/pages/symptomsForm.js";
+import Nearby from "./src/pages/nearby.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -38,7 +39,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} options={{header: () => null}} />
         <Stack.Screen name="CampaignDetails" component={CampaignDetails} options={{header: () => null}} />
         <Stack.Screen name="SymptomsForm" component={SymptomsForm} options={{header: () => null}} />
-        
+        <Stack.Screen name="Nearby" component={Nearby} options={{header: () => null}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
