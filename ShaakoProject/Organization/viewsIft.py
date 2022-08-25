@@ -540,3 +540,33 @@ def makeReadNotification(request):
         notification.is_read=True
         notification.save()
         return Response("marked as read")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSchedule(request):
+    if request.method == 'POST':
+        chw_id=request.data['chw_id']
+        date=request.data['date']
+        print("schedule: "+str(chw_id)+" "+str(date))
+        x=datetime.datetime.strptime(date,'%d-%b-%Y')
+        print(x)
+        x=x.replace(tzinfo=timezone.utc)
+
+        # find chw with chw_id
+        chw = CHW.objects.get(id=chw_id)
+
+        # find all visit form where chw=chw and next_visit_date=date
+        visits = VisitForm.objects.filter(chw=chw, next_visit_date=x)
+
+        ret=[]
+
+        for visit in visits:
+            patient=visit.patient
+            dict={}
+            dict['id']=patient.id
+            dict['name']=patient.name
+            dict['address']=patient.address
+            dict['last_visit']=visit.date.date()
+            ret.append(dict)
+        return Response(ret)

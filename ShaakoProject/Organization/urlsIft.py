@@ -19,6 +19,7 @@ urlpatterns = [
     path('CHW/Campaign/getUnenrolledPatient', viewsIft.getUnenrolledPatient),
     path('CHW/enrollCHW', viewsIft.enrollCHW),
     path('CHW/makeReadNotification', viewsIft.makeReadNotification),
+    path('CHW/getSchedule', viewsIft.getSchedule),
     
     
 ]

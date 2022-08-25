@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     cupertinoButtonInfo_: {
         height: 18,
         width: "100%",
-        marginTop: "0.5%",
+        marginTop: "2%",
         alignSelf: "center",
         backgroundColor: "#82b5a0",
         // fontSize: 10,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     cupertinoButtonInfo2_: {
         height: 18,
         width: "100%",
-        marginTop: "0.5%",
+        marginTop: "2%",
         alignSelf: "center",
         backgroundColor: "#a1b5a8",
         // fontSize: 10,
