@@ -79,7 +79,7 @@ const CampaignManagement = () => {
                                             <p>End Date: {r.end_date}</p>
                                             <p>Details: {r.campaign_details}</p>
 
-                                            {
+                                            {/* {
                                                 r.supervisors.map((r2) => {
                                                     return (
                                                         <>
@@ -94,7 +94,7 @@ const CampaignManagement = () => {
                                                         </>
                                                     );
                                                 })
-                                            }
+                                            } */}
 
 
                                         </div>
