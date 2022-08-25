@@ -52,6 +52,18 @@ def createCampaign(request):
                 # create a Supervisor_Campaign with the campaign and the id of the supervisor
                 sc = Supervisor_Campaign(campaign=campaign, supervisor_id=id)
                 sc.save()
+
+                # find supervisor with id=id
+                supervisor1 = Supervisor.objects.get(id=id)
+                # get all the chw of the supervisor
+                # console.log(supervisor1)
+                chw_list = CHW.objects.filter(supervisor=supervisor1)
+                print(chw_list)
+                for chw in chw_list:
+                    newNotification = Notification(chw_id=chw, description="আপনার এলাকায় নতুন ক্যাম্পেইন '" + name + "' চালু করা হয়েছে",
+                                           timestamp=datetime.datetime.now(), notification_type="campaign",
+                                           type_id=campaign.id, is_read=False)
+                    newNotification.save()
             return Response('True')
 
     return Response('False')

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
 
-function CupertinoButtonInfo(props) {
+function CupertinoButtonInfo2(props) {
   return (
     <TouchableOpacity style={[styles.container, props.style]}>
       <Text style={styles.buttonHelloWorld} onPress={props.handleClick}>{props.text}</Text>
@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
   },
   buttonHelloWorld: {
     color: "#fff",
-    fontSize: 17
+    fontSize: 13,
+    fontStyle: "italic"
   }
 });
 
-export default CupertinoButtonInfo;
+export default CupertinoButtonInfo2;
