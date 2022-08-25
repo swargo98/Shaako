@@ -155,7 +155,7 @@ const NewCampaign = () => {
                                 className="form-control" type="text" onChange={(e) => { handleChangeGoal(e.target.value) }} value={goal?.body}/></div>
 
                                 <div className="mb-3">
-                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}><a style={{color: "white", textDecoration: "none"}}>সংরক্ষণ করুন</a></button>
+                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}><a style={{color: "white", textDecoration: "none"}} href="/campaign_list">সংরক্ষণ করুন</a></button>
                                 </div>
                         </form>
                     </div>

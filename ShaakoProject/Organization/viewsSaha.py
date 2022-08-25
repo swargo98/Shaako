@@ -63,9 +63,12 @@ def getCampaignList(request):
 
             camp_dict = {'id': camp.id, 'title': camp.title, 'state_date': camp.state_date.date(),
                          'end_date': camp.end_date.date(),
-                         'campaign_details': camp.campaign_details, 'goal': camp.goal, 'supervisors': sups}
+                         'campaign_details': camp.campaign_details, 'goal': int(camp.goal), 'supervisors': sups}
             ret.append(camp_dict)
+        # order ret by state_date latest first
+        ret = sorted(ret, key=lambda k: k['state_date'], reverse=True)
         print(ret)
+
         return Response(ret)
 
 
@@ -307,14 +310,10 @@ def updateSupervisorProfile(request):
 @permission_classes([IsAuthenticated])
 def getDiseaseStat(request):
     if request.method == 'POST':
-        sup_id = request.data['sup_id']
         organization = request.data['organization']
-        # get all chw of this supervisor
-        chws = CHW.objects.filter(supervisor_id=sup_id)
-        if sup_id == 0:
-            # get all supervisors of this organization
-            supervisors = Supervisor.objects.filter(organization_id=organization)
-            chws = CHW.objects.filter(supervisor_id__in=supervisors)
+        # get all supervisors of this organization
+        supervisors = Supervisor.objects.filter(organization_id=organization)
+        chws = CHW.objects.filter(supervisor_id__in=supervisors)
         # get all the patient of all the chw in chws
         patients = Patient.objects.filter(chw_id__in=chws)
         # get all the VisitForm of all the patient in patients
@@ -538,7 +537,7 @@ def getRecentQuizSubmissions(request):
                 # find SubmissionItem of this item_id
                 try:
                     submission_item = \
-                    SubmissionItem.objects.filter(quizItem_id=item.id, quizSubmission_id=submission.id)[0]
+                        SubmissionItem.objects.filter(quizItem_id=item.id, quizSubmission_id=submission.id)[0]
                     print(item.correct_option, submission_item.chosenOption)
                     if item.correct_option == submission_item.chosenOption:
                         point += item.point
@@ -547,3 +546,126 @@ def getRecentQuizSubmissions(request):
             dict = {'date': submission.date.date(), 'quiz_name': quiz.title, 'point': point}
             ret.append(dict)
         return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getCampaignStat(request):
+    if request.method == 'POST':
+        organization_id = request.data
+        print(organization_id)
+        # get all supervisors of the organization
+        supervisors = Supervisor.objects.filter(organization=organization_id)
+        all_camps = []
+        for sup in supervisors:
+            # get all campaigns of the supervisor
+            campaigns = Supervisor_Campaign.objects.filter(supervisor=sup.id)
+            for j in campaigns:
+                # add j in all_camps
+                all_camps.append(j.campaign.id)
+        # remove duplicates from all_camps
+        all_camps = list(set(all_camps))
+        ret = []
+        for i in all_camps:
+            # get all details of the campaign
+            camp = Campaign.objects.get(id=i)
+            # get all supervisor of camp from Supervisor_Campaign
+            supervisors = Supervisor_Campaign.objects.filter(campaign=camp.id)
+            sups = []
+            for j in supervisors:
+                # get all details of the supervisor
+                sup = Supervisor.objects.get(id=j.supervisor.id)
+                dict = {'id': sup.id, 'name': sup.name}
+                sups.append(dict)
+            # put all details of camp in a dictionary
+            if len(camp.campaign_details) > 200:
+                camp.campaign_details = camp.campaign_details[:200] + "..."
+            # camp.end_date is > current date then continue
+            if camp.end_date.date() < datetime.now().date():
+                continue
+            # number of entries in PatientCampaign table for this camp
+            entries = PatientCampaign.objects.filter(campaign=camp.id).count()
+            val = entries / int(camp.goal)
+            # round val to 2 decimal places
+            val = round(val, 2)
+            camp_dict = {'id': camp.id, 'title': camp.title, 'state_date': camp.state_date.date(),
+                         'end_date': camp.end_date.date(), 'percentage': val, 'goal': camp.goal}
+            ret.append(camp_dict)
+        # order ret by state_date latest first
+        ret = sorted(ret, key=lambda k: k['state_date'], reverse=True)
+        print(ret)
+
+        return Response(ret)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getFilterDiseaseStat(request):
+    if request.method == 'POST':
+        organization = request.data['organization']
+        inputdivision = request.data['inputdivision']
+        inputdistrict = request.data['inputdistrict']
+        inputupazilla = request.data['inputupazilla']
+        supervisors = Supervisor.objects.filter(organization_id=organization)
+        chws = CHW.objects.filter(supervisor_id__in=supervisors)
+        if len(inputdivision) != 0 and len(inputdistrict) == 0 and len(inputupazilla) == 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision)
+        elif len(inputdivision) != 0 and len(inputdistrict) != 0 and len(inputupazilla) == 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision,
+                                      location__district=inputdistrict)
+        elif len(inputdivision) != 0 and len(inputdistrict) != 0 and len(inputupazilla) != 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision,
+                                      location__district=inputdistrict, location__upazilla_thana=inputupazilla)
+        # get all the patient of all the chw in chws
+        patients = Patient.objects.filter(chw_id__in=chws)
+        # get all the VisitForm of all the patient in patients
+        # if a patient has multiple VisitForm then keep the one with the latest date
+
+        diseases = {}
+        for patient in patients:
+            # get the latest VisitForm of this patient
+            # if no VisitForm then continue
+            try:
+                latest_visit = VisitForm.objects.filter(patient_id=patient.id).order_by('-date').first()
+                # get the disease of this VisitForm
+                disease = latest_visit.assumed_disease
+                # if disease is not in diseases then add it to diseases
+                if disease not in diseases:
+                    diseases[disease] = 1
+                else:
+                    diseases[disease] += 1
+            except:
+                continue
+
+        # calculate percentage of each disease
+        total = 0
+        for disease in diseases:
+            total += diseases[disease]
+        if total != 0:
+            for disease in diseases:
+                diseases[disease] = (diseases[disease] / total) * 100
+                # round to 2 decimal places
+                diseases[disease] = round(diseases[disease], 2)
+        else:
+            diseases['None'] = 100
+        total = 0
+        for disease in diseases:
+            total += diseases[disease]
+
+        # if there are more than 10 entries then keep  10 entries with most value
+        if len(diseases) > 10:
+            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:10]
+            # dictionary
+            diseases = dict(diseases)
+            total = 0
+            for disease in diseases:
+                total += diseases[disease]
+            if total != 0:
+                diseases['Other'] = 100 - total
+        print(diseases)
+        return Response(diseases)

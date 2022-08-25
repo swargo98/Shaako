@@ -3,9 +3,11 @@ from . import viewsSaha
 
 urlpatterns = [
     path('organization/getCampaignList', viewsSaha.getCampaignList),
+    path('organization/getCampaignStat', viewsSaha.getCampaignStat),
     path('organization/getImage', viewsSaha.getOrganizationAdminImage),
     path('organization/pictureUpdate', viewsSaha.adminPictureUpdate),
     path('organization/getDiseaseStat', viewsSaha.getDiseaseStat),
+    path('organization/getFilterDiseaseStat', viewsSaha.getFilterDiseaseStat),
     path('organization/getSupervisorRecruitmentStat', viewsSaha.getSupervisorRecruitmentStat),
     path('organization/getCHWRecruitmentStat', viewsSaha.getCHWRecruitmentStat),
     path('organization/getSupervisorCHW', viewsSaha.getSupervisorCHW),
