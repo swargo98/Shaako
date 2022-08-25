@@ -8,6 +8,8 @@ urlpatterns = [
     path('organization/pictureUpdate', viewsSaha.adminPictureUpdate),
     path('organization/getDiseaseStat', viewsSaha.getDiseaseStat),
     path('organization/getFilterDiseaseStat', viewsSaha.getFilterDiseaseStat),
+    path('organization/getCampaignDetails', viewsSaha.getCampaignDetails),
+
     path('organization/getSupervisorRecruitmentStat', viewsSaha.getSupervisorRecruitmentStat),
     path('organization/getCHWRecruitmentStat', viewsSaha.getCHWRecruitmentStat),
     path('organization/getSupervisorCHW', viewsSaha.getSupervisorCHW),

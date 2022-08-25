@@ -13,7 +13,8 @@ import EditLesson from "./pages/editLesson";
 import Profile from "./pages/profile";
 import CHWProfile from "./pages/viewCHWProfile";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import CampaignManagement from "./pages/campaignManagement";
+import CampaignDetails from "./pages/CampaignDetails";
 
 function App() {
     return (
@@ -35,6 +36,9 @@ function App() {
                     <Route exact path='/edit_lesson/:id' element={<EditLesson />} />
                     <Route exact path='/profile' element={<Profile />} />
                     <Route exact path='/viewCHWProfile/:id' element={<CHWProfile />} />
+                    <Route exact path='/campaign_details/:id' element={<CampaignDetails />} />
+                    <Route path='/campaign_list' element={<CampaignManagement />} />
+
                 </Routes>
             </div>
             <Footer />

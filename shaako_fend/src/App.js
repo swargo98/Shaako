@@ -19,6 +19,7 @@ import Profile from './pages/profile';
 import Statistics from './pages/stat';
 import SupervisorProfile from './pages/viewSupervisorProfile'
 import CHWProfile from './pages/viewCHWProfile';
+import CampaignDetails from './pages/CampaignDetails';
 
 function App() {
     return (
@@ -46,6 +47,7 @@ function App() {
                     <Route path='/statistics' element={<Statistics />} />
                     <Route exact path='/viewSupervisorProfile/:id' element={<SupervisorProfile />} />
                     <Route exact path='/viewCHWProfile/:id' element={<CHWProfile />} />
+                    <Route exact path='/campaign_details/:id' element={<CampaignDetails />} />
                 </Routes>
             </div>
             <Footer />
