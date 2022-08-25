@@ -32,10 +32,14 @@ from datetime import datetime
 @permission_classes([IsAuthenticated])
 def getCampaignList(request):
     if request.method == 'POST':
-        organization_id = request.data
+        organization_id = request.data['organization']
+        # if request.data doesnot have sup_id then supervisor_id = 0
+        supervisor_id = request.data['sup_id'] if 'sup_id' in request.data else 0
         print(organization_id)
         # get all supervisors of the organization
         supervisors = Supervisor.objects.filter(organization=organization_id)
+        if supervisor_id != 0:
+            supervisors = supervisors.filter(id=supervisor_id)
         all_camps = []
         for sup in supervisors:
             # get all campaigns of the supervisor
@@ -669,3 +673,40 @@ def getFilterDiseaseStat(request):
                 diseases['Other'] = 100 - total
         print(diseases)
         return Response(diseases)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getCampaignDetails(request):
+    if request.method == 'POST':
+        campaign_id = request.data['id']
+        camp = Campaign.objects.get(id=campaign_id)
+        # get all supervisors of the campaign
+        supervisors = Supervisor_Campaign.objects.filter(campaign_id=camp.id)
+        sups = []
+        for j in supervisors:
+            # get all details of the supervisor
+            sup = Supervisor.objects.get(id=j.supervisor.id)
+            dict = {'id': sup.id, 'name': sup.name}
+            sups.append(dict)
+        # put all details of camp in a dictionary
+        # number of entries in PatientCampaign table for this camp
+        entries = PatientCampaign.objects.filter(campaign=camp.id).count()
+        # get all patients of this campaign
+        patients = PatientCampaign.objects.filter(campaign=camp.id)
+        p = []
+        for patient in patients:
+            dict = {'id': patient.patient.id, 'name': patient.patient.name, 'phone': patient.patient.contactNo,
+                    'dob': patient.patient.date_of_birth.date(), 'gender': patient.patient.gender,
+                    'address': patient.patient.address}
+            p.append(dict)
+        print(p)
+        val = entries / int(camp.goal)
+        # round val to 2 decimal places
+        val = round(val, 2)
+        camp_dict = {'id': camp.id, 'title': camp.title, 'start_date': camp.state_date.date(),
+                     'end_date': camp.end_date.date(), 'percentage': val, 'goal': camp.goal, 'supervisors': sups,
+                     'patients': p, 'details': camp.campaign_details}
+        print(camp_dict)
+        return Response(camp_dict)

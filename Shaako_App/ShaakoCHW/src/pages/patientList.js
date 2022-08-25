@@ -17,6 +17,7 @@ const PatientList = ({ navigation }) => {
     let [result, setresult] = useState([]);
     let [sup_image, setsup_image] = useState(null);
     let [dummy,setdummy]=useState(true);
+    let [search, setsearch] = useState('');
  
     useEffect(() => {
         getPatientList()
@@ -87,9 +88,14 @@ const PatientList = ({ navigation }) => {
             <SearchBar
                 placeholder="রোগীর তালিকা থেকে খুঁজুন"
                 lightTheme
+                onChangeText={search => setsearch(search)}
+                value={search}
             />
             <ScrollView>
                 {result.map(a => { 
+                    if (!a.name.includes(search)) {
+                        return <></>;
+                    }
                     return (  
                         <View >
                             <Card>

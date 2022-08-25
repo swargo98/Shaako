@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 const CampaignManagement = () => {
     let [result, setresult] = useState([])
     let organization = localStorage.getItem('organization')
-
+    let sup_id = localStorage.getItem('sup_id')
     useEffect(() => {
         getCampaigns()
     }, [])
@@ -19,7 +19,7 @@ const CampaignManagement = () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({organization})
+            body: JSON.stringify({organization,sup_id})
         })
         let d = await response.json()
         setresult([])
@@ -76,25 +76,6 @@ const CampaignManagement = () => {
                                             <p>Start Date: {r.state_date}</p>
                                             <p>End Date: {r.end_date}</p>
                                             <p>Details: {r.campaign_details}</p>
-
-                                            {/* {
-                                                r.supervisors.map((r2) => {
-                                                    return (
-                                                        <>
-                                                            <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
-                                                                width="50" height="50"
-                                                                src={r2.image} alt="man" />
-                                                                <div>
-                                                                    <p className="fw-bold mb-0">{r2.name}</p>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                        </>
-                                                    );
-                                                })
-                                            } */}
-
-
                                         </div>
                                     </div>
                                 );
@@ -102,10 +83,6 @@ const CampaignManagement = () => {
                         }
 
                     </div>
-                    {/* <button className="btn btn-primary" type="button" style={{ margin: "12px" }}>আরও দেখুন</button> */}
-                    <button className="btn btn-primary" type="button"
-                        style={{ margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/new_campaign">ক্যাম্পেইন যোগ করুন</a>
-                    </button>
                 </div>
             </section>
         </main>
