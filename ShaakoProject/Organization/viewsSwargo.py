@@ -249,6 +249,7 @@ def addVisitForm(request):
         print("inside addVisitForm")
         # selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary
         data = request.data
+        patient_id = data['patient_id']
         selectedItems = data['selectedItems']
         chw_id = data['chw_id']
         temperature = data['temperature']
@@ -281,8 +282,8 @@ def addVisitForm(request):
             if not Symptom.objects.filter(symptom_name=symptom).exists():
                 Symptom.objects.create(symptom_name=symptom)
 
-        #find patient with id = 1
-        patient = Patient.objects.get(id=1)
+        #find patient with id = patient_id...
+        patient = Patient.objects.get(id=patient_id)
 
         #find chw with id = chw_id
         chw = CHW.objects.get(id=chw_id)
@@ -333,6 +334,12 @@ def getPatientProfile(request):
 
         #calculate age
         age = calculate_age(date_of_birth)
+
+        #get all visit forms of the patient with id = PatientID sorted by date
+        visitForms = VisitForm.objects.filter(patient=patient).order_by('-date')
+
+        #print number of visit forms
+        print("number of visit forms : {0}".format(len(visitForms)))
 
         # create dictionary with all information
         patientProfile = {'name': name, 'address': address, 'contactNo': contactNo,

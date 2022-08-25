@@ -140,7 +140,7 @@ const SymptosForm = ({ route, navigation }) => {
             'Content-Type': 'application/json',
             'Authorization': 'TOKEN ' + tok
         },
-        body: JSON.stringify({ selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary })
+        body: JSON.stringify({patient_id, selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary })
     })
     let data = await response.json()
     console.log(data)
