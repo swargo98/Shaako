@@ -16,7 +16,7 @@ import email from 'react-native-email'
 
 const Profile = ({ route, navigation }) => {
     let { patient_id } = route.params;
-    
+
     // name, address, contactNo, age, gender, chwName
     let [name, setname] = useState('');
     let [address, setaddress] = useState('');
@@ -24,6 +24,8 @@ const Profile = ({ route, navigation }) => {
     let [age, setage] = useState('');
     let [gender, setgender] = useState('');
     let [chwName, setchwName] = useState('');
+    let [previousForms, setpreviousForms] = useState([])
+    let [myimage, setmyimage] = useState(null)
 
     useEffect(() => {
         getContents()
@@ -51,9 +53,45 @@ const Profile = ({ route, navigation }) => {
         setgender(d['gender'])
         setchwName(d['chwName'])
 
+        setpreviousForms([])
+
+        console.log(gender)
+
+        for (let i = 0; i < d.visitFormsId.length; i++) {
+            let id = d.visitFormsId[i]
+            let date = d.visitFormsDate[i]
+            setpreviousForms(prevArray => [...prevArray, { id: id, date: date }]);
+            // console.log(now)
+        }
+
         console.log(name)
         console.log(address)
         console.log(contactNo)
+        console.log(previousForms)
+
+        let response2 = await fetch(global.ip + '/patient/getPatientImage', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + tok
+            },
+            body: JSON.stringify(patient_id)
+        })
+
+        let image = await response2.blob()
+        var reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onloadend = function () {
+            var base64data = reader.result;
+            setmyimage(base64data)
+            console.log(myimage)
+        }
+        console.log(1)
+        let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+        await sleep(1000);
+        console.log(2)
+
+
     }
 
     const args = {
@@ -69,86 +107,69 @@ const Profile = ({ route, navigation }) => {
 
             <ScrollView>
                 <View >
-                    <Card> 
+                    <Card>
                         <View style={{ alignItems: 'center' }}>
-                            <Card.Image style={{ width: 160, height: 160, borderRadius: 40 }} source={require("./../../assets/logo.png")} />
+                            <Card.Image style={{ width: 160, height: 160, borderRadius: 40 }} source={{ uri: myimage, scale: 1 }} />
                         </View>
 
                         <View style={{ alignItems: 'center' }}>
                             <Text style={styles.title}>{name}</Text>
                         </View>
 
-                        
+
 
                         <View style={styles.posts}>
                             <Button
                                 buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
-                                title='কল করুন'                            
+                                title='কল করুন'
                                 onPress={() => { call(args).catch(console.error) }} />
-                            
+
                             <Button
                                 buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green", width: 150 }}
-                                title='নতুন ভিজিট ফর্ম'                            
+                                title='নতুন ভিজিট ফর্ম'
                                 onPress={() => navigation.navigate('SymptomsForm', { patient_id: patient_id })} />
                         </View>
 
-                    
+
                         <Card.Divider></Card.Divider>
-                        <View style={{margin: 10}}>
+                        <View style={{ margin: 10 }}>
                             <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>
-                            <Text><Text style={{fontWeight: "bold"}}>বয়সঃ </Text>{age} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>লিঙ্গঃ </Text>{gender} </Text>                    
-                            <Text><Text style={{fontWeight: "bold"}}>বর্তমান ঠিকানাঃ </Text>{address} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ফোনঃ </Text>{contactNo} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ডাটাবেইজ এ যুক্ত করেছেনঃ </Text>{chwName} </Text>                    
+                            <Text><Text style={{ fontWeight: "bold" }}>বয়সঃ </Text>{age} </Text>
+                            <Text><Text style={{ fontWeight: "bold" }}>লিঙ্গঃ </Text>{gender} </Text>
+                            <Text><Text style={{ fontWeight: "bold" }}>বর্তমান ঠিকানাঃ </Text>{address} </Text>
+                            <Text><Text style={{ fontWeight: "bold" }}>ফোনঃ </Text>{contactNo} </Text>
+                            <Text><Text style={{ fontWeight: "bold" }}>ডাটাবেইজ এ যুক্ত করেছেনঃ </Text>{chwName} </Text>
 
                         </View>
 
                         <Card.Divider></Card.Divider>
-                        <View style={{margin: 10}}>
-                            <Text style={styles.text}>পূর্ববর্তী ভিজিটসমূহ</Text>                                            
+                        <View style={{ margin: 10 }}>
+                            <Text style={styles.text}>পূর্ববর্তী ভিজিটসমূহ</Text>
                         </View>
 
                         <View>
-                        <View style={{flexDirection:"row"}}>
-                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
-                            <Button
-                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
-                                title='ভিজিট দেখুন'                            
-                                onPress={() => { call(args).catch(console.error) }} />
-                            
-                        </View>
-                        <Card.Divider></Card.Divider>
-                        </View>
+                            {previousForms.map(a => {
+                                return (
+                                    <View>
+                                        <View style={{ flexDirection: "row" }}>
+                                        <Text><Text style={{ fontWeight: "bold" }}>তারিখঃ </Text>{a.date} </Text>
+                                        <Button
+                                            buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
+                                            title='ভিজিট দেখুন'
+                                            onPress={() => navigation.navigate('SymptomsFormPrev', { patient_id: patient_id, form_id: a.id })} />
 
-                        <View>
-                        <View style={{flexDirection:"row"}}>
-                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
-                            <Button
-                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
-                                title='ভিজিট দেখুন'                            
-                                onPress={() => { call(args).catch(console.error) }} />
+                                    </View>
+                                    <Card.Divider></Card.Divider>
+                                    </View>
+                                    );
+                            })}                
                             
-                        </View>
-                        <Card.Divider></Card.Divider>
-                        </View>
-
-                        <View>
-                        <View style={{flexDirection:"row"}}>
-                            <Text><Text style={{fontWeight: "bold"}}>তারিখঃ </Text>01744922677 </Text>
-                            <Button
-                                buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
-                                title='ভিজিট দেখুন'                            
-                                onPress={() => { call(args).catch(console.error) }} />
-                            
-                        </View>
-                        <Card.Divider></Card.Divider>
                         </View>
 
                     </Card>
 
                     <ScrollView>
-                        
+
                     </ScrollView>
                 </View>
 
@@ -190,11 +211,11 @@ const styles = StyleSheet.create({
 
     text: {
         fontWeight: "bold",
-        backgroundColor : "#2089dc",
-        color : "white",
-        textAlign : "center",
-        paddingVertical : 5,
-        marginBottom : 10,
+        backgroundColor: "#2089dc",
+        color: "white",
+        textAlign: "center",
+        paddingVertical: 5,
+        marginBottom: 10,
         borderRadius: 10
     }
 

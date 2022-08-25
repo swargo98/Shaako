@@ -311,7 +311,30 @@ def addVisitForm(request):
 def getPatientProfile(request):
     if request.method == 'POST':
         print("line 362")
-        PatientID = request.data
+        FormID = request.data
+        print(FormID)
+
+        #get all inforation from visit form with id = FormID...
+        visitForm = VisitForm.objects.get(id=FormID)
+        chw = visitForm.chw
+        date = visitForm.date.date()
+        temperature = visitForm.temperature
+        blood_pressure = visitForm.blood_pressure
+        suggestions = visitForm.suggestions
+        assumed_disease = visitForm.assumed_disease
+        next_visit_date = visitForm.next_visit_date.date()
+        summary = visitForm.summary
+        symptoms = SymptomForm.objects.filter(visitForm=visitForm)
+
+        #make list of symptoms...
+        symptoms_list = []
+        for symptom in symptoms:
+            symptoms_list.append(symptom.symptom.symptom_name)
+
+        print(symptoms_list)
+
+        #get patient from visit form with id = FormID...
+        PatientID = VisitForm.objects.get(id=FormID).patient.id
         print("PatientID : {0}".format(PatientID))
 
         # get all information of the patient with id = PatientID
@@ -341,9 +364,19 @@ def getPatientProfile(request):
         #print number of visit forms
         print("number of visit forms : {0}".format(len(visitForms)))
 
+        #make list of visit forms id and date
+        visitFormsId = []
+        visitFormsDate = []
+        for visitForm in visitForms:
+            visitFormsId.append(visitForm.id)
+            visitFormsDate.append(visitForm.date.date())
+
         # create dictionary with all information
         patientProfile = {'name': name, 'address': address, 'contactNo': contactNo,
-                          'age': age, 'gender': gender, 'chwName': chwName}
+                          'age': age, 'gender': gender, 'chwName': chwName, 'visitFormsId': visitFormsId,
+                          'visitFormsDate': visitFormsDate, 'temperature': temperature, 'blood_pressure': blood_pressure,
+                          'suggestions': suggestions, 'assumed_disease': assumed_disease, 'next_visit_date': next_visit_date,
+                          'summary': summary, 'symptoms': symptoms_list, 'date': date}
 
         print(patientProfile)
         return Response(patientProfile)
