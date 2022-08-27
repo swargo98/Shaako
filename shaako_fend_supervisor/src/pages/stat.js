@@ -184,17 +184,6 @@ const Statistics = () => {
             let now = d.division[i]
             setdivision(prevArray => [...prevArray, now]);
         }
-        // setinputdivision(d.division[0]);
-        // for (let i = 0; i < d.district.length; i++) {
-        //     let now = d.district[i]
-        //     setdistrict(prevArray => [...prevArray, now]);
-        // }
-        // setinputdistrict(d.district[0]);
-        // for (let i = 0; i < d.upazilla.length; i++) {
-        //     let now = d.upazilla[i]
-        //     setupazilla(prevArray => [...prevArray, now]);
-        // }
-        // setinputupazilla(d.upazilla[0]);
     }
     let handleChangeDivision = async (value) => {
         setdistrict(["---"])
@@ -282,12 +271,6 @@ const Statistics = () => {
                 let now = d.district[i]
                 setdistrict(prevArray => [...prevArray, now]);
             }
-            // setinputdistrict(d.district[0]);
-            // for (let i = 0; i < d.upazilla.length; i++) {
-            //     let now = d.upazilla[i]
-            //     setupazilla(prevArray => [...prevArray, now]);
-            // }
-            // setinputupazilla(d.upazilla[0]);
         }
     }
 
@@ -487,30 +470,9 @@ const Statistics = () => {
                                     </div>
                                 </div>
                                 <div className="col">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-body">
-                                            <div className="chart-area">
-                                                <div>
-                                                    <CanvasJSChart options={resultrecruitment} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col">
-                                    <div className="card shadow mb-4">
-                                        <div className="card-body">
-                                            <div className="chart-area">
-                                                <div>
-                                                    <CanvasJSChart options={resultchwrecruitment} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 
                         </div>
                     </div>

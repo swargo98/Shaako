@@ -29,4 +29,5 @@ urlpatterns = [
     path('CHW/getRecentQuizSubmissions', viewsSaha.getRecentQuizSubmissions),
     path('CHW/updateCHWProfile', viewsSaha.updateCHWProfile),
     path('patient/getPatientImage', viewsSaha.getPatientImage),
+    path('organization/getSupervisorCHWList', viewsSaha.getSupervisorCHWList),
 ]

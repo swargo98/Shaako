@@ -6,18 +6,19 @@ const CHWList = () => {
     let [result, setresult] = useState([])
     let [search, setsearch] = useState('')
     let organization = localStorage.getItem('organization')
+    let sup_id = localStorage.getItem('sup_id')
     useEffect(() => {
         getCHW()
     }, [])
 
     let getCHW = async () => {
-        let response = await fetch('http://127.0.0.1:8000/organization/getCHW', {
+        let response = await fetch('http://127.0.0.1:8000/organization/getSupervisorCHWList', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify(organization)
+            body: JSON.stringify(sup_id)
         })
         let d = await response.json()
         setresult([])
@@ -53,42 +54,42 @@ const CHWList = () => {
     }
 
     let handleSubmit = async () => {
-        console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({ search, organization })
-        })
-        let d = await response.json()
-        setresult([])
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(now.id)
-            })
-            // let result = stackSizeSync();
-            // console.log(result)
+        // console.log(search)
+        // let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({ search, organization })
+        // })
+        // let d = await response.json()
+        // setresult([])
+        // for (let i = 0; i < d.length; i++) {
+        //     let now = d[i]
+        //     let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
+        //         method: "POST",
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //         },
+        //         body: JSON.stringify(now.id)
+        //     })
+        //     // let result = stackSizeSync();
+        //     // console.log(result)
 
-            //take image respone from bufferIO
-            let image = await response2.blob()
-            //convert to base64
-            let image64 = await image.arrayBuffer()
-            //convert to base64
-            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            //convert to url
-            let imageurl = `data:image/png;base64,${image64base64}`
-            //push to array
-            now.image = imageurl
-            setresult(prevArray => [...prevArray, now]);
-        }
+        //     //take image respone from bufferIO
+        //     let image = await response2.blob()
+        //     //convert to base64
+        //     let image64 = await image.arrayBuffer()
+        //     //convert to base64
+        //     let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+        //     //convert to url
+        //     let imageurl = `data:image/png;base64,${image64base64}`
+        //     //push to array
+        //     now.image = imageurl
+        //     setresult(prevArray => [...prevArray, now]);
+        // }
     }
 
 
@@ -128,6 +129,9 @@ const CHWList = () => {
                             <tbody>
                                 {
                                     result.map((r) => {
+                                        if (!r.name.includes(search)) {
+                                            return <></>;
+                                        }
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
