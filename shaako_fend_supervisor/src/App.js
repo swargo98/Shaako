@@ -15,6 +15,7 @@ import CHWProfile from "./pages/viewCHWProfile";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CampaignManagement from "./pages/campaignManagement";
 import CampaignDetails from "./pages/CampaignDetails";
+import Statistics from './pages/stat';
 
 function App() {
     return (
@@ -39,7 +40,7 @@ function App() {
                     <Route exact path='/viewCHWProfile/:id' element={<CHWProfile />} />
                     <Route exact path='/campaign_details/:id' element={<CampaignDetails />} />
                     <Route path='/campaign_list' element={<CampaignManagement />} />
-
+                    <Route path='/statistics' element={<Statistics />} />
                 </Routes>
             </div>
             <Footer />

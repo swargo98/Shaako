@@ -84,7 +84,7 @@ class Patient(models.Model):
     address = models.CharField(max_length=100)
     contactNo = models.CharField(max_length=100)
     date_of_birth = models.DateTimeField()
-    gender = models.CharField(max_length=10)
+    gender = models.CharField(max_length=20)
 
 
 # create PatientCampaign with patient, campaign, chw and enrollment_date
