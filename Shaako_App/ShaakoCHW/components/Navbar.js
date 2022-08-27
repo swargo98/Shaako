@@ -12,10 +12,14 @@ function Navbar(props) {
   let handleClickCalendar = () => {
     props.navigation.navigate('Schedule');
   }
+  let handleClickProfile = () => {
+    props.navigation.navigate('CHWProfile');
+  }
+
   return (
     <View style={[styles.container]}>
       <View style={styles.leftIconButtonRow}>
-        
+
         <View style={styles.textWrapper}>
           <Text numberOfLines={1} style={styles.title} onPress={handleClickHome} >
             সাঁকো
@@ -42,6 +46,7 @@ function Navbar(props) {
           <MaterialCommunityIconsIcon
             name="account"
             style={styles.rightIcon3}
+            onPress={handleClickProfile}
           ></MaterialCommunityIconsIcon>
         </TouchableOpacity>
       </View>
