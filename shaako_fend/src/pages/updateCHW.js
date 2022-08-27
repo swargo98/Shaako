@@ -63,42 +63,42 @@ const UpdateCHW = () => {
     }
 
     let handleSubmit = async () => {
-        console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({ search, organization })
-        })
-        let d = await response.json()
-        setresult([])
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(now.id)
-            })
-            // let result = stackSizeSync();
-            // console.log(result)
+        // console.log(search)
+        // let response = await fetch('http://127.0.0.1:8000/organization/searchCHW', {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({ search, organization })
+        // })
+        // let d = await response.json()
+        // setresult([])
+        // for (let i = 0; i < d.length; i++) {
+        //     let now = d[i]
+        //     let response2 = await fetch('http://127.0.0.1:8000/CHW/getImage', {
+        //         method: "POST",
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //         },
+        //         body: JSON.stringify(now.id)
+        //     })
+        //     // let result = stackSizeSync();
+        //     // console.log(result)
 
-            //take image respone from bufferIO
-            let image = await response2.blob()
-            //convert to base64
-            let image64 = await image.arrayBuffer()
-            //convert to base64
-            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            //convert to url
-            let imageurl = `data:image/png;base64,${image64base64}`
-            //push to array
-            now.image = imageurl
-            setresult(prevArray => [...prevArray, now]);
-        }
+        //     //take image respone from bufferIO
+        //     let image = await response2.blob()
+        //     //convert to base64
+        //     let image64 = await image.arrayBuffer()
+        //     //convert to base64
+        //     let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+        //     //convert to url
+        //     let imageurl = `data:image/png;base64,${image64base64}`
+        //     //push to array
+        //     now.image = imageurl
+        //     setresult(prevArray => [...prevArray, now]);
+        // }
     }
     let submit = (id) => {
         Swal.fire({
@@ -139,7 +139,7 @@ const UpdateCHW = () => {
             <br />
             <br />
             <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
-                <a href='/new_chw' style={{textDecoration: "none"}}><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
+                <a href='/new_chw' style={{ textDecoration: "none" }}><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
             </div>
             <div className="card shadow">
                 <div className="card-header py-3">
@@ -174,12 +174,17 @@ const UpdateCHW = () => {
                             <tbody>
                                 {
                                     result.map((r) => {
+                                        if (!r.name.includes(search) && !r.email.includes(search) && !r.contactNo.includes(search) && !r.presentAddress.includes(search) && !r.upazilla_thana.includes(search)
+                                            && !r.district.includes(search) && !r.division.includes(search) && !r.recruitment_date.includes(search) && !r.supervisor_name.includes(search)
+                                            && !r.ward_union.includes(search)) {
+                                            return <></>;
+                                        }
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
                                                     src={r.image} alt="man" />
                                                     <a style={{ textDecoration: "none" }} href={`/viewCHWProfile/${r.id}`}>{r.name}</a>
-                                                    </td>
+                                                </td>
                                                 <td>{r.email}
                                                 </td>
                                                 <td>{r.contactNo}

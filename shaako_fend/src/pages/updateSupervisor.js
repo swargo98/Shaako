@@ -68,40 +68,40 @@ const UpdateSupervisor = () => {
         getSupervisor()
     }
     let handleSubmit = async () => {
-        console.log(search)
-        let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'TOKEN ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({search,organization})
-        })
-        let d = await response.json()
-        setresult([])
-        console.log(d)
-        for (let i = 0; i < d.length; i++) {
-            let now = d[i]
-            let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'TOKEN ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(now.id)
-            })
-            //take image respone from bufferIO
-            let image = await response2.blob()
-            //convert to base64
-            let image64 = await image.arrayBuffer()
-            //convert to base64
-            let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
-            //convert to url
-            let imageurl = `data:image/png;base64,${image64base64}`
-            //push to array
-            now.image = imageurl
-            setresult(prevArray => [...prevArray, now]);
-        }
+        // console.log(search)
+        // let response = await fetch('http://127.0.0.1:8000/organization/searchSupervisor', {
+        //     method: "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({search,organization})
+        // })
+        // let d = await response.json()
+        // setresult([])
+        // console.log(d)
+        // for (let i = 0; i < d.length; i++) {
+        //     let now = d[i]
+        //     let response2 = await fetch('http://127.0.0.1:8000/organization/image/supervisor', {
+        //         method: "POST",
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'TOKEN ' + localStorage.getItem('token')
+        //         },
+        //         body: JSON.stringify(now.id)
+        //     })
+        //     //take image respone from bufferIO
+        //     let image = await response2.blob()
+        //     //convert to base64
+        //     let image64 = await image.arrayBuffer()
+        //     //convert to base64
+        //     let image64base64 = await btoa(String.fromCharCode.apply(null, new Uint8Array(image64)))
+        //     //convert to url
+        //     let imageurl = `data:image/png;base64,${image64base64}`
+        //     //push to array
+        //     now.image = imageurl
+        //     setresult(prevArray => [...prevArray, now]);
+        // }
     }
 
     let submit = (id) => {
@@ -131,7 +131,7 @@ const UpdateSupervisor = () => {
             <br />
             <br />
             <div className="col feature-box"><i className="icon-pencil icon"></i>
-                <a href='/new_supervisor' style={{textDecoration: "none"}}><h4>সুপারভাইজার নিয়োগ</h4></a>
+                <a href='/new_supervisor' style={{ textDecoration: "none" }}><h4>সুপারভাইজার নিয়োগ</h4></a>
                 {/* <button className="btn btn-primary" type="submit"
                                                         ><a href='/new_supervisor' style={{textDecoration: "none", color: "white"}}>সুপারভাইজার নিয়োগ</a></button>                     */}
             </div>
@@ -141,7 +141,7 @@ const UpdateSupervisor = () => {
                         <div className="col">
                             <p className="text-primary m-0 fw-bold">সুপারভাইজার তালিকা, এলাকা পরিবর্তন এবং অব্যহতি</p>
                             {/* <a href='/new_supervisor'> <p className="text-primary m-0 fw-bold">সুপারভাইজার নিয়োগ</p></a> */}
-                        </div>                
+                        </div>
                     </div>
                 </div>
                 <div className="card-body">
@@ -172,13 +172,17 @@ const UpdateSupervisor = () => {
                             <tbody>
                                 {
                                     result.map((r) => {
+                                        if (!r.name.includes(search) && !r.email.includes(search) && !r.contactNo.includes(search) && !r.presentAddress.includes(search) && !r.upazilla_thana.includes(search)
+                                            && !r.district.includes(search) && !r.division.includes(search) && !r.recruitment_date.includes(search)) {
+                                            return <></>;
+                                        }
                                         return (
                                             <tr>
                                                 <td><img className="rounded-circle me-2" width="30" height="30"
                                                     src={r.image} alt="man" />
                                                     <a style={{ textDecoration: "none" }} href={`/viewSupervisorProfile/${r.id}`}>{r.name}</a>
                                                     {/* {r.name} */}
-                                                    </td>
+                                                </td>
                                                 <td>{r.email}
                                                 </td>
                                                 <td>{r.contactNo}

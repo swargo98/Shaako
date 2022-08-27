@@ -33,7 +33,8 @@ export const Form = ({ onSubmit, sup_id }) => {
     let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + localStorage.getItem('token')
       },
       body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
     })
@@ -62,7 +63,8 @@ export const Form = ({ onSubmit, sup_id }) => {
       let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'TOKEN ' + localStorage.getItem('token')
         },
         body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
       })
@@ -88,7 +90,8 @@ export const Form = ({ onSubmit, sup_id }) => {
       let response = await fetch('http://127.0.0.1:8000/organization/fetchLocationSupervisor', {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'TOKEN ' + localStorage.getItem('token')
         },
         body: JSON.stringify({ inputdivision, inputdistrict, inputupazilla })
       })
@@ -122,7 +125,8 @@ export const Form = ({ onSubmit, sup_id }) => {
       let response = await fetch('http://127.0.0.1:8000/organization/updateSupervisor', {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'TOKEN ' + localStorage.getItem('token')
         },
         body: JSON.stringify({ sup_id, inputdivision, inputdistrict, inputupazilla })
       })
