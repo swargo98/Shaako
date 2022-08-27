@@ -22,6 +22,7 @@ const CampaignManagement = () => {
             body: JSON.stringify({organization})
         })
         let d = await response.json()
+        console.log(d)
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
@@ -72,27 +73,22 @@ const CampaignManagement = () => {
                                 return (
                                     <div className="col">
                                         <div className="p-4">
-                                            <a style={{ textDecoration: "none" }} href={`/campaign_details/${r.id}`}><h3>{r.title}</h3></a>
+                                            {/* <a style={{ textDecoration: "none" }} href={`/campaign_details/${r.id}`}><h3>{r.title}</h3></a>
                                             <p>Start Date: {r.state_date}</p>
                                             <p>End Date: {r.end_date}</p>
-                                            <p>Details: {r.campaign_details}</p>
+                                            <p>Details: {r.campaign_details}</p> */}
 
-                                            {/* {
-                                                r.supervisors.map((r2) => {
-                                                    return (
-                                                        <>
-                                                            <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
-                                                                width="50" height="50"
-                                                                src={r2.image} alt="man" />
-                                                                <div>
-                                                                    <p className="fw-bold mb-0">{r2.name}</p>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                        </>
-                                                    );
-                                                })
-                                            } */}
+                                            <div class="card" style={{width: "18rem"}}>                                                
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><b>{r.title}</b></h5>
+                                                    <p class="card-text">
+                                                        <p>ক্যাপেইন শুরু: {r.state_date}</p>
+                                                        <p>ক্যাপেইন শেষ: {r.end_date}</p>
+                                                        <p>বিবরণ: {r.campaign_details}</p>
+                                                    </p>
+                                                    <a href={`/campaign_details/${r.id}`} class="btn btn-primary">বিস্তারিত</a>
+                                                </div>
+                                                </div>
 
 
                                         </div>
