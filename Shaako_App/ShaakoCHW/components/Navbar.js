@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -14,6 +15,13 @@ function Navbar(props) {
   }
   let handleClickProfile = () => {
     props.navigation.navigate('CHWProfile');
+  }
+  let handleClickLogout = async () => {
+    props.navigation.navigate('Auth');
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('organization');
+    await AsyncStorage.removeItem('chw_id');
+    await AsyncStorage.removeItem('sup_id');
   }
 
   return (
@@ -47,6 +55,13 @@ function Navbar(props) {
             name="account"
             style={styles.rightIcon3}
             onPress={handleClickProfile}
+          ></MaterialCommunityIconsIcon>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <MaterialCommunityIconsIcon
+            name="logout"
+            style={styles.rightIcon3}
+            onPress={handleClickLogout}
           ></MaterialCommunityIconsIcon>
         </TouchableOpacity>
       </View>
