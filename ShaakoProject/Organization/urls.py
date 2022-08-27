@@ -18,8 +18,6 @@ urlpatterns = [
     path('supervisor/addContent', views.addContent),
     path('supervisor/getL', views.getL),
     path('supervisor/getMyContent', views.getMyContent),
-    
-
 
     path('organization/getCHW', views.getCHW),
     path('organization/createCHW', views.createCHW),
@@ -27,7 +25,6 @@ urlpatterns = [
     path('organization/deleteCHW', views.deleteCHW),
 
     path('organization/createCampaign', views2.createCampaign),
-    # path('organization/getCampaign', views2.getCampaign),
-
+    path('organization/getAgeWiseDiseaseStat', views.getAgeWiseDiseaseStat),
 
 ]

@@ -11,6 +11,7 @@ from os.path import exists
 from django.shortcuts import render
 from pyparsing import Or
 from rest_framework import viewsets
+from datetime import date
 
 from ShaakoProject.settings import BASE_DIR
 from .serializers import *
@@ -559,289 +560,84 @@ def searchSupervisor(request):
         return Response(ret)
 
 
-# Organization
-class OrganizationList(ListAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializers
-
-
-class OrganizationCreate(CreateAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializers
-
-
-class OrganizationDestroy(DestroyAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializers
-
-
-# Organization Admin
-class OrganizationAdminList(ListAPIView):
-    queryset = OrganizationAdmin.objects.all()
-    serializer_class = OrganizationAdminSerializers
-
-
-class OrganizationAdminCreate(CreateAPIView):
-    queryset = OrganizationAdmin.objects.all()
-    serializer_class = OrganizationAdminSerializers
-
-
-class OrganizationAdminDestroy(DestroyAPIView):
-    queryset = OrganizationAdmin.objects.all()
-    serializer_class = OrganizationAdminSerializers
-
-
-# Location
-class LocationList(ListAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializers
-
-
-class LocationCreate(CreateAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializers
-
-
-class LocationDestroy(DestroyAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializers
-
-
-# Notification
-class NotificationList(ListAPIView):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializers
-
-
-class NotificationCreate(CreateAPIView):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializers
-
-
-class NotificationDestroy(DestroyAPIView):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializers
-
-
-# Supervisor
-class SupervisorList(ListAPIView):
-    queryset = Supervisor.objects.all()
-    serializer_class = SupervisorSerializers
-
-
-class SupervisorCreate(CreateAPIView):
-    queryset = Supervisor.objects.all()
-    serializer_class = SupervisorSerializers
-
-
-class SupervisorDestroy(DestroyAPIView):
-    queryset = Supervisor.objects.all()
-    serializer_class = SupervisorSerializers
-
-
-# Campaign
-class CampaignList(ListAPIView):
-    queryset = Campaign.objects.all()
-    serializer_class = CampaignSerializers
-
-
-class CampaignCreate(CreateAPIView):
-    queryset = Campaign.objects.all()
-    serializer_class = CampaignSerializers
-
-
-class CampaignDestroy(DestroyAPIView):
-    queryset = Campaign.objects.all()
-    serializer_class = CampaignSerializers
-
-
-# Location_Campaign
-class Location_CampaignList(ListAPIView):
-    queryset = Location_Campaign.objects.all()
-    serializer_class = Location_CampaignSerializers
-
-
-class Location_CampaignCreate(CreateAPIView):
-    queryset = Location_Campaign.objects.all()
-    serializer_class = Location_CampaignSerializers
-
-
-class Location_CampaignDestroy(DestroyAPIView):
-    queryset = Location_Campaign.objects.all()
-    serializer_class = Location_CampaignSerializers
-
-
-# Supervisor_Campaign
-class Supervisor_CampaignList(ListAPIView):
-    queryset = Supervisor_Campaign.objects.all()
-    serializer_class = Supervisor_CampaignSerializers
-
-
-class Supervisor_CampaignCreate(CreateAPIView):
-    queryset = Supervisor_Campaign.objects.all()
-    serializer_class = Supervisor_CampaignSerializers
-
-
-class Supervisor_CampaignDestroy(DestroyAPIView):
-    queryset = Supervisor_Campaign.objects.all()
-    serializer_class = Supervisor_CampaignSerializers
-
-
-# CHW
-class CHWList(ListAPIView):
-    queryset = CHW.objects.all()
-    serializer_class = CHWSerializers
-
-
-class CHWCreate(CreateAPIView):
-    queryset = CHW.objects.all()
-    serializer_class = CHWSerializers
-
-
-class CHWDestroy(DestroyAPIView):
-    queryset = CHW.objects.all()
-    serializer_class = CHWSerializers
-
-
-# Patient
-class PatientList(ListAPIView):
-    queryset = Patient.objects.all()
-    serializer_class = PatientSerializers
-
-
-class PatientCreate(CreateAPIView):
-    queryset = Patient.objects.all()
-    serializer_class = PatientSerializers
-
-
-class PatientDestroy(DestroyAPIView):
-    queryset = Patient.objects.all()
-    serializer_class = PatientSerializers
-
-
-# PatientCampaign
-class PatientCampaignList(ListAPIView):
-    queryset = PatientCampaign.objects.all()
-    serializer_class = PatientCampaignSerializers
-
-
-class PatientCampaignCreate(CreateAPIView):
-    queryset = PatientCampaign.objects.all()
-    serializer_class = PatientCampaignSerializers
-
-
-class PatientCampaignDestroy(DestroyAPIView):
-    queryset = PatientCampaign.objects.all()
-    serializer_class = PatientCampaignSerializers
-
-
-# VisitForm
-class VisitFormList(ListAPIView):
-    queryset = VisitForm.objects.all()
-    serializer_class = VisitFormSerializers
-
-
-class VisitFormCreate(CreateAPIView):
-    queryset = VisitForm.objects.all()
-    serializer_class = VisitFormSerializers
-
-
-class VisitFormDestroy(DestroyAPIView):
-    queryset = VisitForm.objects.all()
-    serializer_class = VisitFormSerializers
-
-
-# Lesson
-class LessonList(ListAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializers
-
-
-class LessonCreate(CreateAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializers
-
-
-class LessonDestroy(DestroyAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializers
-
-
-# Quiz
-class QuizList(ListAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializers
-
-
-class QuizCreate(CreateAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializers
-
-
-class QuizDestroy(DestroyAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializers
-
-
-# QuizItem
-class QuizItemList(ListAPIView):
-    queryset = QuizItem.objects.all()
-    serializer_class = QuizItemSerializers
-
-
-class QuizItemCreate(CreateAPIView):
-    queryset = QuizItem.objects.all()
-    serializer_class = QuizItemSerializers
-
-
-class QuizItemDestroy(DestroyAPIView):
-    queryset = QuizItem.objects.all()
-    serializer_class = QuizItemSerializers
-
-
-# Lesson_CHW
-class Lesson_CHWList(ListAPIView):
-    queryset = Lesson_CHW.objects.all()
-    serializer_class = Lesson_CHWSerializers
-
-
-class Lesson_CHWCreate(CreateAPIView):
-    queryset = Lesson_CHW.objects.all()
-    serializer_class = Lesson_CHWSerializers
-
-
-class Lesson_CHWDestroy(DestroyAPIView):
-    queryset = Lesson_CHW.objects.all()
-    serializer_class = Lesson_CHWSerializers
-
-
-# QuizSubmission
-class QuizSubmissionList(ListAPIView):
-    queryset = QuizSubmission.objects.all()
-    serializer_class = QuizSubmissionSerializers
-
-
-class QuizSubmissionCreate(CreateAPIView):
-    queryset = QuizSubmission.objects.all()
-    serializer_class = QuizSubmissionSerializers
-
-
-class QuizSubmissionDestroy(DestroyAPIView):
-    queryset = QuizSubmission.objects.all()
-    serializer_class = QuizSubmissionSerializers
-
-
-# SubmissionItem
-class SubmissionItemList(ListAPIView):
-    queryset = SubmissionItem.objects.all()
-    serializer_class = SubmissionItemSerializers
-
-
-class SubmissionItemCreate(CreateAPIView):
-    queryset = SubmissionItem.objects.all()
-    serializer_class = SubmissionItemSerializers
-
-
-class SubmissionItemDestroy(DestroyAPIView):
-    queryset = SubmissionItem.objects.all()
-    serializer_class = SubmissionItemSerializers
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getAgeWiseDiseaseStat(request):
+    if request.method == 'POST':
+        organization = request.data['organization']
+        inputdivision = request.data['inputdivision']
+        inputdistrict = request.data['inputdistrict']
+        inputupazilla = request.data['inputupazilla']
+        supervisors = Supervisor.objects.filter(organization_id=organization)
+        chws = CHW.objects.filter(supervisor_id__in=supervisors)
+        if len(inputdivision) != 0 and len(inputdistrict) == 0 and len(inputupazilla) == 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision)
+        elif len(inputdivision) != 0 and len(inputdistrict) != 0 and len(inputupazilla) == 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision,
+                                      location__district=inputdistrict)
+        elif len(inputdivision) != 0 and len(inputdistrict) != 0 and len(inputupazilla) != 0:
+            # find all CHW of this division
+            chws = CHW.objects.filter(supervisor_id__in=supervisors, location__division=inputdivision,
+                                      location__district=inputdistrict, location__upazilla_thana=inputupazilla)
+        # get all the patient of all the chw in chws
+        patients = Patient.objects.filter(chw_id__in=chws)
+        # get all the VisitForm of all the patient in patients
+        # if a patient has multiple VisitForm then keep the one with the latest date
+
+        diseases = {}
+        for patient in patients:
+            # get the latest VisitForm of this patient
+            # if no VisitForm then continue
+            try:
+                latest_visit = VisitForm.objects.filter(patient_id=patient.id).order_by('-date').first()
+                # get the disease of this VisitForm
+                disease = latest_visit.assumed_disease
+                # if disease is not in diseases then add it to diseases
+                if disease not in diseases:
+                    diseases[disease] = 1
+                else:
+                    diseases[disease] += 1
+            except:
+                continue
+
+        # if there are more than 10 entries then keep  10 entries with most value
+        if len(diseases) > 10:
+            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:10]
+            # dictionary
+            diseases = dict(diseases)
+
+        xs = [0, 6, 11, 18, 51]
+        ys = [5, 10, 17, 50, 500]
+        ret = []
+        for i in range(len(xs)):
+            p = int(xs[i])
+            q = int(ys[i])
+            dictionary = {}
+            for disease in diseases:
+                if disease == 'None':
+                    continue
+                dictionary[disease] = 0
+                for patient in patients:
+                    # get the date_of_birth of patient
+                    date_of_birth = patient.date_of_birth
+                    # get the age of patient
+                    age = date.today().year - date_of_birth.year
+                    age = int(age)
+                    # print(age, p , q)
+                    if age < p or age > q:
+                        continue
+
+                    # get the latest VisitForm of this patient
+                    # if no VisitForm then continue
+                    try:
+                        latest_visit = VisitForm.objects.filter(patient_id=patient.id).order_by('-date').first()
+                        dictionary[latest_visit.assumed_disease] += 1
+                    except:
+                        pass
+            ret.append(dictionary)
+
+        print(ret)
+        return Response(ret)

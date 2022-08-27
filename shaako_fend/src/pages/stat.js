@@ -20,7 +20,7 @@ const Statistics = () => {
         }]
     }
     let [resultdisease, setresultdisease] = useState(null)
-
+    let [resultagedisease, setresultagedisease] = useState(null)
     let recruitment = {
         title: {
             text: "Basic Column Chart"
@@ -49,6 +49,70 @@ const Statistics = () => {
     }
     let [resultchwrecruitment, setresultchwrecruitment] = useState(null)
     let organization = localStorage.getItem('organization')
+
+    const agediseases = {
+        animationEnabled: true,
+        title: {
+            text: "বয়সভেদে বিভিন্ন রোগের রোগী",
+            fontFamily: "verdana"
+        },
+        axisX: {
+            title: "রোগের নাম",
+        },
+        axisY: {
+            title: "রোগীর সংখ্যা",
+            includeZero: true,
+            suffix: "জন"
+        },
+        toolTip: {
+            shared: true,
+            reversed: true
+        },
+        legend: {
+            verticalAlign: "center",
+            horizontalAlign: "right",
+            reversed: true,
+            cursor: "pointer",
+        },
+        data: [
+            {
+                type: "stackedColumn",
+                name: "শিশু(০-৫)",
+                showInLegend: true,
+                dataPoints: [
+                ]
+            },
+            {
+                type: "stackedColumn",
+                name: "বালক/বালিকা(৬-১০)",
+                showInLegend: true,
+                dataPoints: [
+                ]
+            },
+            {
+                type: "stackedColumn",
+                name: "কিশোর/কিশোরি(১১-১৭)",
+                showInLegend: true,
+                dataPoints: [
+                ]
+            },
+            {
+                type: "stackedColumn",
+                name: "প্রাপ্তবয়স্ক(১৮-৫০)",
+                showInLegend: true,
+                dataPoints: [
+                ]
+            },
+            {
+                type: "stackedColumn",
+                name: "বৃদ্ধ(৫১-)",
+                showInLegend: true,
+                dataPoints: [
+                ]
+            }
+        ]
+    }
+
 
     let [a, seta] = useState(true)
 
@@ -91,11 +155,13 @@ const Statistics = () => {
 
     useEffect(() => {
         getUpazilla();
+        SubmitAgeFilter();
     }, [inputdistrict])
 
     useEffect(() => {
         SubmitFilter();
-    }, [inputdivision,inputdistrict,inputupazilla])
+        SubmitAgeFilter();
+    }, [inputdivision, inputdistrict, inputupazilla])
 
     let getDivisions = async () => {
         setdivision(["---"]);
@@ -130,7 +196,7 @@ const Statistics = () => {
         // }
         // setinputupazilla(d.upazilla[0]);
     }
-    let handleChangeDivision =async (value) => {
+    let handleChangeDivision = async (value) => {
         setdistrict(["---"])
         setupazilla(["---"])
         setinputdistrict('')
@@ -138,17 +204,45 @@ const Statistics = () => {
         setinputdivision(value);
     }
 
-    let handleChangeDistrict =async (value) => {
+    let handleChangeDistrict = async (value) => {
         setupazilla(["---"])
         setinputupazilla('')
         setinputdistrict(value);
     }
 
-    let handleChangeUpazilla =async (value) => {
+    let handleChangeUpazilla = async (value) => {
         setinputupazilla(value)
     }
 
-    let SubmitFilter =async () => {
+    let SubmitAgeFilter = async () => {
+        let response = await fetch('http://127.0.0.1:8000/organization/getAgeWiseDiseaseStat', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({ organization, inputdivision, inputdistrict, inputupazilla })
+        })
+        let d = await response.json()
+        console.log(d)
+        agediseases.data[0].dataPoints = []
+        agediseases.data[1].dataPoints = []
+        agediseases.data[2].dataPoints = []
+        agediseases.data[3].dataPoints = []
+        agediseases.data[4].dataPoints = []
+
+        for (let i = 0; i < 5; i++) {
+            let now = d[i]
+            for (const [key, value] of Object.entries(now)) {
+                agediseases.data[i].dataPoints.push({
+                    label: key,
+                    y: value
+                })
+            }
+        }
+        setresultagedisease(agediseases)
+    }
+    let SubmitFilter = async () => {
         let response = await fetch('http://127.0.0.1:8000/organization/getFilterDiseaseStat', {
             method: "POST",
             headers: {
@@ -167,6 +261,7 @@ const Statistics = () => {
         }
         setresultdisease(diseases)
         console.log(d)
+
     }
     let getDistrict = async () => {
         if (inputdivision.length !== 0) {
@@ -319,14 +414,6 @@ const Statistics = () => {
                             <div className="row">
                                 <div className="col">
                                     <div className="card shadow mb-4">
-                                        <div className="card-body">
-                                            <CanvasJSChart options={resultcampaign} />
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col">
-                                    <div className="card shadow mb-4">
                                         <div className="container form-group">
                                             <label htmlFor="name">বিভাগ</label>
                                             <br />
@@ -366,11 +453,24 @@ const Statistics = () => {
                                                 }
                                             </select>
                                         </div>
-                                        <div className="card-body">
-                                            <div className="chart-area">
-                                                <div>
-                                                    <CanvasJSChart options={resultdisease}
-                                                    />
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="card-body">
+                                                    <div className="chart-area">
+                                                        <div>
+                                                            <CanvasJSChart options={resultdisease}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col">
+                                                <div className="card-body">
+                                                    <div className="chart-area">
+                                                        <div>
+                                                            <CanvasJSChart options={resultagedisease} />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -378,6 +478,14 @@ const Statistics = () => {
                                 </div>
                             </div>
                             <div className="row">
+                                <div className="col">
+                                    <div className="card shadow mb-4">
+                                        <div className="card-body">
+                                            <CanvasJSChart options={resultcampaign} />
+
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="col">
                                     <div className="card shadow mb-4">
                                         <div className="card-body">
