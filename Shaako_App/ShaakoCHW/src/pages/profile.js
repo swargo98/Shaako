@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Image, AppRegistry, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, AppRegistry, ScrollView, TouchableOpacity } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
@@ -13,6 +13,7 @@ import { Card, ListItem, Button, Icon, Header, SearchBar } from 'react-native-el
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import call from 'react-native-phone-call'
 import email from 'react-native-email'
+import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Profile = ({ route, navigation }) => {
     let { patient_id } = route.params;
@@ -113,12 +114,12 @@ const Profile = ({ route, navigation }) => {
                         </View>
 
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.title}>{name}</Text>
+                            <Text style={styles.title}>{name}{'\n'}</Text>
                         </View>
 
 
 
-                        <View style={styles.posts}>
+                        {/* <View style={styles.posts}>
                             <Button
                                 buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
                                 title='কল করুন'
@@ -128,17 +129,43 @@ const Profile = ({ route, navigation }) => {
                                 buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 0, backgroundColor: "green", width: 150 }}
                                 title='নতুন ভিজিট ফর্ম'
                                 onPress={() => navigation.navigate('SymptomsForm', { patient_id: patient_id })} />
+                        </View> */}
+
+                        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+
+                        <TouchableOpacity style={styles.iconButton}>
+                            <MaterialCommunityIconsIcon
+                                name="phone"
+                                size={40}
+                                alignItems="center"
+                                onPress={() => { call(args).catch(console.error) }}
+                            ></MaterialCommunityIconsIcon>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.iconButton}>
+                            <MaterialCommunityIconsIcon
+                                name="form-select"
+                                size={40}
+                                alignItems="center"
+                                onPress={() => navigation.navigate('SymptomsForm', { patient_id: patient_id })}
+                            
+                            ></MaterialCommunityIconsIcon>
+                        </TouchableOpacity>
                         </View>
 
 
                         <Card.Divider></Card.Divider>
                         <View style={{ margin: 10 }}>
                             <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>বয়সঃ </Text>{age} </Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>লিঙ্গঃ </Text>{gender} </Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>বর্তমান ঠিকানাঃ </Text>{address} </Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>ফোনঃ </Text>{contactNo} </Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>ডাটাবেইজ এ যুক্ত করেছেনঃ </Text>{chwName} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>{'\n'}বয়স </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{age}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>লিঙ্গ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{gender}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>বর্তমান ঠিকানা</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{address}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>ফোন</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{contactNo}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>ডাটাবেইজ এ যুক্ত করেছেন</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{chwName}{'\n'} </Text>                            
 
                         </View>
 
@@ -151,8 +178,12 @@ const Profile = ({ route, navigation }) => {
                             {previousForms.map(a => {
                                 return (
                                     <View>
-                                        <View style={{ flexDirection: "row" }}>
-                                        <Text><Text style={{ fontWeight: "bold" }}>তারিখঃ </Text>{a.date} </Text>
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            <View>
+                                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>তারিখ </Text></Text>
+                                        <Text style={{ fontSize: 16, }}>{a.date}{'\n'} </Text>
+                                            </View>
+                                        
                                         <Button
                                             buttonStyle={{ borderRadius: 10, marginLeft: 10, marginRight: 0, marginBottom: 10, backgroundColor: "green", width: 150 }}
                                             title='ভিজিট দেখুন'
@@ -216,7 +247,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingVertical: 5,
         marginBottom: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        fontSize: 18
     }
 
 });

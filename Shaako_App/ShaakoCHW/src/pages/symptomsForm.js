@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Image, AppRegistry, ScrollView, TouchableOpacity } from "react-native";
 import Navbar from "./../../components/Navbar";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Input } from 'react-native-elements';
+import { Card, Input } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 
 
@@ -25,10 +25,27 @@ const SymptosForm = ({ route, navigation }) => {
   let [assumedDisease, setassumedDisease] = useState('')
   let [nextVisit, setnextVisit] = useState(new Date())
 
-  
+
   let [name, setname] = useState('')
   let [age, setage] = useState('')
   let [gender, setgender] = useState('')
+
+  let sortedSymptoms = ['abdominal_pain', 'abnormal_menstruation', 'acidity', 'acute_liver_failure', 'altered_sensorium', 'anxiety', 'back_pain',
+    'belly_pain', 'blackheads', 'bladder_discomfort', 'blister', 'blood_in_sputum', 'bloody_stool', 'blurred_and_distorted_vision',
+    'breathlessness', 'brittle_nails', 'bruising', 'burning_micturition', 'chest_pain', 'chills', 'cold_hands_and_feets', 'coma', 'congestion',
+    'constipation', 'continuous_feel_of_urine', 'continuous_sneezing', 'cough', 'cramps', 'dark_urine', 'dehydration', 'depression', 'diarrhoea',
+    'dischromic _patches', 'distention_of_abdomen', 'dizziness', 'drying_and_tingling_lips', 'enlarged_thyroid', 'excessive_hunger', 'extra_marital_contacts',
+    'family_history', 'fast_heart_rate', 'fatigue', 'fluid_overload', 'fluid_overload', 'foul_smell_of urine', 'headache', 'high_fever', 'hip_joint_pain',
+    'history_of_alcohol_consumption', 'increased_appetite', 'indigestion', 'inflammatory_nails', 'internal_itching', 'irregular_sugar_level', 'irritability',
+    'irritation_in_anus', 'itching', 'joint_pain', 'knee_pain', 'lack_of_concentration', 'lethargy', 'loss_of_appetite', 'loss_of_balance', 'loss_of_smell', 'malaise',
+    'mild_fever', 'mood_swings', 'movement_stiffness', 'mucoid_sputum', 'muscle_pain', 'muscle_wasting', 'muscle_weakness', 'nausea', 'neck_pain', 'nodal_skin_eruptions',
+    'obesity', 'pain_behind_the_eyes', 'pain_during_bowel_movements', 'pain_in_anal_region', 'painful_walking', 'palpitations', 'passage_of_gases', 'patches_in_throat',
+    'phlegm', 'polyuria', 'prominent_veins_on_calf', 'puffy_face_and_eyes', 'pus_filled_pimples', 'receiving_blood_transfusion', 'receiving_unsterile_injections', 'red_sore_around_nose',
+    'red_spots_over_body', 'redness_of_eyes', 'restlessness', 'runny_nose', 'rusty_sputum', 'scurring', 'shivering', 'silver_like_dusting', 'sinus_pressure', 'skin_peeling', 'skin_rash',
+    'slurred_speech', 'small_dents_in_nails', 'spinning_movements', 'spotting_ urination', 'stiff_neck', 'stomach_bleeding', 'stomach_pain', 'sunken_eyes', 'sweating', 'swelled_lymph_nodes',
+    'swelling_joints', 'swelling_of_stomach', 'swollen_blood_vessels', 'swollen_extremeties', 'swollen_legs', 'throat_irritation', 'toxic_look_(typhos)', 'ulcers_on_tongue', 'unsteadiness',
+    'visual_disturbances', 'vomiting', 'watering_from_eyes', 'weakness_in_limbs', 'weakness_of_one_body_side', 'weight_gain', 'weight_loss', 'yellow_crust_ooze', 'yellow_urine', 'yellowing_of_eyes', 'yellowish_skin']
+
 
   let handleChangeTemperature = (value) => {
     console.log(value)
@@ -82,8 +99,8 @@ const SymptosForm = ({ route, navigation }) => {
     setname(d.name)
     setage(d.age)
     setgender(d.gender)
-    for (let i = 0; i < d.list.length; i++) {
-      let now = d.list[i]
+    for (let i = 0; i < sortedSymptoms.length; i++) {
+      let now = sortedSymptoms[i]
       let id = i.toString()
       let name = now
       setitems(prevArray => [...prevArray, { id: id, name: name }]);
@@ -115,7 +132,7 @@ const SymptosForm = ({ route, navigation }) => {
         'Content-Type': 'application/json',
         'Authorization': 'TOKEN ' + tok
       },
-      body: JSON.stringify({selectedItems})
+      body: JSON.stringify({ selectedItems })
     })
     let data = await response.json()
     setshowPrediction(true);
@@ -135,49 +152,51 @@ const SymptosForm = ({ route, navigation }) => {
     let tok = await AsyncStorage.getItem('token')
     tok = JSON.parse(tok)
     let response = await fetch(global.ip + '/chw/saveVisitForm', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'TOKEN ' + tok
-        },
-        body: JSON.stringify({patient_id, selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary })
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + tok
+      },
+      body: JSON.stringify({ patient_id, selectedItems, chw_id, temperature, bloodPressure, suggestion, assumedDisease, nextVisit, summary })
     })
     let data = await response.json()
     console.log(data)
     if (data === 'True') {
-        setisLoggedIn(true)
+      setisLoggedIn(true)
     }
     else {
-        setfailedLogin(true)
+      setfailedLogin(true)
     }
 
-}
+  }
 
   return (
     <View style={styles.container}>
       <Navbar navigation={navigation}></Navbar>
-      <View style={{ alignItems: 'center' }}>
-        <Text style={styles.title}>ভিজিট ফর্ম</Text>
-      </View>
-      <View style={styles.text2}>
-        <Text style={styles.text}>   রোগীর নাম: {name}</Text>
-        <Text style={styles.text}>   লিঙ্গ: {gender}</Text>
-        <Text style={styles.text}>   বয়স: {age}</Text>
-      </View>
 
-      <View style={styles.text2}>
-        <Text style={styles.text}>   তারিখ:  {new Date().toDateString()} </Text>
-      </View>
+      <Card>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={styles.title}>ভিজিট ফর্ম</Text>
+        </View>
+        <Card.Divider style={{ borderBottomColor: 'black', borderBottomWidth: 1,}}></Card.Divider>
+        <View style={styles.text2}>
+          <Text style={styles.text}>   রোগীর নাম: {name}</Text>
+          <Text style={styles.text}>   লিঙ্গ: {gender}</Text>
+          <Text style={styles.text}>   বয়স: {age}</Text>
+          <Text style={styles.text}>   তারিখ:  {new Date().toDateString()} </Text>
+        </View>
+      </Card>
+
 
 
       <ScrollView>
 
+        <Card>
+
         <View style={styles.text2}>
           <Text style={styles.textLabel}>    তাপমাত্রা (ফারেনহাইট): </Text>
           <Input onChangeText={handleChangeTemperature} />
-        </View>
 
-        <View style={styles.text2}>
           <Text style={styles.textLabel}>    রক্তচাপ: </Text>
           <Input onChangeText={handleChangeBloodPressure} />
         </View>
@@ -221,33 +240,29 @@ const SymptosForm = ({ route, navigation }) => {
             <Text style={styles.loginText} onPress={handleSubmit}>প্রেডিকশন দেখুন</Text>
           </TouchableOpacity>
 
-          <View style={ [showPrediction? styles.text2 : styles.text3] }>
+          <View style={[showPrediction ? styles.text2 : styles.text3]}>
             <Text style={styles.text}>    সম্ভাব্য রোগ: {predictedDisease}</Text>
             <Text style={styles.text}>    সম্ভাবনা: {confideceScore}%</Text>
+            <Card.Divider style={{ borderBottomColor: 'black', borderBottomWidth: 1,}}></Card.Divider>
           </View>
 
+          
           <View style={styles.text2}>
-          <Text style={styles.textLabel}>    অনুমিত রোগ: </Text>
-          <Input onChangeText={handleChangeAssumedDisease} />
-        </View>
+            <Text style={styles.textLabel}>    অনুমিত রোগ: </Text>
+            <Input onChangeText={handleChangeAssumedDisease} />
 
-          <View style={styles.text2}>
             <Text style={styles.textLabel}>    পরামর্শ: </Text>
             <Input
               multiline={true}
               numberOfLines={3}
               onChangeText={handleChangeSuggestion} />
-          </View>
 
-          <View style={styles.text2}>
             <Text style={styles.textLabel}>    সামারি: </Text>
             <Input
               multiline={true}
               numberOfLines={3}
               onChangeText={handleChangeSummary} />
-          </View>
 
-          <View style={styles.text2}>
             <Text style={styles.textLabel}>    পরবর্তী ভিজিট এর তারিখ: </Text>
             <DatePicker
               style={styles.datePickerStyle}
@@ -282,6 +297,10 @@ const SymptosForm = ({ route, navigation }) => {
 
 
         </View>
+
+        </Card>
+
+        
       </ScrollView>
     </View>
   );
@@ -325,15 +344,16 @@ const styles = StyleSheet.create({
 
   text: {
     fontWeight: "bold",
-    backgroundColor: "#2089dc",
-    color: "white",
+    backgroundColor: "white",
+    color: "black",
     // textAlign : "center",
     paddingVertical: 5,
-    borderRadius: 10
+    borderRadius: 10,
+    fontSize: 16
   },
 
   text2: {
-    backgroundColor: "#2089dc",
+    backgroundColor: "white",
     paddingVertical: 0,
     borderRadius: 10,
     margin: 5
@@ -345,7 +365,8 @@ const styles = StyleSheet.create({
 
   textLabel: {
     fontWeight: "bold",
-    color: "white",
+    color: "black",
+    fontSize: 16
   },
 
   loginBtn: {

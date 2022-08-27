@@ -101,7 +101,8 @@ const PatientList = ({ navigation }) => {
                             <Card>
                                 <View style={styles.cardContainer}>
                                     <View>
-                                        <Card.Title>{a.name}</Card.Title>
+                                        {/* <Card.Title>{a.name}</Card.Title> */}
+                                        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{a.name}{'\n'}</Text>
                                         <View style={{ flex: 1, flexDirection: "row" }}>
                                             <Button
                                                 buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 0,
         alignItems: "center",
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
 
 });

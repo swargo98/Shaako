@@ -45,7 +45,7 @@ const SymptomsFormPrev = ({ route, navigation }) => {
         let tok = await AsyncStorage.getItem('token')
         tok = JSON.parse(tok)
         console.log(tok)
-        let response = await fetch(global.ip + '/chw/patientProfile', {
+        let response = await fetch(global.ip + '/chw/prevVisitForm', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -106,13 +106,19 @@ const SymptomsFormPrev = ({ route, navigation }) => {
                     
                         <Card.Divider></Card.Divider>
                         <View style={{margin: 10}}>
-                            <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>
-                            <Text><Text style={{fontWeight: "bold"}}>নামঃ </Text>{name} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>বয়সঃ </Text>{age} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>লিঙ্গঃ </Text>{gender} </Text>                    
-                            <Text><Text style={{fontWeight: "bold"}}>বর্তমান ঠিকানাঃ </Text>{address} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ফোনঃ </Text>{contactNo} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>ডাটাবেইজ এ যুক্ত করেছেনঃ </Text>{chwName} </Text>                    
+                            <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>                             
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>নাম </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{name}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>বয়স </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{age}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>লিঙ্গ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{gender}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>বর্তমান ঠিকানা</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{address}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>ফোন</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{contactNo}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>ডাটাবেইজ এ যুক্ত করেছেন</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{chwName}{'\n'} </Text>                   
 
                         </View>
 
@@ -122,20 +128,28 @@ const SymptomsFormPrev = ({ route, navigation }) => {
                         </View>
 
                         <View>
-                            <Text><Text style={{fontWeight: "bold"}}>তাপমাত্রাঃ </Text>{temperature} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>রক্তচাপঃ </Text>{blood_pressure} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>অনুমিত রোগঃ </Text>{assumed_disease} </Text>                    
-                            <Text style={{fontWeight: "bold"}}>লক্ষণসমূহঃ </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>তাপমাত্রা </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{temperature}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>রক্তচাপ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{blood_pressure}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>অনুমিত রোগ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{assumed_disease}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>লক্ষণসমূহ</Text></Text>
+                            
+
                             {symptoms_list.map(a => {
                                 return (
                                     <View>
-                                        <Text>{a.name}</Text>
+                                        <Text style={{ fontSize: 16, }}>    {a.name}{'\n'} </Text>
                                     </View>
                                     );
                             })}        
-                            <Text><Text style={{fontWeight: "bold"}}>পরামর্শঃ </Text>{suggestions} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>সামারিঃ </Text>{summary} </Text>
-                            <Text><Text style={{fontWeight: "bold"}}>পরবর্তী ভিজিটের তারিখঃ </Text>{next_visit_date} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>পরামর্শ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{suggestions}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>সামারি </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{summary}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>পরবর্তী ভিজিটের তারিখ </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{next_visit_date}{'\n'} </Text>
                         </View>
 
 
@@ -189,7 +203,8 @@ const styles = StyleSheet.create({
         textAlign : "center",
         paddingVertical : 5,
         marginBottom : 10,
-        borderRadius: 10
+        borderRadius: 10,
+        fontSize: 18,
     }
 
 });
