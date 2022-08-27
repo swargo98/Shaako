@@ -11,7 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Card, ListItem, Button, Icon, Header } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 const BlogList = ({ navigation }) => {
     let [result, setresult] = useState([]);
     let [sup_image, setsup_image] = useState(null);
@@ -25,6 +25,10 @@ const BlogList = ({ navigation }) => {
 
 
     let getContents = async () => {
+
+        let chw_id = await AsyncStorage.getItem('chw_id')
+        chw_id = JSON.parse(chw_id)
+
         sup_id = await AsyncStorage.getItem('sup_id');
         sup_id = JSON.parse(sup_id)
 
@@ -38,13 +42,13 @@ const BlogList = ({ navigation }) => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify({ sup_id: sup_id, chw_id: chw_id })
         })
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            console.log(now.id + " " + now.title + " " + now.supervisor_name + " " + now.upload_time)
+            console.log(now.id + " " + now.title + " " + now.supervisor_name + " " + now.upload_time + " " + now.is_read)
             setresult(prevArray => [...prevArray, now]);
         }
 
@@ -53,7 +57,7 @@ const BlogList = ({ navigation }) => {
         // const nodeFetch = require('node-fetch');
         // global.fetch = nodeFetch;
 
-        let response2 = await fetch(global.ip+'/organization/image/supervisor', {
+        let response2 = await fetch(global.ip + '/organization/image/supervisor', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -74,6 +78,30 @@ const BlogList = ({ navigation }) => {
         }
     }
 
+    let click = async (a) => {
+        console.log(a.id)
+        let chw_id = await AsyncStorage.getItem('chw_id')
+        chw_id = JSON.parse(chw_id)
+
+        let tok = await AsyncStorage.getItem('token')
+        tok = JSON.parse(tok)
+
+        let response = await fetch(global.ip + '/chw/mark_lesson_read', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + tok
+            },
+            body: JSON.stringify({ lesson_id: a.id, chw_id: chw_id })
+        })
+        let d = await response.json()
+        console.log(d)
+
+        navigation.navigate('BlogPost', { lesson_id: a.id })
+
+
+    }
+
     return (
         <View style={styles.container}>
             <Navbar navigation={navigation}></Navbar>
@@ -83,9 +111,20 @@ const BlogList = ({ navigation }) => {
                     return (
                         <View >
                             <Card>
+                                {!a.is_read &&
+                                    <View style={styles.circle}></View>
+                                }
+
+                                {/* <MaterialCommunityIconsIcon
+                                    name="new-box"
+                                    size={40}
+                                    alignItems="center"
+                                ></MaterialCommunityIconsIcon> */}
                                 <Card.Title>{a.title}</Card.Title>
+
                                 <Card.Divider />
                                 <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2, alignSelf: 'center' }} source={{ uri: sup_image, scale: 1 }} />
+
                                 <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', }}>
                                     {a.supervisor_name}
                                 </Text>
@@ -95,7 +134,7 @@ const BlogList = ({ navigation }) => {
                                 <Button
                                     icon={<Icon name='code' color='#ffffff' />}
                                     buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                    title='পড়ুন' onPress={() => navigation.navigate('BlogPost', { lesson_id: a.id })} />
+                                    title='পড়ুন' onPress={() => click(a)} />
                             </Card>
                         </View>);
                 })}
@@ -114,6 +153,14 @@ const styles = StyleSheet.create({
     posts: {
         flex: 1,
         flexDirection: "row"
+    },
+    circle: {
+        width: 10, // this should be a "props"-value in future
+        height: 10, // this should be a "props"-value in future
+        borderRadius: 10 / 2,
+        backgroundColor: 'red',
+        marginTop: -18,
+        marginLeft: -18
     },
 
 });

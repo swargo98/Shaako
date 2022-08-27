@@ -570,3 +570,21 @@ def getSchedule(request):
             dict['last_visit']=visit.date.date()
             ret.append(dict)
         return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def mark_lesson_read(request):
+    if request.method == 'POST':
+        print("came here")
+        chw_id=request.data['chw_id']
+        lesson_id=request.data['lesson_id']
+        
+        # find chw with chw_id
+        chw = CHW.objects.get(id=chw_id)
+        # find lesson with lesson_id
+        lesson = Lesson.objects.get(id=lesson_id)
+        #create Lesson_CHW where chw=chw and lesson=lesson and date=now and is_read=True
+        entry=Lesson_CHW(chw=chw, lesson=lesson, dateOfRead=datetime.datetime.now(), is_read=True)
+        entry.save()
+        return Response("done")

@@ -101,13 +101,24 @@ def getLessonList(request):
     if request.method == 'POST':
         data = request.data
         print(data)
-        sup_id = data
-        # find all contents of the supervisor with id=sup_id
-        lessons = Lesson.objects.filter(supervisor_id=sup_id)
+        sup_id = request.data['sup_id']
+        chw_id=request.data['chw_id']
+
+        # find chw with id=chw_id
+        chw = CHW.objects.get(id=chw_id)
+
+        # find all contents of the supervisor with id=sup_id sorted by date latest first
+        lessons = Lesson.objects.filter(supervisor=sup_id).order_by('-upload_date')
         ret = []
         for lesson in lessons:
+            # find Lesson_CHW where chw=chw and lesson=lesson
+            lesson_chw = Lesson_CHW.objects.filter(chw=chw, lesson=lesson)
+            # if lesson_chw is not empty then lesson is done
+            done=False
+            if len(lesson_chw) > 0:
+                done = True
             ret.append({'id': lesson.id, 'title': lesson.title,
-                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date()})
+                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date(),'is_read': done})
         print(ret)
         return Response(ret)
 
