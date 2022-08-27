@@ -291,7 +291,7 @@ const CHWProfile = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-md-6 align-self-center">
-                                                <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Total {visit.length} results</p>
+                                                <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Total {quiz.length} results</p>
                                             </div>
                                         </div>
                                     </div>

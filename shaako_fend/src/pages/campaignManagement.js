@@ -102,7 +102,7 @@ const CampaignManagement = () => {
                     </div>
                     {/* <button className="btn btn-primary" type="button" style={{ margin: "12px" }}>আরও দেখুন</button> */}
                     <button className="btn btn-primary" type="button"
-                        style={{ margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/new_campaign">ক্যাম্পেইন যোগ করুন</a>
+                        style={{marginLeft:"24px", margin: "12px", background: "rgb(52,163,0)" }}><a style={{ color: 'white', textDecoration: "none" }} href="/new_campaign">ক্যাম্পেইন যোগ করুন</a>
                     </button>
                 </div>
             </section>

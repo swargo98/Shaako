@@ -589,6 +589,8 @@ def getSupervisor(request):
                     'id': supervisor.id, 'email': supervisor.email, 'contactNo': supervisor.contactNo,
                     'presentAddress': supervisor.presentAddress}
             ret.append(dict)
+        # sort ret by name
+        ret.sort(key=lambda x: x['name'])
         return Response(ret)
 
 
@@ -610,6 +612,8 @@ def getCHW(request):
                     'imagePath': chw.imagePath,
                     'supervisor_name': supervisor.name, 'supervisor_id': supervisor.id}
             ret.append(dict)
+        # sort ret by name
+        ret.sort(key=lambda x: x['name'])
         return Response(ret)
 
 
@@ -647,11 +651,11 @@ def createCHW(request):
             token = Token.objects.create(user=U)
             token.save()
 
-            Supervisors_Notification(supervisor=supervisor, 
-                                        description="আপনার অধীনে নতুন স্বাস্থ্যকর্মী '" + name + "' কে যুক্ত করা হয়েছে",
-                                        timestamp=datetime.datetime.now(),
-                                        notification_type="chw",
-                                        type_id=chw.id).save()
+            Supervisors_Notification(supervisor=supervisor,
+                                     description="আপনার অধীনে নতুন স্বাস্থ্যকর্মী '" + name + "' কে যুক্ত করা হয়েছে",
+                                     timestamp=datetime.datetime.now(),
+                                     notification_type="chw",
+                                     type_id=chw.id).save()
 
             return Response('True')
 
