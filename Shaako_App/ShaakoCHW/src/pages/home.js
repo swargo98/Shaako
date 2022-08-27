@@ -74,6 +74,9 @@ export default function Home({ navigation }) {
 	let handleClick6 = () => {
 		navigation.navigate('Nearby')
 	}
+	let handleClick7 = () => {
+		navigation.navigate('Supervisor')
+	}
 	return (
 		<View style={styles.container}>
 			<Navbar navigation={navigation}></Navbar>
@@ -106,6 +109,7 @@ export default function Home({ navigation }) {
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="আপনার সুপারভাইজর"
+				clicked={handleClick7}
 			></MaterialButtonViolet3>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
