@@ -1,6 +1,6 @@
 import React from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, Linking } from "react-native";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 //import { NativeRouter ,Link } from "react-router-native";
 // import MaterialButtonViolet from "../../components/MaterialButtonViolet";
@@ -26,6 +26,7 @@ export default function Nearby({ navigation }) {
     let [dummy, setdummy] = useState(false);
     let [details, setdetails] = useState('নিকটবর্তী হাসপাতাল খুঁজুন');
     let [show, setshow] = useState(false);
+    let [placeName, setplaceName] = useState('');
 
     useEffect(() => {
         getData()
@@ -245,7 +246,7 @@ export default function Nearby({ navigation }) {
         let lat = e.nativeEvent.coordinate.latitude
         let long = e.nativeEvent.coordinate.longitude
         let nam = e.nativeEvent.name
-        console.log(nam)
+        console.log("নামঃ " + nam)
         setlatitude(lat)
         setlongitude(long)
 
@@ -263,17 +264,20 @@ export default function Nearby({ navigation }) {
         while (nam.charAt(nam.length - 1) == '…') {
             nam = nam.substr(0, nam.length - 1);
         }
-        let str=data.display_name
+        let str = data.display_name
         var arr = str.split(',')
         arr.splice(0, 1);
-        str=arr.join(',')
+        str = arr.join(',')
 
         // nam=nam.replace(/(\r\n|\n|\r)/gm, " ")
         let address = data.address
-
+        
+        console.log("নামঃ " + nam)
         let s = nam + ', ' + str
         setdetails(s)
         setshow(true)
+        setplaceName('http://google.com/search?q=' + nam)
+        console.log(placeName)
     }
 
 
@@ -314,7 +318,13 @@ export default function Nearby({ navigation }) {
                             onPress={() => setshow(false)}
                         ></MaterialCommunityIconsIcon>
                     </TouchableOpacity>
-                    <Card.Title style={styles.rect}>{details}</Card.Title>
+                    <Card.Title style={styles.rect}>
+                        {details}{'\n'}
+                        <Text style={{ color: 'blue' }}
+                            onPress={() => Linking.openURL(placeName)}>
+                            গুগুল সার্চ করুন
+                        </Text>
+                    </Card.Title>
                 </View>
             }
 

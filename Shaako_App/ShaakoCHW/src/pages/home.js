@@ -116,10 +116,7 @@ export default function Home({ navigation }) {
 				text="রোগীর তালিকা"
 				clicked={handleClick4}
 			></MaterialButtonViolet3>
-			<MaterialButtonViolet3
-				style={styles.materialButtonViolet4}
-				text="নতুন ভিজিট হালনাগাদ"
-			></MaterialButtonViolet3>
+			
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet4}
 				text="নতুন রোগী যুক্ত"
