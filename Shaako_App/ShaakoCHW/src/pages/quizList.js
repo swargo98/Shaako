@@ -43,26 +43,30 @@ const QuizList = ({ navigation }) => {
             body: JSON.stringify(chw_id)
         })
         let d = await response.json()
-        for (let i=0;i<d.length;i++){
+        for (let i = 0; i < d.length; i++) {
             // set d[i] in pastquiz array
             console.log(d[i])
             setpastquiz(prevArray => [...prevArray, d[i]]);
         }
     }
     let getContents = async () => {
+
+        chw_id = await AsyncStorage.getItem('chw_id');
+        chw_id = JSON.parse(chw_id)
+
         sup_id = await AsyncStorage.getItem('sup_id');
         sup_id = JSON.parse(sup_id)
 
         let tok = await AsyncStorage.getItem('token')
         tok = JSON.parse(tok)
-        
+
         let response = await fetch(global.ip + '/supervisor/getQ', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify({ sup_id: sup_id, chw_id: chw_id })
         })
         let d = await response.json()
         setresult([])
@@ -104,40 +108,43 @@ const QuizList = ({ navigation }) => {
                     return (
                         <View >
                             <Card>
-                            <Card.Title ><Text style={{ fontWeight: 'bold' }}>{a.title}</Text></Card.Title>
+                                {!a.played &&
+                                    <View style={styles.circle}></View>
+                                }
+                                <Card.Title ><Text style={{ fontWeight: 'bold' }}>{a.title}</Text></Card.Title>
                                 <Card.Divider />
                                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
 
-                                    <View style={{ flexDirection: "column"}}>
-                                        <View style={{ flexDirection: "row"}}>
-                                        <MaterialCommunityIconsIcon
-                                            name="lead-pencil"
-                                            size={30}                                        
-                                        ></MaterialCommunityIconsIcon>
-                                                                                
-                                        <Text style={{ fontSize: 18, }}>    {a.supervisor_name}{'\n'} </Text>
+                                    <View style={{ flexDirection: "column" }}>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <MaterialCommunityIconsIcon
+                                                name="lead-pencil"
+                                                size={30}
+                                            ></MaterialCommunityIconsIcon>
+
+                                            <Text style={{ fontSize: 18, }}>    {a.supervisor_name}{'\n'} </Text>
                                         </View>
 
-                                        <View style={{ flexDirection: "row"}}>
-                                        <MaterialCommunityIconsIcon
-                                            name="calendar-check"
-                                            size={30}                                        
-                                        ></MaterialCommunityIconsIcon>                                        
-                                        <Text style={{ fontSize: 18, }}>    {a.upload_time}{'\n'} </Text>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <MaterialCommunityIconsIcon
+                                                name="calendar-check"
+                                                size={30}
+                                            ></MaterialCommunityIconsIcon>
+                                            <Text style={{ fontSize: 18, }}>    {a.upload_time}{'\n'} </Text>
                                         </View>
-                                        
-                                        
+
+
                                     </View>
-                                    
+
 
                                     <View>
                                         <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2, alignSelf: 'center' }} source={{ uri: sup_image, scale: 1 }} />
                                     </View>
 
                                 </View>
-                                
-                                
+
+
                                 <Button
                                     icon={<Icon name='code' color='#ffffff' />}
                                     buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
@@ -187,6 +194,14 @@ const styles = StyleSheet.create({
     posts: {
         flex: 1,
         flexDirection: "row"
+    },
+    circle: {
+        width: 10, // this should be a "props"-value in future
+        height: 10, // this should be a "props"-value in future
+        borderRadius: 10 / 2,
+        backgroundColor: 'red',
+        marginTop: -18,
+        marginLeft: -18
     },
 
 });

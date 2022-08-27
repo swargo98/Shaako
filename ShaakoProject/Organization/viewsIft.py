@@ -167,15 +167,25 @@ def getQ(request):
     if request.method == 'POST':
         data = request.data
         print(data)
-        sup_id = data
+        sup_id = request.data['sup_id']
+        chw_id = request.data['chw_id']
+
+        # find chw
+        chw = CHW.objects.get(id=chw_id)
+
         # find all contents of the supervisor with id=sup_id
         quizes = Quiz.objects.filter(supervisor_id=sup_id)
         # order quizes by upload_date
         quizes = quizes.order_by('-upload_date')
         ret = []
         for quiz in quizes:
+            # find QuizSubmission where chw=chw and quiz=quiz
+            quizSubmission = QuizSubmission.objects.filter(chw=chw, quiz=quiz)
+            played=True
+            if quizSubmission.count() == 0:
+                played=False
             ret.append({'id': quiz.id, 'title': quiz.title, 'supervisor_name': quiz.supervisor.name,
-                        'upload_time': quiz.upload_date.date()})
+                        'upload_time': quiz.upload_date.date(),'played':played})
         return Response(ret)
 
 
