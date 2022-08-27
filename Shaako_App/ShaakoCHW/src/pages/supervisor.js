@@ -135,10 +135,21 @@ const Supervisor = ({ navigation }) => {
                         {/* <Card.Divider></Card.Divider> */}
                         <View style={{ margin: 10 }}>
                             <Text style={styles.text}>সাধারণ তথ্যসমূহ</Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>বর্তমান ঠিকানা: </Text>Dhaka </Text>
+                            {/* <Text><Text style={{ fontWeight: "bold" }}>বর্তমান ঠিকানা: </Text>Dhaka </Text>
                             <Text><Text style={{ fontWeight: "bold" }}>ফোন: </Text>{number}</Text>
                             <Text><Text style={{ fontWeight: "bold" }}>ইমেইল: </Text>{mail}</Text>
-                            <Text><Text style={{ fontWeight: "bold" }}>অধীনস্থ এলাকা: </Text>{upazilla}, {district}, {division} </Text>
+                            <Text><Text style={{ fontWeight: "bold" }}>অধীনস্থ এলাকা: </Text>{upazilla}, {district}, {division} </Text> */}
+
+                            
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>ইমেইল এড্রেস </Text></Text>
+                            <Text style={{ fontSize: 16, }}>{mail}{'\n'} </Text>
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>মোবাইল নম্বর</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{number}{'\n'} </Text>
+                            {/* <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>বর্তমান ঠিকানা</Text></Text>
+                            <Text style={{ fontSize: 16, }}>Dhaka{'\n'} </Text> */}
+                            <Text><Text style={{ fontWeight: "bold", fontSize: 18, }}>অধীনস্থ এলাকা</Text></Text>
+                            <Text style={{ fontSize: 16, }}>{upazilla}, {district}, {division}{'\n'} </Text>
+                            
                         </View>
                     </Card>
                 </View>

@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Card, ListItem, Button, Icon, Header } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const BlogList = ({ navigation }) => {
     let [result, setresult] = useState([]);
@@ -53,7 +54,7 @@ const BlogList = ({ navigation }) => {
         // const nodeFetch = require('node-fetch');
         // global.fetch = nodeFetch;
 
-        let response2 = await fetch(global.ip+'/organization/image/supervisor', {
+        let response2 = await fetch(global.ip + '/organization/image/supervisor', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -83,15 +84,41 @@ const BlogList = ({ navigation }) => {
                     return (
                         <View >
                             <Card>
-                                <Card.Title>{a.title}</Card.Title>
+                                <Card.Title ><Text style={{ fontWeight: 'bold' }}>{a.title}</Text></Card.Title>
                                 <Card.Divider />
-                                <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2, alignSelf: 'center' }} source={{ uri: sup_image, scale: 1 }} />
-                                <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', }}>
-                                    {a.supervisor_name}
-                                </Text>
-                                <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', marginBottom: 10 }}>
-                                    {a.upload_time}
-                                </Text>
+
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+
+
+                                    <View style={{ flexDirection: "column"}}>
+                                        <View style={{ flexDirection: "row"}}>
+                                        <MaterialCommunityIconsIcon
+                                            name="lead-pencil"
+                                            size={30}                                        
+                                        ></MaterialCommunityIconsIcon>
+                                                                                
+                                        <Text style={{ fontSize: 18, }}>    {a.supervisor_name}{'\n'} </Text>
+                                        </View>
+
+                                        <View style={{ flexDirection: "row"}}>
+                                        <MaterialCommunityIconsIcon
+                                            name="calendar-check"
+                                            size={30}                                        
+                                        ></MaterialCommunityIconsIcon>                                        
+                                        <Text style={{ fontSize: 18, }}>    {a.upload_time}{'\n'} </Text>
+                                        </View>
+                                        
+                                        
+                                    </View>
+                                    
+
+                                    <View>
+                                        <Card.Image style={{ width: 60, height: 60, borderRadius: 60 / 2, alignSelf: 'center' }} source={{ uri: sup_image, scale: 1 }} />
+                                    </View>
+
+                                </View>
+
+
                                 <Button
                                     icon={<Icon name='code' color='#ffffff' />}
                                     buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
