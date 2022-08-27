@@ -19,12 +19,26 @@ let handleSubmit = async () => {
 }
 const NavbarSupervisor = () => {
     const [data, setData] = useState([]);
-    let [logged, setlogged] = useState(false)
+    let [dummy, setdummy] = useState(false)
 
     useEffect(() => {
         init();
 
     }, [])
+
+    let handleChecked = async (id) => {
+        let response = await fetch('http://127.0.0.1:8000/supervisor/markAsRead', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'TOKEN ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(id)
+        })
+        let d = await response.json()
+        console.log(d)
+    }
+
     let init = async () => {
         console.log("ekhane")
         let response = await fetch('http://127.0.0.1:8000/supervisor/getSupNotification', {
@@ -39,34 +53,37 @@ const NavbarSupervisor = () => {
         console.log(d)
         setData([])
 
+
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
 
-            if( now.notification_type === 'campaign')
-            {
+            if (now.notification_type === 'campaign') {
                 let DEFAULT_NOTIFICATION = {
                     image:
                         "https://cutshort-data.s3.amazonaws.com/cloudfront/public/companies/5809d1d8af3059ed5b346ed1/logo-1615367026425-logo-v6.png",
                     message: now.description,
-                    detailPage: "/campaign_details/"+now.type_id,
-                    receivedTime: now.ago_minute,
                     
+                    receivedTime: now.ago_minute,
+                    // onClick: handleChecked(now.id),
+                    detailPage: "/go_to/"+now.id,
                 };
                 setData(prevArray => [...prevArray, DEFAULT_NOTIFICATION]);
             }
-            if( now.notification_type === 'chw')
-            {
+            if (now.notification_type === 'chw') {
                 let DEFAULT_NOTIFICATION = {
                     image:
                         "https://cutshort-data.s3.amazonaws.com/cloudfront/public/companies/5809d1d8af3059ed5b346ed1/logo-1615367026425-logo-v6.png",
                     message: now.description,
-                    detailPage: "/viewCHWProfile/"+now.type_id,
+                    // onClick: handleChecked(now.id),
+                    detailPage: "/go_to/"+now.id,
                     receivedTime: now.ago_minute
                 };
                 setData(prevArray => [...prevArray, DEFAULT_NOTIFICATION]);
             }
-            
+
         }
+
+        setdummy()
 
     }
     return (
@@ -79,37 +96,44 @@ const NavbarSupervisor = () => {
                     className="visually-hidden">Toggle navigation</span><span className="navbar-toggler-icon"></span>
                 </button>
                 {/* {logged && */}
-                    <div className="collapse navbar-collapse" id="navcol-1">
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item"><a className="nav-link" href="/home">হোম</a></li>
-                            <li className="nav-item"><a className="nav-link" href="/view_contents">পাঠসমূহ</a></li>
-                            <li className="nav-item"><a className="nav-link" href="/chw_list">স্বাস্থ্যকর্মী</a></li>
-                            <li className="nav-item"><a className="nav-link" href="/campaign_list">ক্যাম্পেইন</a></li>
-                            <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
-                            <li className="nav-item"><Notifications
+                <div className="collapse navbar-collapse" id="navcol-1">
+                    <ul className="navbar-nav ms-auto">
+                        <li className="nav-item"><a className="nav-link" href="/home">হোম</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/view_contents">পাঠসমূহ</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/chw_list">স্বাস্থ্যকর্মী</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/campaign_list">ক্যাম্পেইন</a></li>
+                        <li className="nav-item"><a className="nav-link" href="/">পরিসংখ্যান</a></li>
+                        <li className="nav-item">
+
+                            {/* <Notifications data={data} onItemClick={(item) => {
+                                console.log(item)
+
+                            }} */}
+                            {/* /> */}
+                            <Notifications
                                 data={data}
                                 header={{
                                     title: "Notifications",
                                     option: { text: "View All", onClick: () => console.log("Clicked") }
                                 }}
-                                markAsRead={(data) => {
-                                    console.log(data);
-                                }}
+                                // onItemClick={(item) => {
+                                //     console.log("hennnnnnnlooooooo "+item)
+                                // }}
                                 // onClick={init()}
                             />
-                            </li>
-                            <li className="nav-item">
-                                <div className="nav-item dropdown" style={{ margin: "5px" }}><a className="dropdown-toggle"
-                                    aria-expanded="false"
-                                    data-bs-toggle="dropdown"
-                                    href="/"
-                                    style={{ color: 'rgb(0,0,0)' }}></a>
-                                    <div className="dropdown-menu"><a className="dropdown-item" href="/profile">প্রোফাইল</a><a
-                                        className="dropdown-item" href="/login" onClick={handleSubmit}>লগ আউট</a></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                        <li className="nav-item">
+                            <div className="nav-item dropdown" style={{ margin: "5px" }}><a className="dropdown-toggle"
+                                aria-expanded="false"
+                                data-bs-toggle="dropdown"
+                                href="/"
+                                style={{ color: 'rgb(0,0,0)' }}></a>
+                                <div className="dropdown-menu"><a className="dropdown-item" href="/profile">প্রোফাইল</a><a
+                                    className="dropdown-item" href="/login" onClick={handleSubmit}>লগ আউট</a></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
                 {/* } */}
             </div>
         </nav>

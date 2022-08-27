@@ -16,6 +16,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CampaignManagement from "./pages/campaignManagement";
 import CampaignDetails from "./pages/CampaignDetails";
 import Statistics from './pages/stat';
+import GoTo from './pages/go_to';
+
 
 function App() {
     return (
@@ -41,6 +43,8 @@ function App() {
                     <Route exact path='/campaign_details/:id' element={<CampaignDetails />} />
                     <Route path='/campaign_list' element={<CampaignManagement />} />
                     <Route path='/statistics' element={<Statistics />} />
+                    {/* <Route path='/go_to/:now' element={<GoTo />} /> */}
+                    <Route exact path='/go_to/:id' element={<GoTo />} />
                 </Routes>
             </div>
             <Footer />

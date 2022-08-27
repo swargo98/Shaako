@@ -645,3 +645,31 @@ def getSupNotification(request):
         print(ret)
 
         return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def markAsRead(request):
+    if request.method == 'POST':
+        id=request.data
+        print("notification: "+str(id))
+        notification = Supervisors_Notification.objects.get(id=id)
+        # delete notification
+        notification.delete()
+        print("deleteeeeeeeeeeeeeeeeeee "+str(id))
+
+        return Response("marked as read")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSingleNotification(request):
+    if request.method == 'POST':
+        id=request.data
+        
+        notification = Supervisors_Notification.objects.get(id=id)
+        dict={}
+        dict['is_read'] = notification.is_read
+        dict['notification_type']=notification.notification_type
+        dict['type_id'] = notification.type_id
+        return Response(dict)
