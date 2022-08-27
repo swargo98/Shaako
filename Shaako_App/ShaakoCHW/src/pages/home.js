@@ -12,8 +12,8 @@ import MaterialButtonViolet from "../../components/MaterialButtonViolet";
 import { useState, useEffect } from 'react'
 import '../../global.js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 export default function Home({ navigation }) {
-	console.log("ekhaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 	let [chw_id, setchw_id] = useState(null)
 	let [sup_id, setsup_id] = useState(null)
 	let [lesson_count, setLessonCount] = useState(-1)

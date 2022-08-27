@@ -27,9 +27,9 @@ function App() {
             <NavbarNGOAdmin />
             <br />
             <br />
-            <br />
             <div className="app-container" style={{ backgroundColor: "#a6f9d6" }}>
                 <Routes>
+                    <Route path='/' element={<Home />} />
                     <Route path='/home' element={<Home />} />
                     <Route path='/about' element={<About />} />
                     <Route path='/login' element={<Authentication />} />

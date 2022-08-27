@@ -110,7 +110,7 @@ const ViewContents = () => {
                 <div className="container py-4 py-xl-5">
                     <div className="row mb-5">
                         <div className="col-md-8 col-xl-7 text-center mx-auto">
-                            <h2>স্বাস্থ্যসেবা বিষয়ক পাঠ</h2>
+                            <h2><b>স্বাস্থ্যসেবা বিষয়ক পাঠ</b></h2>
                         </div>
                     </div>
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
@@ -118,7 +118,19 @@ const ViewContents = () => {
                             result.map((r) => {
                                 return (
                                     <div className="col">
-                                        <div className="p-4">
+                                        <div class="card" style={{width: "18rem"}}>                                                
+                                                <div class="card-body">
+                                                <div class="card-header"><b>{r.title}</b></div>
+                                                    {/* <h5 class="card-title"><b>{r.title}</b></h5> */}
+                                                    <br></br>
+                                                    <p class="card-text">
+                                                        <p>লেখকঃ {r.supervisor_name}</p>
+                                                        <p>তারিখঃ {r.upload_time}</p>                                                        
+                                                    </p>
+                                                    <a href={`/blog_post/${r.id}`} class="btn btn-primary">বিস্তারিত</a>
+                                                </div>
+                                                </div>
+                                        {/* <div className="p-4">
                                             <a style={{ textDecoration: "none" }} href={`/blog_post/${r.id}`}><h4>{r.title}</h4></a>
                                             <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
                                                 width="50" height="50"
@@ -127,8 +139,10 @@ const ViewContents = () => {
                                                     <p className="fw-bold mb-0">{r.supervisor_name}</p>
                                                     <p className="text-muted mb-0">Upload date: {r.upload_time}</p>
                                                 </div>
+
+                                                
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 );
                             })
@@ -143,7 +157,7 @@ const ViewContents = () => {
                 <div className="container py-4 py-xl-5">
                     <div className="row mb-5">
                         <div className="col-md-8 col-xl-7 text-center mx-auto">
-                            <h2>স্বাস্থ্যসেবা বিষয়ক কুইজ</h2>
+                            <h2><b>স্বাস্থ্যসেবা বিষয়ক কুইজ</b></h2>
                         </div>
                     </div>
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
@@ -151,7 +165,19 @@ const ViewContents = () => {
                             result2.map((r) => {
                                 return (
                                     <div className="col">
-                                        <div className="p-4">
+                                        <div class="card" style={{width: "18rem"}}>                                                
+                                                <div class="card-body">
+                                                <div class="card-header"><b>{r.title}</b></div>
+                                                    {/* <h5 class="card-title"><b>{r.title}</b></h5> */}
+                                                    <br></br>
+                                                    <p class="card-text">
+                                                        <p>লেখকঃ {r.supervisor_name}</p>
+                                                        <p>তারিখঃ {r.upload_time}</p>                                                        
+                                                    </p>
+                                                    <a href={`/quiz_post/${r.id}`} class="btn btn-primary">কুইজ দেখুন</a>
+                                                </div>
+                                                </div>
+                                        {/* <div className="p-4">
                                             <a style={{ textDecoration: "none" }} href={`/quiz_post/${r.id}`}><h4>{r.title}</h4></a>
                                             <div className="d-flex"><img className="rounded-circle flex-shrink-0 me-3 fit-cover"
                                                 width="50" height="50"
@@ -161,7 +187,7 @@ const ViewContents = () => {
                                                     <p className="text-muted mb-0">Upload date: {r.upload_time}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 );
                             })

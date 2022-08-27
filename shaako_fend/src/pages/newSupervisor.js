@@ -193,7 +193,7 @@ const NewSupervisor = () => {
                     <div className="container">
                         <div className="block-heading" style={{ padding: "24px 0px 0px" }}>
                             <h2 className="text-info"><br /><span
-                                style={{ color: "rgba(var(--bs-info-rgb), var(--bs-text-opacity))", backgroundColor: "rgb(246, 246, 246)" }}>সুপারভাইজার নিয়োগ</span><br />
+                                style={{ color: "rgba(var(--bs-info-rgb), var(--bs-text-opacity))",fontWeight:'bold'}}>সুপারভাইজার নিয়োগ</span><br />
                             </h2>
                         </div>
                     </div>

@@ -33,10 +33,10 @@ const Home = () => {
             
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <section className="clean-block clean-hero"
-                style={{ backgroundImage: "url(" + Background + ")", color: 'rgba(9, 255, 162, 0.85)' }}>
+                style={{ backgroundImage: "url(" + Background + ")", color: 'rgba(9, 255, 162, 0.85)'}}>
                 <div className="text">
-                    <h1><span style={{ color: 'rgb(66, 0, 255)', backgroundColor: 'rgb(248, 247, 247)' }}>সাঁকো</span></h1>
-                    <p><br /><strong><span style={{ color: 'rgb(7, 55, 99)', backgroundColor: 'rgb(244, 244, 245)' }}>স্বাস্থ্যসেবার সেতুবন্ধন</span></strong><br /><br />
+                    <h1><span style={{ color: 'rgb(66, 0, 255)', fontWeight:'bold'}}>সাঁকো</span></h1>
+                    <p><br /><strong><span style={{ color: 'rgb(7, 55, 99)' , fontWeight:'bold'}}>স্বাস্থ্যসেবার সেতুবন্ধন</span></strong><br /><br />
                     </p>
                     <button className="btn btn-outline-light btn-lg" type="button"
                         style={{ margin: '0px', padding: '8px 16px', width: '433.922px', background: 'green' }}>সেবাপ্রাপ্ত রুগী:&nbsp; {data1.data1}
