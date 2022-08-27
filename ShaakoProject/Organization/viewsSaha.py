@@ -27,6 +27,7 @@ from rest_framework.authtoken.models import Token
 from datetime import datetime
 import base64
 
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -102,7 +103,7 @@ def getLessonList(request):
         data = request.data
         print(data)
         sup_id = request.data['sup_id']
-        chw_id=request.data['chw_id']
+        chw_id = request.data['chw_id']
 
         # find chw with id=chw_id
         chw = CHW.objects.get(id=chw_id)
@@ -114,11 +115,12 @@ def getLessonList(request):
             # find Lesson_CHW where chw=chw and lesson=lesson
             lesson_chw = Lesson_CHW.objects.filter(chw=chw, lesson=lesson)
             # if lesson_chw is not empty then lesson is done
-            done=False
+            done = False
             if len(lesson_chw) > 0:
                 done = True
             ret.append({'id': lesson.id, 'title': lesson.title,
-                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date(),'is_read': done})
+                        'supervisor_name': lesson.supervisor.name, 'upload_time': lesson.upload_date.date(),
+                        'is_read': done})
         print(ret)
         return Response(ret)
 
@@ -373,8 +375,8 @@ def getDiseaseStat(request):
                 # round to 2 decimal places
                 diseases[disease] = round(diseases[disease], 2)
         # if there are more than 10 entries then keep  10 entries with most value
-        if len(diseases) > 10:
-            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:10]
+        if len(diseases) > 15:
+            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:15]
             # dictionary
             diseases = dict(diseases)
             total = 0
@@ -632,10 +634,17 @@ def getCampaignStat(request):
 @permission_classes([IsAuthenticated])
 def getFilterDiseaseStat(request):
     if request.method == 'POST':
+        print(request.data)
         organization = request.data['organization']
         inputdivision = request.data['inputdivision']
         inputdistrict = request.data['inputdistrict']
         inputupazilla = request.data['inputupazilla']
+        if inputdivision == '---':
+            inputdivision = ''
+        if inputdistrict == '---':
+            inputdistrict = ''
+        if inputupazilla == '---':
+            inputupazilla = ''
         supervisors = Supervisor.objects.filter(organization_id=organization)
         chws = CHW.objects.filter(supervisor_id__in=supervisors)
         if len(inputdivision) != 0 and len(inputdistrict) == 0 and len(inputupazilla) == 0:
@@ -686,8 +695,8 @@ def getFilterDiseaseStat(request):
             total += diseases[disease]
 
         # if there are more than 10 entries then keep  10 entries with most value
-        if len(diseases) > 10:
-            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:10]
+        if len(diseases) > 15:
+            diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)[:15]
             # dictionary
             diseases = dict(diseases)
             total = 0
@@ -758,7 +767,7 @@ def updateCHWProfile(request):
             return Response('False')
         if len(password) == 0 or len(password2) == 0:
             CHW.objects.filter(id=id).update(email=email, contactNo=contactNo,
-                                                    presentAddress=presentAddress)
+                                             presentAddress=presentAddress)
             return Response('True')
         if password == password2:
             # match argon2 hash of passwordOld2 with passwordOld with try/except
@@ -767,11 +776,10 @@ def updateCHWProfile(request):
                 # update OrganizationAdmin with name, password, email, contactNo, presentAddress
                 passwordHash = ph().hash(password)
                 CHW.objects.filter(id=id).update(password=passwordHash,
-                                                        email=email, contactNo=contactNo,
-                                                        presentAddress=presentAddress)
+                                                 email=email, contactNo=contactNo,
+                                                 presentAddress=presentAddress)
                 return Response('True')
 
             except:
                 pass
         return Response('False')
-

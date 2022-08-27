@@ -1,5 +1,6 @@
 from __future__ import division
 import datetime
+import random
 from email import message
 from io import BytesIO
 import re
@@ -28,6 +29,9 @@ from rest_framework.decorators import authentication_classes
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+import names
+from random import randrange
+from datetime import timedelta
 
 
 @api_view(['POST'])
@@ -85,6 +89,179 @@ def getMyContent(request):
         # print(lesson.title, lesson.content)
         return Response({'title': lesson.title, 'content': lesson.content, 'author': lesson.supervisor.name,
                          'upload_time': lesson.upload_date.date()})
+
+
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
+
+
+def PopulateSupervisor():
+    print("Heelooo world")
+    # Location.objects.all().delete()
+    # Campaign.objects.all().delete()
+    for i in range(300):
+        organization_id = 3
+        first = names.get_first_name()
+        last = names.get_last_name()
+        name = first + " " + last
+        password = ph().hash("ABCD")
+        email = first + last + "@gmail.com"
+        contactNo = "01715295467"
+        # fetch a random row from Location table
+        location = Location.objects.order_by('?').first()
+        presentAddress = location.upazilla_thana + ", " + location.district + ", " + location.division
+        imagePath = 'image\default.png'
+        recruitment_date = random_date(date(2022, 1, 1), date(2022, 8, 28))
+        # create a new Supervisor
+        supervisor = Supervisor(name=name, password=password, email=email, contactNo=contactNo,
+                                presentAddress=presentAddress, imagePath=imagePath, location=location,
+                                organization_id=organization_id, recruitment_date=recruitment_date)
+
+        supervisor.save()
+        U = User(username=supervisor.email)
+        U.save()
+        token = Token.objects.create(user=U)
+        token.save()
+    return True
+
+
+def PopulateCHW():
+    print("Heelooo world CHW")
+    # Location.objects.all().delete()
+    # Campaign.objects.all().delete()
+    for i in range(600):
+        supervisor = Supervisor.objects.order_by('?').first()
+        first = names.get_first_name()
+        last = names.get_last_name()
+        name = first + " " + last
+        password = ph().hash("ABCD")
+        rand = str(randrange(1, 1000))
+        email = first + last + rand + "@gmail.com"
+        contactNo = "01715295467"
+        # fetch a random row from Location table
+        # generate a random number between 1 and 1000
+
+        location = Location.objects.order_by('?').first()
+        presentAddress = location.upazilla_thana + ", " + location.district + ", " + location.division
+        imagePath = 'image\default.png'
+        recruitment_date = random_date(date(2022, 1, 1), date(2022, 8, 28))
+        # create a new Supervisor
+        chw = CHW(name=name, password=password, email=email, contactNo=contactNo,
+                  presentAddress=presentAddress, imagePath=imagePath, location=location,
+                  supervisor=supervisor, recruitment_date=recruitment_date)
+
+        chw.save()
+        U = User(username=chw.email)
+        U.save()
+        token = Token.objects.create(user=U)
+        token.save()
+    return True
+
+
+def PopulatePatient():
+    for i in range(500):
+        chw = CHW.objects.get(id=randrange(800, 1096))
+        contactNo = "017" + str(randrange(11111111, 99999999))
+        while len(contactNo) < 11:
+            contactNo = contactNo + "0"
+        gender = "Female"
+        if randrange(0, 2) == 0:
+            gender = "Male"
+        name = names.get_full_name(gender)
+        location = chw.location
+        address = location.upazilla_thana + ", " + location.district + ", " + location.division
+        imagePath = 'image\default.png'
+        date_of_birth = random_date(date(1960, 1, 1), date(2021, 8, 28))
+        # create a new Supervisor
+        patient = Patient(name=name, contactNo=contactNo, chw=chw, date_of_birth=date_of_birth, gender=gender,
+                          address=address)
+
+        patient.save()
+
+    return True
+
+
+def PopulateVisitForm():
+    symptomslistOld = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills',
+                       'joint_pain',
+                       'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting',
+                       'burning_micturition', 'spotting_ urination',
+                       'fatigue', 'weight_gain', 'anxiety', 'cold_hands_and_feets', 'mood_swings', 'weight_loss',
+                       'restlessness', 'lethargy',
+                       'patches_in_throat', 'irregular_sugar_level', 'cough', 'high_fever', 'sunken_eyes',
+                       'breathlessness', 'sweating',
+                       'dehydration', 'indigestion', 'headache', 'yellowish_skin', 'dark_urine', 'nausea',
+                       'loss_of_appetite', 'pain_behind_the_eyes',
+                       'back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine',
+                       'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach',
+                       'swelled_lymph_nodes', 'malaise', 'blurred_and_distorted_vision', 'phlegm', 'throat_irritation',
+                       'redness_of_eyes', 'sinus_pressure', 'runny_nose', 'congestion', 'chest_pain',
+                       'weakness_in_limbs',
+                       'fast_heart_rate', 'pain_during_bowel_movements', 'pain_in_anal_region', 'bloody_stool',
+                       'irritation_in_anus', 'neck_pain', 'dizziness', 'cramps', 'bruising', 'obesity', 'swollen_legs',
+                       'swollen_blood_vessels', 'puffy_face_and_eyes', 'enlarged_thyroid', 'brittle_nails',
+                       'swollen_extremeties', 'excessive_hunger', 'extra_marital_contacts', 'drying_and_tingling_lips',
+                       'slurred_speech', 'knee_pain', 'hip_joint_pain', 'muscle_weakness', 'stiff_neck',
+                       'swelling_joints',
+                       'movement_stiffness', 'spinning_movements', 'loss_of_balance', 'unsteadiness',
+                       'weakness_of_one_body_side', 'loss_of_smell', 'bladder_discomfort', 'foul_smell_of urine',
+                       'continuous_feel_of_urine', 'passage_of_gases', 'internal_itching', 'toxic_look_(typhos)',
+                       'depression', 'irritability', 'muscle_pain', 'altered_sensorium', 'red_spots_over_body',
+                       'belly_pain',
+                       'abnormal_menstruation', 'dischromic _patches', 'watering_from_eyes', 'increased_appetite',
+                       'polyuria', 'family_history', 'mucoid_sputum',
+                       'rusty_sputum', 'lack_of_concentration', 'visual_disturbances', 'receiving_blood_transfusion',
+                       'receiving_unsterile_injections', 'coma', 'stomach_bleeding', 'distention_of_abdomen',
+                       'history_of_alcohol_consumption', 'fluid_overload', 'blood_in_sputum',
+                       'prominent_veins_on_calf',
+                       'palpitations', 'painful_walking', 'pus_filled_pimples', 'blackheads', 'scurring',
+                       'skin_peeling',
+                       'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails', 'blister',
+                       'red_sore_around_nose',
+                       'yellow_crust_ooze']
+    diseaselist = ['Fungal infection', 'Allergy', 'GERD', 'Chronic cholestasis', 'Drug Reaction',
+                   'Peptic ulcer diseae', 'AIDS', 'Diabetes ',
+                   'Gastroenteritis', 'Bronchial Asthma', 'Hypertension ', 'Migraine', 'Cervical spondylosis',
+                   'Paralysis (brain hemorrhage)',
+                   'Jaundice', 'Malaria', 'Chicken pox', 'Dengue', 'Typhoid', 'hepatitis A', 'Hepatitis B',
+                   'Hepatitis C', 'Hepatitis D',
+                   'Hepatitis E', 'Alcoholic hepatitis', 'Tuberculosis', 'Common Cold', 'Pneumonia',
+                   'Dimorphic hemmorhoids(piles)',
+                   'Heart attack', 'Varicose veins', 'Hypothyroidism', 'Hyperthyroidism', 'Hypoglycemia',
+                   'Osteoarthristis',
+                   'Arthritis', '(vertigo) Paroymsal  Positional Vertigo', 'Acne', 'Urinary tract infection',
+                   'Psoriasis', 'Impetigo']
+    for i in range(300):
+        # get a random patient
+        patient = Patient.objects.order_by('?').first()
+        chw = patient.chw
+        curdate = random_date(date(2022, 1, 1), date(2022, 8, 28))
+        temperature = randrange(98, 102)
+        blood_pressure = randrange(120, 140)
+        # assumed_disease = get a random disease from the list
+        assumed_disease = random.choice(diseaselist)
+        suggestions = "বেশি পানি পান করুন।"
+        summary = "রোগী অসুস্থ"
+        next_visit_date = random_date(curdate, date(2022, 8, 30))
+        cur_symptoms = random.sample(symptomslistOld, randrange(1, 5))
+        for symptom in cur_symptoms:
+            if not Symptom.objects.filter(symptom_name=symptom).exists():
+                Symptom.objects.create(symptom_name=symptom)
+        VisitForm.objects.create(patient=patient, chw=chw, date=curdate, temperature=temperature,
+                                 blood_pressure=blood_pressure, suggestions=suggestions,
+                                 assumed_disease=assumed_disease,
+                                 next_visit_date=next_visit_date, summary=summary)
+        for symptom in cur_symptoms:
+            symptom = Symptom.objects.get(symptom_name=symptom)
+            visitForm = VisitForm.objects.get(date=curdate, chw=chw, patient=patient)
+            SymptomForm.objects.create(visitForm=visitForm, symptom=symptom)
 
 
 # Create your views here.
@@ -184,18 +361,15 @@ def home(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def createSupervisor(request):
     print(request.data)
-    print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     print(request.user)
     print(request.auth)
     if request.method == 'POST':
-        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         data = request.data
         print(data)
-        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         name = data['name']
         password = data['password']
         email = data['email']
@@ -209,7 +383,6 @@ def createSupervisor(request):
         upazilla_thana = data['inputupazilla']
         # find supervisor with email equals to email
         supervisor = Supervisor.objects.filter(email=email)
-        print("heereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         ok = 1
         message = ""
 
@@ -341,8 +514,8 @@ def getUnionsOfSupervisor(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def updateSupervisor(request):
     data = request.data
     supervisor = Supervisor.objects.get(id=data['sup_id'])
@@ -360,8 +533,8 @@ def updateSupervisor(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def fetchLocationSupervisor(request):
     if request.method == 'POST':
         data = request.data
@@ -378,7 +551,7 @@ def fetchLocationSupervisor(request):
             ret.append(d['division'])
         dict['division'] = ret
 
-        if len(division) == 0:
+        if len(division) == 0 or division == '---':
             division = ret[0]
 
         districts = Location.objects.values('district').filter(division=division).distinct()
@@ -569,6 +742,12 @@ def getAgeWiseDiseaseStat(request):
         inputdivision = request.data['inputdivision']
         inputdistrict = request.data['inputdistrict']
         inputupazilla = request.data['inputupazilla']
+        if inputdivision == '---':
+            inputdivision = ''
+        if inputdistrict == '---':
+            inputdistrict = ''
+        if inputupazilla == '---':
+            inputupazilla = ''
         supervisors = Supervisor.objects.filter(organization_id=organization)
         chws = CHW.objects.filter(supervisor_id__in=supervisors)
         if len(inputdivision) != 0 and len(inputdistrict) == 0 and len(inputupazilla) == 0:
