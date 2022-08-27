@@ -333,8 +333,8 @@ def getPatientProfile(request):
 
         print(symptoms_list)
 
-        #get patient from visit form with id = FormID...
-        PatientID = VisitForm.objects.get(id=FormID).patient.id
+        #get patient with FormID
+        PatientID=FormID
         print("PatientID : {0}".format(PatientID))
 
         # get all information of the patient with id = PatientID

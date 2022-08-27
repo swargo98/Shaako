@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LoginScreen from "react-native-login-screen";
-import { View, Text, StyleSheet, Image, AppRegistry, TouchableOpacity, } from "react-native";
+import { View, Text, StyleSheet, Image, AppRegistry, TouchableOpacity, ScrollView } from "react-native";
 import MaterialButtonViolet from "./../../components/MaterialButtonViolet";
 import Navbar from "./../../components/Navbar";
 import MaterialCardWithoutImage from "../../components/MaterialCardWithoutImage";
@@ -9,9 +9,9 @@ import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow"
 import { Card, ListItem, Button, Icon, Header, Input } from 'react-native-elements'
 import DatePicker from 'react-native-datepicker';
 import RadioButtonRN from 'radio-buttons-react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import * as ImagePicker from 'expo-image-picker';  // not react-image-picker
 // Ref: https://reactnativeelements.com/docs/2.3.2/input#label
 
 const AddPatient = ({ navigation }) => {
@@ -22,7 +22,7 @@ const AddPatient = ({ navigation }) => {
     const [gen, setgen] = useState('');
     let [isLoggedIn, setisLoggedIn] = useState(false)
     let [failedLogin, setfailedLogin] = useState(false)
-
+    const [image, setImage] = useState(null);
     const gender = [
         {
             label: 'পুরুষ'
@@ -55,7 +55,7 @@ const AddPatient = ({ navigation }) => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + tok
             },
-            body: JSON.stringify({ name, address, phone, gen, date, chw_id })
+            body: JSON.stringify({ name, address, phone, gen, date, chw_id, image })
         })
         let data = await response.json()
         console.log(data)
@@ -65,12 +65,34 @@ const AddPatient = ({ navigation }) => {
         else {
             setfailedLogin(true)
         }
+    }
+
+    let handleClickIMAGE = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: true
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            // quality: 1,
+        });
+
+        // console.log(result);
+
+
+
+        if (!result.cancelled) {
+            console.log("vitor")
+            setImage(result.base64);
+            // console.log(image)
+        }
 
     }
+
     return (
         <View style={styles.container}>
             <Navbar navigation={navigation}></Navbar>
-
+            <ScrollView>
             <View style={{ alignItems: 'center', padding: 10 }} >
                 <View style={styles.FormData}>
                     <Input onChangeText={handleChangeName}
@@ -125,6 +147,10 @@ const AddPatient = ({ navigation }) => {
                         }}
                     />
 
+                    <TouchableOpacity style={styles.loginBtn} onPress={handleClickIMAGE}>
+                        <Text style={styles.loginText}>IMAGE</Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
                         <Text style={styles.loginText}>সাবমিট</Text>
                     </TouchableOpacity>
@@ -135,6 +161,7 @@ const AddPatient = ({ navigation }) => {
                     </View>
                 </View>
             </View>
+            </ScrollView>
         </View>
     );
 }

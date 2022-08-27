@@ -153,9 +153,8 @@ const QuizList = ({ navigation }) => {
                         </View>);
                 })}
                 <View >
-                    <Card>
+                    <Card style={styles.submission}>
                         <Card.Title>পূর্ববর্তী সাবমিশন দেখুন</Card.Title>
-                        <Card.Divider />
                     </Card>
                 </View>
 
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         marginTop: -18,
         marginLeft: -18
-    },
+    }
 
 });
 

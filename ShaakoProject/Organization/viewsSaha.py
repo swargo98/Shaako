@@ -25,7 +25,7 @@ from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from datetime import datetime
-
+import base64
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -135,16 +135,28 @@ def addPatient(request):
         gen = data['gen']
         birthdate = data['date']
         chw_id = data['chw_id']
+        image = data['image']
+        # print(image)
+
         print(name, address, phone, gen, birthdate, chw_id)
         # check if any of the fields is empty or null
         if name == "" or address == "" or phone == "" or gen == "" or birthdate == "":
             return Response("False")
         # convert birtdate to datetime
-        birthdate = datetime.strptime(birthdate, '%d-%m-%Y').date()
+        birthdate = datetime.strptime(birthdate, '%d/%m/%Y').date()
         # create a new Patient object and add it to Patient table
         patient = Patient(name=name, address=address, contactNo=phone, gender=gen, date_of_birth=birthdate,
                           chw_id=chw_id)
         patient.save()
+
+        imgdata = base64.b64decode(image)
+        filename = str(BASE_DIR) + "\\image\\patient\\" + str(patient.id) + ".png"
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
+        # img = Image.open(image)
+        # img.save(str(BASE_DIR) + "\\image\\patient\\" + str(patient.id) + ".png", qualtity=95,
+        #                  optimize=True)
+
         return Response("True")
 
 
