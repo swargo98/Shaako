@@ -139,7 +139,7 @@ const UpdateCHW = () => {
             <br />
             <br />
             <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
-                <a href='/new_chw'><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
+                <a href='/new_chw' style={{textDecoration: "none"}}><h4>স্বাস্থ্যকর্মী নিয়োগ</h4></a>
             </div>
             <div className="card shadow">
                 <div className="card-header py-3">

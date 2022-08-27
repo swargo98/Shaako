@@ -130,15 +130,18 @@ const UpdateSupervisor = () => {
             {!localStorage.getItem('token') && <Navigate to="/login" replace={true} />}
             <br />
             <br />
-            <div className="col-md-5 col-lg-8 feature-box"><i className="icon-pencil icon"></i>
-                <a href='/new_supervisor'><h4>সুপারভাইজার নিয়োগ</h4></a>
+            <div className="col feature-box"><i className="icon-pencil icon"></i>
+                <a href='/new_supervisor' style={{textDecoration: "none"}}><h4>সুপারভাইজার নিয়োগ</h4></a>
+                {/* <button className="btn btn-primary" type="submit"
+                                                        ><a href='/new_supervisor' style={{textDecoration: "none", color: "white"}}>সুপারভাইজার নিয়োগ</a></button>                     */}
             </div>
             <div className="card shadow">
                 <div className="card-header py-3">
                     <div className="row">
                         <div className="col">
                             <p className="text-primary m-0 fw-bold">সুপারভাইজার তালিকা, এলাকা পরিবর্তন এবং অব্যহতি</p>
-                        </div>
+                            {/* <a href='/new_supervisor'> <p className="text-primary m-0 fw-bold">সুপারভাইজার নিয়োগ</p></a> */}
+                        </div>                
                     </div>
                 </div>
                 <div className="card-body">
