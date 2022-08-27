@@ -28,7 +28,7 @@ const PatientList = ({ navigation }) => {
         let tok = await AsyncStorage.getItem('token')
         chw_id = JSON.parse(chw_id)
         tok = JSON.parse(tok)
-        console.log(chw_id)
+        // console.log(chw_id)
 
         let response = await fetch(global.ip + '/chw/getPatientList', {
             method: "POST",
@@ -38,13 +38,13 @@ const PatientList = ({ navigation }) => {
             },
             body: JSON.stringify(chw_id)
         })
-        console.log('came')
+        // console.log('came')
 
         let d = await response.json()
         setresult([])
         for (let i = 0; i < d.length; i++) {
             let now = d[i]
-            console.log(now.id + " " + now.name + " " + now.contact_no)
+            // console.log(now.id + " " + now.name + " " + now.contact_no)
 
             now.args = {
                 number: now.contact_no, // String value with the number to call
@@ -67,16 +67,16 @@ const PatientList = ({ navigation }) => {
             reader.onloadend = function () {
                 var base64data = reader.result;
                 now.image = base64data
-                console.log(now.image)
+                // console.log(now.image)
             }
-            console.log(1)
+            // console.log(1)
             let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
             await sleep(1000);
-            console.log(2)
+            // console.log(2)
 
             setresult(prevArray => [...prevArray, now]);
         }
-        console.log(result)
+        // console.log(result)
         setdummy(false)
         
     } 

@@ -118,7 +118,7 @@ const SymptomsFormPrev = ({ route, navigation }) => {
 
                         <Card.Divider></Card.Divider>
                         <View style={{margin: 10}}>
-                            <Text style={styles.text}>তারিখঃ </Text>                                            
+                            <Text style={styles.text}>তারিখঃ {date}</Text>                                            
                         </View>
 
                         <View>
