@@ -84,7 +84,7 @@ const PatientList = ({ navigation }) => {
 
     return  dummy? null : ( 
         <View style={styles.container}>
-            <Navbar></Navbar>
+           <Navbar navigation={navigation}></Navbar>
             <SearchBar
                 placeholder="রোগীর তালিকা থেকে খুঁজুন"
                 lightTheme

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, AppRegistry, ScrollView , TouchableOpacity} from "react-native";
+import { View, Text, StyleSheet, Image, AppRegistry, ScrollView, TouchableOpacity } from "react-native";
 import Navbar from "./../../components/Navbar";
 
 import { Card, ListItem, Button, Icon, Header, SearchBar } from 'react-native-elements'
@@ -87,7 +87,7 @@ const CHWProfile = ({ navigation }) => {
                         </View>
                         <Card.Divider></Card.Divider>
                         <TouchableOpacity style={styles.loginBtn}>
-                            <Text style={{color:'white', fontWeight: "bold", fontSize: 15}}>তথ্য অথবা পাসওয়ার্ড পরিবর্তন</Text>
+                            <Text style={{color:'white', fontWeight: "bold", fontSize: 15}} onPress={() => navigation.navigate('CHWProfileEdit')}>তথ্য অথবা পাসওয়ার্ড পরিবর্তন</Text>
                         </TouchableOpacity>
                     </Card>
 
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         width: "80%",
         borderRadius: 25,
-        height: 50,
+        height: 40,
         alignItems: "center",
         justifyContent: "center",
         marginLeft: "10%",

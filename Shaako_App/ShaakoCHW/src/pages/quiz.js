@@ -128,7 +128,7 @@ const Quiz = ({ route, navigation }) => {
 
   return a ? null : (
     <View style={styles.container}>
-      <Navbar></Navbar>
+      <Navbar navigation={navigation}></Navbar>
       <QuizeSingleChoice
         containerStyle={{ backgroundColor: "#61dafb", paddingTop: 30 }}
         questionTitleStyle={{ fontSize: 22, color: "#FFF" }}

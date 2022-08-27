@@ -155,7 +155,7 @@ const SymptosForm = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Navbar></Navbar>
+      <Navbar navigation={navigation}></Navbar>
       <View style={{ alignItems: 'center' }}>
         <Text style={styles.title}>ভিজিট ফর্ম</Text>
       </View>

@@ -27,6 +27,6 @@ urlpatterns = [
     path('CHW/getPastQuiz', viewsSaha.getPastQuiz),
     path('CHW/getImage', viewsSaha.getCHWImage),
     path('CHW/getRecentQuizSubmissions', viewsSaha.getRecentQuizSubmissions),
-
+    path('CHW/updateCHWProfile', viewsSaha.updateCHWProfile),
     path('patient/getPatientImage', viewsSaha.getPatientImage),
 ]

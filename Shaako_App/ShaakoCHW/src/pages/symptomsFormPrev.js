@@ -94,7 +94,7 @@ const SymptomsFormPrev = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Navbar></Navbar>
+            <Navbar navigation={navigation}></Navbar>
 
             <ScrollView>
                 <View >

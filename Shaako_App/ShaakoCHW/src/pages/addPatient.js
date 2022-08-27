@@ -69,7 +69,7 @@ const AddPatient = ({ navigation }) => {
     }
     return (
         <View style={styles.container}>
-            <Navbar></Navbar>
+            <Navbar navigation={navigation}></Navbar>
 
             <View style={{ alignItems: 'center', padding: 10 }} >
                 <View style={styles.FormData}>

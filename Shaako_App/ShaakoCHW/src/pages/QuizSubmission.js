@@ -46,7 +46,7 @@ function QuizSubmission({ route, navigation }) {
 	}
 	return (
 		<View style={styles.container}>
-			<Navbar></Navbar>
+			<Navbar navigation={navigation}></Navbar>
 			<ScrollView>
 
 				<View style={styles.loremIpsum3Row}>

@@ -21,6 +21,7 @@ import Nearby from "./src/pages/nearby.js";
 import Supervisor from "./src/pages/supervisor.js";
 import SymptomsFormPrev from "./src/pages/symptomsFormPrev.js";
 import CHWProfile from "./src/pages/CHWProfile.js";
+import CHWProfileEdit from "./src/pages/CHWProfileEdit.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ export default function App() {
         <Stack.Screen name="Supervisor" component={Supervisor} options={{header: () => null}} />
         <Stack.Screen name="SymptomsFormPrev" component={SymptomsFormPrev} options={{header: () => null}} />
         <Stack.Screen name="CHWProfile" component={CHWProfile} options={{header: () => null}} />
+        <Stack.Screen name="CHWProfileEdit" component={CHWProfileEdit} options={{header: () => null}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -87,8 +87,7 @@ const Profile = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Navbar></Navbar>
-
+            <Navbar navigation={navigation}></Navbar>
             <ScrollView>
                 <View >
                     <Card> 

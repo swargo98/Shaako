@@ -306,7 +306,8 @@ def updateSupervisorProfile(request):
                 return Response({"success": "True"})
 
             except:
-                return Response({"success": "False"})
+                pass
+        return Response({"success": "False"})
 
 
 @api_view(['POST'])
@@ -710,3 +711,45 @@ def getCampaignDetails(request):
                      'patients': p, 'details': camp.campaign_details}
         print(camp_dict)
         return Response(camp_dict)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateCHWProfile(request):
+    if request.method == 'POST':
+        data = request.data
+        id = data['id']
+        password = data['password']
+        password2 = data['password2']
+        passwordOld = data['passwordOld']
+        email = data['email']
+        contactNo = data['contact']
+        presentAddress = data['address']
+        # get current password of CHW with id = id
+        passwordOld2 = CHW.objects.get(id=id).password
+        print(id, password, password2, passwordOld, passwordOld2, email, contactNo, presentAddress)
+        try:
+            ph().verify(passwordOld2, passwordOld)
+        except:
+            print("Here")
+            return Response('False')
+        if len(password) == 0 or len(password2) == 0:
+            CHW.objects.filter(id=id).update(email=email, contactNo=contactNo,
+                                                    presentAddress=presentAddress)
+            return Response('True')
+        if password == password2:
+            # match argon2 hash of passwordOld2 with passwordOld with try/except
+            try:
+                ph().verify(passwordOld2, passwordOld)
+                # update OrganizationAdmin with name, password, email, contactNo, presentAddress
+                passwordHash = ph().hash(password)
+                CHW.objects.filter(id=id).update(password=passwordHash,
+                                                        email=email, contactNo=contactNo,
+                                                        presentAddress=presentAddress)
+                return Response('True')
+
+            except:
+                print("Here")
+                pass
+        return Response('False')

@@ -96,7 +96,7 @@ const QuizList = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Navbar></Navbar>
+            <Navbar navigation={navigation}></Navbar>
             <ScrollView>
 
                 {result.map(a => {
