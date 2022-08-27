@@ -732,7 +732,6 @@ def updateCHWProfile(request):
         try:
             ph().verify(passwordOld2, passwordOld)
         except:
-            print("Here")
             return Response('False')
         if len(password) == 0 or len(password2) == 0:
             CHW.objects.filter(id=id).update(email=email, contactNo=contactNo,
@@ -750,6 +749,6 @@ def updateCHWProfile(request):
                 return Response('True')
 
             except:
-                print("Here")
                 pass
         return Response('False')
+
