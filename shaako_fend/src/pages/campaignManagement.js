@@ -64,7 +64,7 @@ const CampaignManagement = () => {
                 <div className="container py-4 py-xl-5">
                     <div className="row mb-5">
                         <div className="col-md-8 col-xl-7 text-center mx-auto">
-                            <h2>ক্যাম্পেইন ম্যানেজমেন্ট</h2>
+                            <h2><b>ক্যাম্পেইন ম্যানেজমেন্ট</b></h2>
                         </div>
                     </div>
                     <div className="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
@@ -80,10 +80,12 @@ const CampaignManagement = () => {
 
                                             <div class="card" style={{width: "18rem"}}>                                                
                                                 <div class="card-body">
-                                                    <h5 class="card-title"><b>{r.title}</b></h5>
+                                                <div class="card-header"><b>{r.title}</b></div>
+                                                    {/* <h5 class="card-title"><b>{r.title}</b></h5> */}
+                                                    <br></br>
                                                     <p class="card-text">
-                                                        <p>ক্যাপেইন শুরু: {r.state_date}</p>
-                                                        <p>ক্যাপেইন শেষ: {r.end_date}</p>
+                                                        <p>ক্যাম্পেইন শুরু: {r.state_date}</p>
+                                                        <p>ক্যাম্পেইন শেষ: {r.end_date}</p>
                                                         <p>বিবরণ: {r.campaign_details}</p>
                                                     </p>
                                                     <a href={`/campaign_details/${r.id}`} class="btn btn-primary">বিস্তারিত</a>
