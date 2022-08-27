@@ -12,7 +12,7 @@ const NavbarNGOAdmin = () => {
     return (
         <nav className="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
             <div className="container"><img src={logo} alt="logo" style={{ width: '40px' }} /><a
-                className="navbar-brand logo" href="/"
+                className="navbar-brand logo" href="/home"
                 style={{ width: '67.25px', padding: '3px 0px', margin: '0px' }}><strong><span
                     style={{ color: 'rgba(4, 40, 228, 0.9)' }}>&nbsp; সাঁকো</span></strong></a>
                 <button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navcol-1"><span
