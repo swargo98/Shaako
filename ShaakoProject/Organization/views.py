@@ -646,6 +646,13 @@ def createCHW(request):
             U.save()
             token = Token.objects.create(user=U)
             token.save()
+
+            Supervisors_Notification(supervisor=supervisor, 
+                                        description="আপনার অধীনে নতুন স্বাস্থ্যকর্মী '" + name + "' কে যুক্ত করা হয়েছে",
+                                        timestamp=datetime.datetime.now(),
+                                        notification_type="chw",
+                                        type_id=chw.id).save()
+
             return Response('True')
 
     return Response('False')
