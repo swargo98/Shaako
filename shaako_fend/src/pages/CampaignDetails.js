@@ -210,7 +210,7 @@ const CampaignDetails = () => {
                                         <hr/>
                                         <div className="row">
                                             <div className="col-md-6 align-self-center">
-                                                <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Total {patients.length} results</p>
+                                                <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Total {supervisors.length} results</p>
                                             </div>
                                         </div>
                                     </div>
