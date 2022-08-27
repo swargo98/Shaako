@@ -259,7 +259,7 @@ const NewSupervisor = () => {
                                 <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label><input
                                     className="form-control" type="file" onChange={(e) => { handleChangeImage(e) }} /></div>
                                 <div className="mb-3">
-                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}>সংরক্ষণ করুন</button>
+                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}><a style={{color: "white", textDecoration: "none"}} href="/update_supervisor">সংরক্ষণ করুন</a></button>
                                     {failedCreateBool && <p style={{ color: "red" }}>{failedCreate}!</p>}
                                 </div>
                             </form>
