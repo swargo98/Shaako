@@ -25,6 +25,7 @@ function App() {
             <br />
             <div className="app-container" style={{ backgroundColor: "#a6f9d6" }}>
                 <Routes>
+                    <Route exact path='/' element={<Home />} />
                     <Route exact path='/home' element={<Home />} />
                     <Route exact path='/login' element={<Authentication />} />
                     <Route exact path='/new_lesson' element={<NewLesson />} />
