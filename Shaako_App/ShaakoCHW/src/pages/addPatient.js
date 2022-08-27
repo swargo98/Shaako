@@ -89,11 +89,33 @@ const AddPatient = ({ navigation }) => {
 
     }
 
+    let openCamera = async () => {
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: true
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            // quality: 1,
+        });
+
+        // console.log(result);
+
+
+
+        if (!result.cancelled) {
+            console.log("vitor")
+            setImage(result.base64);
+            // console.log(image)
+        }
+
+    }
+
     return (
         <View style={styles.container}>
             <Navbar navigation={navigation}></Navbar>
             <ScrollView>
-            <View style={{ alignItems: 'center', padding: 10 }} >
+            <View style={{ alignItems: 'center', padding: 0 }} >
                 <View style={styles.FormData}>
                     <Input onChangeText={handleChangeName}
                         label="রোগীর নাম"
@@ -147,8 +169,12 @@ const AddPatient = ({ navigation }) => {
                         }}
                     />
 
+                <TouchableOpacity style={styles.loginBtn} onPress={openCamera}>
+                        <Text style={styles.loginText}>ছবি তুলুন</Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity style={styles.loginBtn} onPress={handleClickIMAGE}>
-                        <Text style={styles.loginText}>IMAGE</Text>
+                        <Text style={styles.loginText}>ছবি আপলোড করুন</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
@@ -189,7 +215,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
+        marginTop: 20,
         marginLeft: "10%",
         backgroundColor: "#0c6efc",
     },
@@ -221,7 +247,7 @@ const styles = StyleSheet.create({
 
     FormData: {
         backgroundColor: "white",
-        width: "80%",
+        width: "90%",
         padding: 10,
     }
 

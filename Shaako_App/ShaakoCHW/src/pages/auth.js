@@ -45,7 +45,7 @@ const Authentication = ({ navigation }) => {
   }, [])
 
   let checkAlreadyLogged = () => {
-
+    console.disableYellowBox = true;
   }
 
   let handleChangeUsername = (value) => {
