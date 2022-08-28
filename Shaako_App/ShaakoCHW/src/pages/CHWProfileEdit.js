@@ -134,7 +134,7 @@ const CHWProfileEdit = ({ navigation }) => {
 
                         <View>
                             {failedLogin && <Text style={styles.failedLogin}>প্রোফাইল আপডেট সফল হয় নি</Text>}
-                            {isLoggedIn && navigation.navigate('CHWProfile')}
+                            {isLoggedIn && navigation.navigate('Home')}
                         </View>
                     </View>
 

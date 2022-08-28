@@ -98,6 +98,16 @@ export default function Home({ navigation }) {
 			</View>
 			<MaterialButtonViolet3
 				style={styles.materialButtonViolet3}
+				text="নতুন রোগী যুক্ত"
+				clicked={handleClick3}
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
+				text="রোগীর তালিকা"
+				clicked={handleClick4}
+			></MaterialButtonViolet3>
+			<MaterialButtonViolet3
+				style={styles.materialButtonViolet4}
 				text="চলমান ক্যাম্পেইনসমূহ"
 				clicked={handleClick5}
 			></MaterialButtonViolet3>
@@ -111,17 +121,9 @@ export default function Home({ navigation }) {
 				text="আপনার সুপারভাইজর"
 				clicked={handleClick7}
 			></MaterialButtonViolet3>
-			<MaterialButtonViolet3
-				style={styles.materialButtonViolet4}
-				text="রোগীর তালিকা"
-				clicked={handleClick4}
-			></MaterialButtonViolet3>
 			
-			<MaterialButtonViolet3
-				style={styles.materialButtonViolet4}
-				text="নতুন রোগী যুক্ত"
-				clicked={handleClick3}
-			></MaterialButtonViolet3>
+			
+			
 		</View>
 	);
 }

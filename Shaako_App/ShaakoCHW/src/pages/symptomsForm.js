@@ -29,7 +29,7 @@ const SymptosForm = ({ route, navigation }) => {
   let [name, setname] = useState('')
   let [age, setage] = useState('')
   let [gender, setgender] = useState('')
-
+  let [isLoggedIn, setisLoggedIn] = useState(false)
   let sortedSymptoms = ['abdominal_pain', 'abnormal_menstruation', 'acidity', 'acute_liver_failure', 'altered_sensorium', 'anxiety', 'back_pain',
     'belly_pain', 'blackheads', 'bladder_discomfort', 'blister', 'blood_in_sputum', 'bloody_stool', 'blurred_and_distorted_vision',
     'breathlessness', 'brittle_nails', 'bruising', 'burning_micturition', 'chest_pain', 'chills', 'cold_hands_and_feets', 'coma', 'congestion',
@@ -172,6 +172,7 @@ const SymptosForm = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      {isLoggedIn && navigation.navigate('Home')}
       <Navbar navigation={navigation}></Navbar>
 
       <Card>
