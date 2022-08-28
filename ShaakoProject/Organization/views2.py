@@ -55,6 +55,12 @@ def createCampaign(request):
 
                 # find supervisor with id=id
                 supervisor1 = Supervisor.objects.get(id=id)
+                Supervisors_Notification(supervisor=supervisor1, 
+                                        description="আপনার এলাকায় নতুন ক্যাম্পেইন '" + name + "' চালু করা হয়েছে",
+                                        timestamp=datetime.datetime.now(),
+                                        notification_type="campaign",
+                                        type_id=campaign.id).save()
+
                 # get all the chw of the supervisor
                 # console.log(supervisor1)
                 chw_list = CHW.objects.filter(supervisor=supervisor1)

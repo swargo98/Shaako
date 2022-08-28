@@ -31,7 +31,7 @@ const SupervisorProfile = () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({organization,id})
+            body: JSON.stringify({ organization, id })
         })
         let d = await response.json()
         setresult([])
@@ -74,7 +74,7 @@ const SupervisorProfile = () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({ search, organization , id})
+            body: JSON.stringify({ search, organization, id })
         })
         let d = await response.json()
         setresult([])
@@ -271,15 +271,20 @@ const SupervisorProfile = () => {
                                                 <tbody>
                                                     {
                                                         result.map((r) => {
+                                                            if (!r.name.includes(search) && !r.email.includes(search) && !r.contactNo.includes(search) && !r.presentAddress.includes(search) && !r.upazilla_thana.includes(search)
+                                                                && !r.district.includes(search) && !r.division.includes(search) && !r.recruitment_date.includes(search) && !r.supervisor_name.includes(search)
+                                                                && !r.ward_union.includes(search)) {
+                                                                return <></>;
+                                                            }
                                                             return (
                                                                 <tr>
                                                                     <td><img className="rounded-circle me-2" width="30" height="30"
                                                                         src={r.image} alt="man" />
-                                                    <a style={{ textDecoration: "none" }} href={`/viewCHWProfile/${r.id}`}>{r.name}</a>
-                                                                        </td>
+                                                                        <a style={{ textDecoration: "none" }} href={`/viewCHWProfile/${r.id}`}>{r.name}</a>
+                                                                    </td>
                                                                     <td>{r.email}
                                                                     </td>
-                                                                    
+
                                                                     <td>{r.contactNo}
                                                                     </td>
                                                                     <td>{r.presentAddress}

@@ -783,3 +783,23 @@ def updateCHWProfile(request):
             except:
                 pass
         return Response('False')
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSupervisorCHWList(request):
+    if request.method == 'POST':
+        data = request.data
+        print(data)
+        ret = []
+        for chw in CHW.objects.filter(supervisor_id=data):
+            location = chw.location
+            supervisor = chw.supervisor
+            dict = {'name': chw.name, 'division': location.division, 'district': location.district,
+                    'upazilla_thana': location.upazilla_thana, 'ward_union': location.ward_union,
+                    'recruitment_date': chw.recruitment_date.date(),
+                    'id': chw.id, 'email': chw.email, 'contactNo': chw.contactNo, 'presentAddress': chw.presentAddress,
+                    'imagePath': chw.imagePath,
+                    'supervisor_name': supervisor.name, 'supervisor_id': supervisor.id}
+            ret.append(dict)
+        return Response(ret)

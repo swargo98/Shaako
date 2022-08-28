@@ -21,6 +21,9 @@ urlpatterns = [
     path('CHW/makeReadNotification', viewsIft.makeReadNotification),
     path('CHW/getSchedule', viewsIft.getSchedule),
     path('chw/mark_lesson_read', viewsIft.mark_lesson_read),
+    path('supervisor/getSupNotification', viewsIft.getSupNotification),
+    path('supervisor/markAsRead', viewsIft.markAsRead),
+    path('supervisor/getSingleNotification', viewsIft.getSingleNotification),
     
     
 ]

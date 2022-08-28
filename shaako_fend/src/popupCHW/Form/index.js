@@ -11,7 +11,8 @@ export const Form = ({ onSubmit, chwid }) => {
     let response = await fetch('http://127.0.0.1:8000/organization/getAssignableSupervisor', {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + localStorage.getItem('token')
       },
       body: JSON.stringify(chwid)
     })
@@ -30,7 +31,8 @@ export const Form = ({ onSubmit, chwid }) => {
     let response = await fetch('http://127.0.0.1:8000/organization/changeSupervisorOfCHW', {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'TOKEN ' + localStorage.getItem('token')
       },
 
       body: JSON.stringify({chwid,supid})

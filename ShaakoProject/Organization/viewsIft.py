@@ -598,3 +598,78 @@ def mark_lesson_read(request):
         entry=Lesson_CHW(chw=chw, lesson=lesson, dateOfRead=datetime.datetime.now(), is_read=True)
         entry.save()
         return Response("done")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSupNotification(request):
+    if request.method == 'POST':
+        sup_id=request.data
+        # find supervisor with sup_id
+        supervisor = Supervisor.objects.get(id=sup_id)
+        # find all Supervisors_Notification where supervisor=supervisor
+        notifications = Supervisors_Notification.objects.filter(supervisor=supervisor)
+
+        ret = []
+
+        for notification in notifications:
+            dict = {}
+            dict['id'] = notification.id
+            dict['description'] = notification.description
+            dict['date'] = notification.timestamp.date()
+            print(notification.timestamp)
+            # find difference in minute between current time and timestamp
+            # datetime.replace(tzinfo=None)
+            diff = ((datetime.datetime.now(timezone.utc) - notification.timestamp).total_seconds()+21600) / 60
+            diff=math.floor(diff)
+
+            if diff<=60:
+                diff="{} মিনিট আগে".format(diff)
+            else:
+                diff=diff/60
+                diff=math.floor(diff)
+                if diff<=24:
+                    diff="{} ঘন্টা আগে".format(diff)
+                else:
+                    diff=diff/24
+                    diff=math.floor(diff)
+                    diff="{} দিন আগে".format(diff)
+
+            dict['ago_minute'] = diff
+            dict['is_read'] = notification.is_read
+            dict['notification_type']=notification.notification_type
+            dict['type_id'] = notification.type_id
+
+            ret.append(dict)
+            
+        print(ret)
+
+        return Response(ret)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def markAsRead(request):
+    if request.method == 'POST':
+        id=request.data
+        print("notification: "+str(id))
+        notification = Supervisors_Notification.objects.get(id=id)
+        # delete notification
+        notification.delete()
+        print("deleteeeeeeeeeeeeeeeeeee "+str(id))
+
+        return Response("marked as read")
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getSingleNotification(request):
+    if request.method == 'POST':
+        id=request.data
+        
+        notification = Supervisors_Notification.objects.get(id=id)
+        dict={}
+        dict['is_read'] = notification.is_read
+        dict['notification_type']=notification.notification_type
+        dict['type_id'] = notification.type_id
+        return Response(dict)

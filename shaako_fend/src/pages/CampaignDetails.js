@@ -109,11 +109,6 @@ const CampaignDetails = () => {
                 <br />
                 <div className="row mb-3">
                     <div className="col-lg-4">
-                        {/* <div className="card mb-3">
-                            <div className="card-body text-center shadow">
-                                <h4>{title}</h4>
-                            </div>
-                        </div> */}
                         <div className="card shadow mb-3">
                             <div className="card-header py-3">
                                 <p className="text-primary m-0 fw-bold">ক্যাম্পেইন তথ্য</p>

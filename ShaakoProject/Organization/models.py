@@ -174,3 +174,11 @@ class Notification(models.Model):
     notification_type = models.CharField(max_length=100)
     type_id = models.IntegerField()
     is_read = models.BooleanField(default=False)
+
+class Supervisors_Notification(models.Model):
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE, null=True)
+    timestamp = models.DateTimeField()
+    description = models.CharField(max_length=100)
+    notification_type = models.CharField(max_length=100)
+    type_id = models.IntegerField()
+    is_read = models.BooleanField(default=False)
