@@ -1,3 +1,4 @@
 Demonstration Video:
 
-[![Demonstration Video: ](https://img.youtube.com/vi/h7b0vDJqepY/0.jpg)](https://www.youtube.com/watch?v=h7b0vDJqepY)
+
+[![Demonstration Video](https://yt-embed.herokuapp.com/embed?v=h7b0vDJqepY)](https://www.youtube.com/watch?v=h7b0vDJqepY "Demonstration Video")
