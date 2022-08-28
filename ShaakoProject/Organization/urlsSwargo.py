@@ -8,5 +8,6 @@ urlpatterns = [
     path('chw/getPrediction', viewsSwargo.getPrediction),
     path('chw/saveVisitForm', viewsSwargo.addVisitForm),
     path('chw/patientProfile', viewsSwargo.getPatientProfile),
+    path('chw/prevVisitForm', viewsSwargo.getPrevVisitForm),
 
 ]

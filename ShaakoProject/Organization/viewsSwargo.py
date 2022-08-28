@@ -165,7 +165,10 @@ def getSymptomsList(request):
 
         # alphabaticsymptomslist = alphabaticsymptomslist[:10]
 
-        ret = {'list': alphabaticsymptomslist, 'name': name, 'age': age, 'gender': gender}
+        # print("alphabaticsymptomslist : {0}".format(alphabaticsymptomslist))
+        # print(alphabaticsymptomslist)
+
+        ret = {'name': name, 'age': age, 'gender': gender}
 
         print(ret)
         return Response(ret)
@@ -311,6 +314,58 @@ def addVisitForm(request):
 def getPatientProfile(request):
     if request.method == 'POST':
         print("line 362")
+        PatientID = request.data
+        print("PatientID : {0}".format(PatientID))
+
+        # get all information of the patient with id = PatientID
+        patient = Patient.objects.get(id=PatientID)
+
+        print("patient : {0}".format(patient))
+        #name, chwId, address, contact no, date_of_birth, gender
+        name = patient.name
+        chw = patient.chw
+        print("chwId : {0}".format(chw))
+        address = patient.address
+        contactNo = patient.contactNo
+        date_of_birth = patient.date_of_birth
+        gender = patient.gender
+
+
+        #get chw name from chw
+        chwName = chw.name
+        print("chwName : {0}".format(chwName))
+
+        #calculate age
+        age = calculate_age(date_of_birth)
+
+        #get all visit forms of the patient with id = PatientID sorted by date
+        visitForms = VisitForm.objects.filter(patient=patient).order_by('-date')
+
+        #print number of visit forms
+        print("number of visit forms : {0}".format(len(visitForms)))
+
+        #make list of visit forms id and date
+        visitFormsId = []
+        visitFormsDate = []
+        for visitForm in visitForms:
+            visitFormsId.append(visitForm.id)
+            visitFormsDate.append(visitForm.date.date())
+
+        # create dictionary with all information
+        patientProfile = {'name': name, 'address': address, 'contactNo': contactNo,
+                          'age': age, 'gender': gender, 'chwName': chwName, 'visitFormsId': visitFormsId,
+                          'visitFormsDate': visitFormsDate}
+
+        print(patientProfile)
+        return Response(patientProfile)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getPrevVisitForm(request):
+    if request.method == 'POST':
+        print("line 362")
         FormID = request.data
         print(FormID)
 
@@ -333,8 +388,8 @@ def getPatientProfile(request):
 
         print(symptoms_list)
 
-        #get patient with FormID
-        PatientID=FormID
+        #get patient from visit form with id = FormID...
+        PatientID = VisitForm.objects.get(id=FormID).patient.id
         print("PatientID : {0}".format(PatientID))
 
         # get all information of the patient with id = PatientID
