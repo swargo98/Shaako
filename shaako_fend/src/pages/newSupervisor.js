@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import FileBase64 from 'react-file-base64';
+import ReactDOM from 'react-dom';
 
 const NewSupervisor = () => {
     let [division, setdivision] = useState([])
@@ -147,10 +149,18 @@ const NewSupervisor = () => {
     }
 
     let handleChangeImage = (value) => {
+        // convert value.target.files[0] to base64
+        let reader = new FileReader();
+        reader.readAsDataURL(value.target.files[0]);
+
+        reader.onload = function () {
+            console.log(reader.result)
+            setinputimage(reader.result);
+        }
         // set the inputimage to value.target.files[0]
-        console.log(value);
-        console.log(value.target.files[0]);
-        setinputimage(value.target.files[0])
+        // console.log(value);
+        // console.log(value.target.files[0]);
+        // setinputimage(value.target.files[0].base64)
     }
 
     let handleSubmit = async () => {
@@ -185,6 +195,12 @@ const NewSupervisor = () => {
             setfailedCreateBool(true)
         }
     }
+    let getFiles = (files) => {
+        console.log(files.base64)
+        setinputimage(files.base64)
+        // this.setState({ files: files })
+    }
+
     return (
         <>
             <main className="page landing-page" style={{ padding: "20px 0px 0px" }}>
@@ -193,7 +209,7 @@ const NewSupervisor = () => {
                     <div className="container">
                         <div className="block-heading" style={{ padding: "24px 0px 0px" }}>
                             <h2 className="text-info"><br /><span
-                                style={{ color: "rgba(var(--bs-info-rgb), var(--bs-text-opacity))",fontWeight:'bold'}}>সুপারভাইজার নিয়োগ</span><br />
+                                style={{ color: "rgba(var(--bs-info-rgb), var(--bs-text-opacity))", fontWeight: 'bold' }}>সুপারভাইজার নিয়োগ</span><br />
                             </h2>
                         </div>
                     </div>
@@ -256,10 +272,15 @@ const NewSupervisor = () => {
                                     </select>
                                 </div>
                                 <br />
-                                <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label><input
-                                    className="form-control" type="file" onChange={(e) => { handleChangeImage(e) }} /></div>
+                                <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label>
+                                    <FileBase64
+                                        multiple={false}
+                                        onDone={getFiles.bind(this)} />
+                                    {/* <input
+                                    className="form-control" type="file" onChange={(e) => { handleChangeImage(e) }} /> */}
+                                </div>
                                 <div className="mb-3">
-                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}><a style={{color: "white", textDecoration: "none"}} href="/update_supervisor">সংরক্ষণ করুন</a></button>
+                                    <button className="btn btn-primary" type="button" onClick={handleSubmit}><a style={{ color: "white", textDecoration: "none" }} href="/update_supervisor">সংরক্ষণ করুন</a></button>
                                     {failedCreateBool && <p style={{ color: "red" }}>{failedCreate}!</p>}
                                 </div>
                             </form>

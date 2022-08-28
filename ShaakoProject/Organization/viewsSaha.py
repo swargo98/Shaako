@@ -616,7 +616,7 @@ def getCampaignStat(request):
                 continue
             # number of entries in PatientCampaign table for this camp
             entries = PatientCampaign.objects.filter(campaign=camp.id).count()
-            val = entries / int(camp.goal)
+            val = entries / int(camp.goal) * 100
             # round val to 2 decimal places
             val = round(val, 2)
             camp_dict = {'id': camp.id, 'title': camp.title, 'state_date': camp.state_date.date(),
@@ -735,7 +735,7 @@ def getCampaignDetails(request):
                     'address': patient.patient.address}
             p.append(dict)
         print(p)
-        val = entries / int(camp.goal)
+        val = entries / int(camp.goal) * 100
         # round val to 2 decimal places
         val = round(val, 2)
         camp_dict = {'id': camp.id, 'title': camp.title, 'start_date': camp.state_date.date(),

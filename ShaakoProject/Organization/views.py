@@ -1,6 +1,9 @@
 from __future__ import division
+
+import base64
 import datetime
 import random
+import traceback
 from email import message
 from io import BytesIO
 import re
@@ -9,6 +12,7 @@ from sqlite3 import TimeFromTicks
 from PIL import Image
 from os.path import exists
 
+from django.core.handlers import exception
 from django.shortcuts import render
 from pyparsing import Or
 from rest_framework import viewsets
@@ -431,19 +435,23 @@ def createSupervisor(request):
             token.save()
 
             try:
-                image = data['inputimage']
-                img = Image.open(image)
-                # find size of img in kB
-                # resize image as 100kB
+                image = request.data['inputimage']
+                print("heello")
+                # print(image)
+                # delete first 22 characters from image
+                image = image[22:]
+                # print(image)
+                imgdata = base64.b64decode(image)
 
-                width, height = img.size
-                TARGET_WIDTH = 200
-                coefficient = width / TARGET_WIDTH
-                new_height = height / coefficient
-                img = img.resize((int(TARGET_WIDTH), int(new_height)), Image.ANTIALIAS)
-                img.save(str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png", qualtity=95,
-                         optimize=True)
+                # print("heello")
+                filename = str(BASE_DIR) + "\\image\\supervisor\\" + str(supervisor.id) + ".png"
+                print(filename)
+                with open(filename, 'wb') as f:
+                    f.write(imgdata)
             except:
+                # traceback.print_exc()
+
+                # print("here")
                 pass
 
             return Response('True')
@@ -656,7 +664,25 @@ def createCHW(request):
                                      timestamp=datetime.datetime.now(),
                                      notification_type="chw",
                                      type_id=chw.id).save()
+            try:
+                image = request.data['inputimage']
+                print("heello")
+                # print(image)
+                # delete first 22 characters from image
+                image = image[22:]
+                # print(image)
+                imgdata = base64.b64decode(image)
 
+                # print("heello")
+                filename = str(BASE_DIR) + "\\image\\CHW\\" + str(chw.id) + ".png"
+                print(filename)
+                with open(filename, 'wb') as f:
+                    f.write(imgdata)
+            except:
+                # traceback.print_exc()
+
+                # print("here")
+                pass
             return Response('True')
 
     return Response('False')

@@ -64,7 +64,7 @@ const ViewContents = () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'TOKEN ' + localStorage.getItem('token')
             },
-            body: JSON.stringify(sup_id)
+            body: JSON.stringify({sup_id})
         })
         let d = await response.json()
         setresult2([])

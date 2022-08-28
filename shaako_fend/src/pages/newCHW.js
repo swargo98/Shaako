@@ -4,6 +4,8 @@ import man3 from './assets/img/avatars/avatar3.jpg'
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import FileBase64 from 'react-file-base64';
+import ReactDOM from 'react-dom';
 
 const NewCHW = () => {
     let [ward, setward] = useState([])
@@ -22,6 +24,7 @@ const NewCHW = () => {
     let [contact, setcontact] = useState('')
     let [address, setaddress] = useState('')
     let organization = localStorage.getItem('organization')
+    let [inputimage, setinputimage] = useState(null)
 
     let handleChangename = (value) => {
         setname(value)
@@ -37,6 +40,11 @@ const NewCHW = () => {
     }
     let handleChangeaddress = (value) => {
         setaddress(value)
+    }
+    let getFiles = (files) => {
+        console.log(files.base64)
+        setinputimage(files.base64)
+        // this.setState({ files: files })
     }
     useEffect(() => {
         getSups();
@@ -150,7 +158,7 @@ const NewCHW = () => {
                     'Authorization':'TOKEN ' + localStorage.getItem('token')
                 },
 
-                body: JSON.stringify({ name, email, password, contact, address, organization, inputward, supid, division, district, upazilla_thana })
+                body: JSON.stringify({ name, email, password, contact, address, organization, inputward, supid, division, district, upazilla_thana,inputimage })
             })
             let data = await response.json()
         }
@@ -251,8 +259,13 @@ const NewCHW = () => {
                                 </select>
                             </div>
                             <br />
-                            <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label><input
-                                className="form-control" type="file" /></div>
+                            <div className="mb-3"><label className="form-label" htmlFor="email">ছবি</label>
+                            {/* <input
+                                className="form-control" type="file" /> */}
+                                <FileBase64
+                                        multiple={false}
+                                        onDone={getFiles.bind(this)} />
+                                </div>
                             <div className="mb-3">
                                 <button className="btn btn-primary" type="button" onClick={handleSubmit}> <a style={{color: "white", textDecoration: "none"}} href="/update_chw">সংরক্ষণ করুন</a></button>
                             </div>

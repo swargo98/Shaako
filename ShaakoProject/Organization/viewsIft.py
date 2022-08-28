@@ -168,25 +168,37 @@ def getQ(request):
         data = request.data
         print(data)
         sup_id = request.data['sup_id']
-        chw_id = request.data['chw_id']
+        if 'chw_id' in request.data:
+            chw_id = request.data['chw_id']
 
-        # find chw
-        chw = CHW.objects.get(id=chw_id)
+            # find chw
+            chw = CHW.objects.get(id=chw_id)
 
-        # find all contents of the supervisor with id=sup_id
-        quizes = Quiz.objects.filter(supervisor_id=sup_id)
-        # order quizes by upload_date
-        quizes = quizes.order_by('-upload_date')
-        ret = []
-        for quiz in quizes:
-            # find QuizSubmission where chw=chw and quiz=quiz
-            quizSubmission = QuizSubmission.objects.filter(chw=chw, quiz=quiz)
-            played=True
-            if quizSubmission.count() == 0:
-                played=False
-            ret.append({'id': quiz.id, 'title': quiz.title, 'supervisor_name': quiz.supervisor.name,
-                        'upload_time': quiz.upload_date.date(),'played':played})
-        return Response(ret)
+            # find all contents of the supervisor with id=sup_id
+            quizes = Quiz.objects.filter(supervisor_id=sup_id)
+            # order quizes by upload_date
+            quizes = quizes.order_by('-upload_date')
+            ret = []
+            for quiz in quizes:
+                # find QuizSubmission where chw=chw and quiz=quiz
+                quizSubmission = QuizSubmission.objects.filter(chw=chw, quiz=quiz)
+                played = True
+                if quizSubmission.count() == 0:
+                    played = False
+                ret.append({'id': quiz.id, 'title': quiz.title, 'supervisor_name': quiz.supervisor.name,
+                            'upload_time': quiz.upload_date.date(), 'played': played})
+            return Response(ret)
+        else:
+            # find all contents of the supervisor with id=sup_id
+            quizes = Quiz.objects.filter(supervisor_id=sup_id)
+            # order quizes by upload_date
+            quizes = quizes.order_by('-upload_date')
+            ret = []
+            for quiz in quizes:
+                # find QuizSubmission where chw=chw and quiz=quiz
+                ret.append({'id': quiz.id, 'title': quiz.title, 'supervisor_name': quiz.supervisor.name,
+                            'upload_time': quiz.upload_date.date()})
+            return Response(ret)
 
 
 @api_view(['POST'])
@@ -401,7 +413,7 @@ def getNotification(request):
             dict['is_read'] = notification.is_read
 
             ret.append(dict)
-            
+
         print(ret)
         return Response(ret)
 
@@ -450,7 +462,7 @@ def getPatientImage(request):
 def getAllCampaigns(request):
     if request.method == 'POST':
         chw_id = request.data
-        
+
         # find chw with id=chw_id
         chw = CHW.objects.get(id=chw_id)
         # find supervisor of chw
@@ -468,7 +480,7 @@ def getAllCampaigns(request):
         # filter all campaigns if end_date<current_date
         now = timezone.now()
         campaigns = [campaign for campaign in campaigns if campaign.end_date >= now]
-        
+
         print(campaigns)
 
         ret=[]
@@ -493,7 +505,7 @@ def getUnenrolledPatient(request):
     if request.method == 'POST':
         campaign_id = request.data['campaign_id']
         chw_id = request.data['chw_id']
-        
+
         # find campaign with campaign_id
         campaign = Campaign.objects.get(id=campaign_id)
 
@@ -589,7 +601,7 @@ def mark_lesson_read(request):
         print("came here")
         chw_id=request.data['chw_id']
         lesson_id=request.data['lesson_id']
-        
+
         # find chw with chw_id
         chw = CHW.objects.get(id=chw_id)
         # find lesson with lesson_id
@@ -641,7 +653,7 @@ def getSupNotification(request):
             dict['type_id'] = notification.type_id
 
             ret.append(dict)
-            
+
         print(ret)
 
         return Response(ret)
@@ -666,7 +678,7 @@ def markAsRead(request):
 def getSingleNotification(request):
     if request.method == 'POST':
         id=request.data
-        
+
         notification = Supervisors_Notification.objects.get(id=id)
         dict={}
         dict['is_read'] = notification.is_read

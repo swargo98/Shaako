@@ -47,6 +47,7 @@ const AddPatient = ({ navigation }) => {
         let chw_id = await AsyncStorage.getItem('chw_id');
         chw_id = JSON.parse(chw_id)
         console.log(name + " " + address + " " + phone + " " + gen + " " + date)
+        console.log(image)
         let tok = await AsyncStorage.getItem('token')
         tok = JSON.parse(tok)
         let response = await fetch(global.ip + '/CHW/addPatient', {
@@ -83,6 +84,7 @@ const AddPatient = ({ navigation }) => {
 
         if (!result.cancelled) {
             console.log("vitor")
+            console.log(result.base64)
             setImage(result.base64);
             // console.log(image)
         }
